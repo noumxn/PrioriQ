@@ -1,0 +1,26 @@
+{
+  "name": "task-management-application",
+  "version": "1.0.0",
+  "description": "Final Project for CS-546",
+  "main": "app.js",
+  "type": "module",
+  "contributors": [
+    "Nouman Syed 20011457"
+  ],
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon --exec yarn start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noumxn/Task-Management-Application.git"
+  },
+  "license": "",
+  "dependencies": {
+    "express": "^4.18.2",
+    "moment": "^2.29.4",
+    "mongodb": "^5.1.0",
+    "nodemon": "^2.0.21",
+    "tota11y": "^0.1.6"
+  }
+}
