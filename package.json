@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon --exec yarn start"
+    "dev": "nodemon --exec yarn start",
+    "seed": "node ./tasks/seed.js"
   },
   "repository": {
     "type": "git",
