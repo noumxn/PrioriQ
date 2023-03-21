@@ -116,7 +116,7 @@ const numberValidCheck = (...num) => {
 }
 
 
-export {
+export default {
   badReqErr,
   notFoundErr,
   forbiddenErr,

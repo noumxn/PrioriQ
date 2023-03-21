@@ -2,7 +2,7 @@ import {ObjectId} from 'mongodb';
 import {boards} from '../config/mongoCollections.js';
 import userData from './users.js';
 import boardData from './boards.js';
-import {} from '../validation.js';
+import validation from '../utils/validation.js';
 import helpers from './helpers.js';
 
 const exportedMethods = {

@@ -1,7 +1,7 @@
 import {ObjectId} from 'mongodb';
 import userData from './users.js';
 import {boards} from '../config/mongoCollections.js';
-import {} from '../validation.js';
+import validation from '../utils/validation.js';
 import helper from './helpers.js';
 
 const exportedMethods = {
