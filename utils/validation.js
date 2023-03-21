@@ -5,50 +5,62 @@ import {ObjectId} from 'mongodb';
 import Ajv from 'ajv';
 import moment from 'moment';
 
-// Error types
-const error = {
+// Define error types
+const response = Object.freeze({
+  SUCCESS: {
+    status: 200,
+    message: "Success."
+  },
+  NO_CHANGE: {
+    status: 204,
+    message: "No changes were made."
+  },
   BAD_REQUEST: {
     status: 400,
-    message: "Invalid Request Parameter."
+    message: "Invalid request parameter."
   },
   UNAUTHORIZED: {
     status: 401,
-    message: "Access Denied. Please provide valid JSON Web Token."
+    message: "Access denied. Please provide a valid JSON Web Token."
   },
   FORBIDDEN: {
     status: 403,
-    message: "You are not Authorized to perform this action."
+    message: "You are not authorized to perform this action."
   },
   NOT_FOUND: {
     status: 404,
-    message: "Not Found."
+    message: "Not found."
   },
   INTERNAL_SERVER_ERROR: {
     status: 500,
-    message: "Interal Server Error."
+    message: "Internal server error."
+  },
+});
+
+// Create new error object
+const createResponseObject = (obj, message) => {
+  if (!obj || !obj.status || !obj.message) {
+    throw response.INTERNAL_SERVER_ERROR;
   }
-}
-
-Object.freeze(error);
-
-// This function to creates new error object
-const createErrorObj = (err, message) => {
-  if (!err || !err.status || !err.message) throw error.INTERNAL_SERVER_ERROR;
   return {
-    ...err,
-    message: message ? message : err.message
-  }
-}
-// These are convenience functions to create new error objects of specific types with custom messages if provided.
-const badReqErr = (message) => createErrorObj(error.BAD_REQUEST, message);
-const unauthorizedErr = (message) => createErrorObj(error.UNAUTHORIZED, message);
-const forbiddenErr = (message) => createErrorObj(error.FORBIDDEN, message);
-const notFoundErr = (message) => createErrorObj(error.NOT_FOUND, message);
-const intServerErr = (message) => createErrorObj(error.INTERNAL_SERVER_ERROR, message);
+    ...obj,
+    message: message || obj.message
+  };
+};
 
-// This function sends an error response to the client with the specified status code and message if provided.
-const sendErrResponse = (res, {status, message}) =>
-  res.status(status || error.INTERNAL_SERVER_ERROR.status).json(message ? {message} : '');
+// Convenience functions to create new error objects with custom messages
+const badReqErr = (message) => createResponseObject(response.BAD_REQUEST, message);
+const unauthErr = (message) => createResponseObject(response.UNAUTHORIZED, message);
+const forbiddenErr = (message) => createResponseObject(response.FORBIDDEN, message);
+const notFoundErr = (message) => createResponseObject(response.NOT_FOUND, message);
+const intServerErr = (message) => createResponseObject(response.INTERNAL_SERVER_ERROR, message);
+const noChangeErr = (message) => createResponseObject(response.NO_CHANGE, message);
+
+// Send error response to client
+const sendErrResponse = (res, {status, message}) => {
+  res.status(status || response.INTERNAL_SERVER_ERROR.status).json(message ? {message} : '');
+};
+
 
 // This function checks if any of the parameters provided are null or undefined
 const parameterCheck = (...param) => {
@@ -120,8 +132,9 @@ export default {
   badReqErr,
   notFoundErr,
   forbiddenErr,
-  unauthorizedErr,
+  unauthErr,
   intServerErr,
+  noChangeErr,
   sendErrResponse,
   parameterCheck,
   idCheck,
