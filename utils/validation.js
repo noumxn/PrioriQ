@@ -109,7 +109,7 @@ const objValidCheck = (...obj) => {
 // This function checks if all of the parameters provided are valid numbers
 const numberValidCheck = (...num) => {
   for (let i in num) {
-    if (typeof num[i] !== 'number' || Number.isNaN(num[i])) {
+    if (typeof num[i] !== 'number' || Number.isNaN(num[i]) || !Number.isFinite(num[i])) {
       throw badReqErr(`Input provided must be a number.`);
     }
   }
