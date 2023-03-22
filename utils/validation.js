@@ -5,15 +5,15 @@ import {ObjectId} from 'mongodb';
 import Ajv from 'ajv';
 import moment from 'moment';
 
-// Define error types
+// Define response types
 const response = Object.freeze({
   SUCCESS: {
     status: 200,
     message: "Success."
   },
-  NO_CHANGE: {
+  NO_CONTENT: {
     status: 204,
-    message: "No changes were made."
+    message: "Request processed but no changes made."
   },
   BAD_REQUEST: {
     status: 400,
@@ -54,7 +54,7 @@ const unauthErr = (message) => createResponseObject(response.UNAUTHORIZED, messa
 const forbiddenErr = (message) => createResponseObject(response.FORBIDDEN, message);
 const notFoundErr = (message) => createResponseObject(response.NOT_FOUND, message);
 const intServerErr = (message) => createResponseObject(response.INTERNAL_SERVER_ERROR, message);
-const noChangeErr = (message) => createResponseObject(response.NO_CHANGE, message);
+const noContentRes = (message) => createResponseObject(response.NO_CONTENT, message);
 
 // Send error response to client
 const sendErrResponse = (res, {status, message}) => {
@@ -134,7 +134,7 @@ export default {
   forbiddenErr,
   unauthErr,
   intServerErr,
-  noChangeErr,
+  noContentRes,
   sendErrResponse,
   parameterCheck,
   idCheck,
