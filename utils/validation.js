@@ -1,16 +1,13 @@
 /*
   * This file exports functions for error handling and validation checks for different data
   * */
+
 import {ObjectId} from 'mongodb';
 import Ajv from 'ajv';
 import moment from 'moment';
 
 // Define response types
 const response = Object.freeze({
-  SUCCESS: {
-    status: 200,
-    message: "Success."
-  },
   NO_CONTENT: {
     status: 204,
     message: "Request processed but no changes made."
@@ -48,13 +45,8 @@ const createResponseObject = (obj, message) => {
   };
 };
 
-// Convenience functions to create new error objects with custom messages
-const badReqErr = (message) => createResponseObject(response.BAD_REQUEST, message);
-const unauthErr = (message) => createResponseObject(response.UNAUTHORIZED, message);
-const forbiddenErr = (message) => createResponseObject(response.FORBIDDEN, message);
-const notFoundErr = (message) => createResponseObject(response.NOT_FOUND, message);
-const intServerErr = (message) => createResponseObject(response.INTERNAL_SERVER_ERROR, message);
-const noContentRes = (message) => createResponseObject(response.NO_CONTENT, message);
+// Convenience function to create error response object
+const throwErr = (type, message) => createResponseObject(response[type], message);
 
 // Send error response to client
 const sendErrResponse = (res, {status, message}) => {
@@ -66,18 +58,18 @@ const sendErrResponse = (res, {status, message}) => {
 const parameterCheck = (...param) => {
   for (let i in param) {
     if (!param[i] && param[i] !== 0) // (!varName) also throws if param is 0. So making sure 0 doesn't get caught.
-      throw badReqErr('An Input Parameter is undefined.');
+      throw throwErr('BAD_REQUEST', 'An Input Parameter is undefined.');
   }
 }
 
 // This function checks if an ID is provided and if it is a valid ObjectId
 const idCheck = (id) => {
   if (!id) throw badReqErr(`You must provide an ID.`);
-  if (typeof id !== 'string') throw badReqErr(`ID must be a string.`);
+  if (typeof id !== 'string') throw throwErr('BAD_REQUEST', `ID must be a string.`);
   id = id.trim();
   if (id.length === 0)
-    throw badReqErr(`ID cannot be an empty string or just spaces`);
-  if (!ObjectId.isValid(id)) throw badReqErr(`Invalid object ID`);
+    throw throwErr('BAD_REQUEST', `ID cannot be an empty string or just spaces`);
+  if (!ObjectId.isValid(id)) throw throwErr('BAD_REQUEST', `Invalid object ID`);
   return id;
 }
 
@@ -85,10 +77,10 @@ const idCheck = (id) => {
 const arrayValidCheck = (...arr) => {
   for (let i in arr) {
     if (!Array.isArray(arr[i])) {
-      throw badReqErr(`${arr[i]} is not of type Array.`);
+      throw throwErr('BAD_REQUEST', `${arr[i]} is not of type Array.`);
     }
     if (arr[i].length < 1) {
-      throw badReqErr(`Array can not be empty.`);
+      throw throwErr('BAD_REQUEST', `Array can not be empty.`);
     }
   }
 }
@@ -97,10 +89,10 @@ const arrayValidCheck = (...arr) => {
 const strValidCheck = (...str) => {
   for (let i in str) {
     if (typeof str[i] !== 'string') {
-      throw badReqErr(`${str[i]} is not of type string.`);
+      throw throwErr('BAD_REQUEST', `${str[i]} is not of type string.`);
     }
     if (str[i].trim().length === 0) {
-      throw badReqErr(`A string can not be empty or just filled with spaces.`);
+      throw throwErr('BAD_REQUEST', `A string can not be empty or just filled with spaces.`);
     }
   }
 }
@@ -110,10 +102,10 @@ const objValidCheck = (...obj) => {
   for (let i in obj) {
     // Object.prototype.toString.call(obj[i]) !== '[object Object]'
     if (typeof obj[i] !== 'object' || obj[i] === null || Array.isArray(obj[i])) {
-      throw badReqErr(`Input of type Object is required.`);
+      throw throwErr('BAD_REQUEST', `Input of type Object is required.`);
     }
     if (Object.keys(obj[i]).length === 0) {
-      throw badReqErr(`Can not give empty Object as input.`);
+      throw throwErr('BAD_REQUEST', `Can not give empty Object as input.`);
     }
   }
 }
@@ -122,19 +114,14 @@ const objValidCheck = (...obj) => {
 const numberValidCheck = (...num) => {
   for (let i in num) {
     if (typeof num[i] !== 'number' || Number.isNaN(num[i]) || !Number.isFinite(num[i])) {
-      throw badReqErr(`Input provided must be a number.`);
+      throw throwErr('BAD_REQUEST', `Input provided must be a number.`);
     }
   }
 }
 
 
 export default {
-  badReqErr,
-  notFoundErr,
-  forbiddenErr,
-  unauthErr,
-  intServerErr,
-  noContentRes,
+  throwErr,
   sendErrResponse,
   parameterCheck,
   idCheck,
