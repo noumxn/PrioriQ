@@ -18,6 +18,7 @@
   },
   "license": "",
   "dependencies": {
+    "ajv": "^8.12.0",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "email-validator": "^2.0.4",
