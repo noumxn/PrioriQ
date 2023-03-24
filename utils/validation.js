@@ -28,6 +28,10 @@ const response = Object.freeze({
     status: 404,
     message: "Not found."
   },
+  CONFLICT: {
+    status: 409,
+    message: "Operation cannot be completed due to a conflict with existing data in the database."
+  },
   INTERNAL_SERVER_ERROR: {
     status: 500,
     message: "Internal server error."
@@ -119,6 +123,18 @@ const numberValidCheck = (...num) => {
   }
 }
 
+// This function checks if dates provided are valid dates and are in the range 1920 - current year
+// and follow the MM/DD/YYYY format
+const validDateCheck = (date) => {
+  const d = moment(date, 'MM/DD/YYYY');
+  if (!d.isValid()) throw throwErr('BAD_REQUEST', `${d}. Date must be in MM/DD/YYYY format.`);
+  let year = parseInt(date.slice(6));
+  let minYear = 1920;
+  let maxYear = Number(moment().add(1, 'year').format('YYYY'));
+  if (year < minYear || year > maxYear)
+    throw throwErr('BAD_REQUEST', `Date must be within the range ${minYear} and ${maxYear}.`);
+}
+
 
 export default {
   throwErr,
@@ -129,4 +145,5 @@ export default {
   strValidCheck,
   objValidCheck,
   numberValidCheck,
+  validDateCheck,
 }
