@@ -5,7 +5,8 @@
   "main": "app.js",
   "type": "module",
   "contributors": [
-    "Nouman Syed 20011457"
+    "Nouman Syed 20011457",
+    "Michael Bearint 10462613"
   ],
   "scripts": {
     "start": "node app.js",
