@@ -6,7 +6,10 @@ import validation from '../utils/validation.js';
 import helpers from './helpers.js';
 
 const exportedMethods = {
-
+  async createTask(taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo) {},
+  async getTaskById(taskId) {},
+  async updateTask(taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo) {},
+  async deleteTask(taskId) {},
 };
 
 export default exportedMethods;

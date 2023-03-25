@@ -68,12 +68,12 @@ const parameterCheck = (...param) => {
 
 // This function checks if an ID is provided and if it is a valid ObjectId
 const idCheck = (id) => {
-  if (!id) throw badReqErr(`You must provide an ID.`);
+  if (!id) throw badReqErr('BAD_REQUEST', `You must provide an ID.`);
   if (typeof id !== 'string') throw throwErr('BAD_REQUEST', `ID must be a string.`);
   id = id.trim();
   if (id.length === 0)
-    throw throwErr('BAD_REQUEST', `ID cannot be an empty string or just spaces`);
-  if (!ObjectId.isValid(id)) throw throwErr('BAD_REQUEST', `Invalid object ID`);
+    throw throwErr('BAD_REQUEST', `ID cannot be an empty string or just spaces.`);
+  if (!ObjectId.isValid(id)) throw throwErr('BAD_REQUEST', `Invalid object ID.`);
   return id;
 }
 

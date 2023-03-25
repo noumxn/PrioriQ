@@ -6,6 +6,10 @@ import boardData from './boards.js';
 import validation from '../utils/validation.js';
 import helpers from './helpers.js';
 
-const exportedMethods = {};
+const exportedMethods = {
+  async createCheckListItem() {},
+  async addTaskToCheckList() {},
+  async deleteTaskFromCheckList() {},
+};
 
 export default exportedMethods;
