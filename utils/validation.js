@@ -124,7 +124,7 @@ const strValidCheck = (...str) => {
 }
 
 /*
- * @param {...obj} Array of strings
+ * @param {...obj} Array of objects
  * @description This function checks if all of the parameters provided are valid Objects 
  * @throws {BAD_REQUEST} if any of the objects provided to this function are not valid objects
  * @throws {BAD_REQUEST} if any of the objects provided to this function are empty
@@ -142,7 +142,7 @@ const objValidCheck = (...obj) => {
 }
 
 /*
- * @param {...num} Array of strings
+ * @param {...num} number
  * @description This function checks if all of the parameters provided are valid numbers
  * @throws {BAD_REQUEST} if any of the numbers provided to this function are not valid numbers
  **/
