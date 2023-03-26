@@ -1,6 +1,6 @@
 /*
-  * This file exports functions for error handling and validation checks for different data
-  * */
+ * This file exports functions for error handling and validation checks for different data
+ **/
 
 import {ObjectId} from 'mongodb';
 import Ajv from 'ajv';
@@ -58,7 +58,11 @@ const sendErrResponse = (res, {status, message}) => {
 };
 
 
-// This function checks if any of the parameters provided are null or undefined
+/*
+ * @param {...param} Array of parameters
+ * @description This function checks if any of the parameters provided are null or undefined
+ * @throws {BAD_REQUEST} if any of the parameters provided to this function are undefined or null
+ **/
 const parameterCheck = (...param) => {
   for (let i in param) {
     if (!param[i] && param[i] !== 0) // (!varName) also throws if param is 0. So making sure 0 doesn't get caught.
@@ -66,18 +70,31 @@ const parameterCheck = (...param) => {
   }
 }
 
-// This function checks if an ID is provided and if it is a valid ObjectId
+/*
+ * @param {id} ObjectId
+ * @description This function checks if an ID is provided and if it is a valid ObjectId
+ * @throws {BAD_REQUEST} if ID provided is undefined or null
+ * @throws {BAD_REQUEST} if ID provided is not a string
+ * @throws {BAD_REQUEST} if ID provided is an empty string or a string with just spaces
+ * @throws {BAD_REQUEST} if ID provided is an invalid ObjectId
+ * @return {id} Returns the ID after trimming leading and trailing spaces
+ **/
 const idCheck = (id) => {
-  if (!id) throw badReqErr(`You must provide an ID.`);
+  if (!id) throw badReqErr('BAD_REQUEST', `You must provide an ID.`);
   if (typeof id !== 'string') throw throwErr('BAD_REQUEST', `ID must be a string.`);
   id = id.trim();
   if (id.length === 0)
-    throw throwErr('BAD_REQUEST', `ID cannot be an empty string or just spaces`);
-  if (!ObjectId.isValid(id)) throw throwErr('BAD_REQUEST', `Invalid object ID`);
+    throw throwErr('BAD_REQUEST', `ID cannot be an empty string or just spaces.`);
+  if (!ObjectId.isValid(id)) throw throwErr('BAD_REQUEST', `Invalid object ID.`);
   return id;
 }
 
-// This function checks if all of the parameters provided are valid Arrays
+/*
+ * @param {...arr} Array of Arrays
+ * @description This function checks if all of the parameters provided are valid Arrays
+ * @throws {BAD_REQUEST} if any of the Arrays provided to this function are not valid Arrays
+ * @throws {BAD_REQUEST} if any of the Arrays provided to this function are empty
+ **/
 const arrayValidCheck = (...arr) => {
   for (let i in arr) {
     if (!Array.isArray(arr[i])) {
@@ -89,7 +106,12 @@ const arrayValidCheck = (...arr) => {
   }
 }
 
-// This function checks if all of the parameters provided are valid strings
+/*
+ * @param {...str} Array of strings
+ * @description This function checks if all of the parameters provided are valid strings
+ * @throws {BAD_REQUEST} if any of the strings provided to this function are not valid strings
+ * @throws {BAD_REQUEST} if any of the strings provided to this function are empty or filled with just spaces
+ **/
 const strValidCheck = (...str) => {
   for (let i in str) {
     if (typeof str[i] !== 'string') {
@@ -101,7 +123,12 @@ const strValidCheck = (...str) => {
   }
 }
 
-// This function checks if all of the parameters provided are valid Objects
+/*
+ * @param {...obj} Array of strings
+ * @description This function checks if all of the parameters provided are valid Objects 
+ * @throws {BAD_REQUEST} if any of the objects provided to this function are not valid objects
+ * @throws {BAD_REQUEST} if any of the objects provided to this function are empty
+ **/
 const objValidCheck = (...obj) => {
   for (let i in obj) {
     // Object.prototype.toString.call(obj[i]) !== '[object Object]'
@@ -114,7 +141,11 @@ const objValidCheck = (...obj) => {
   }
 }
 
-// This function checks if all of the parameters provided are valid numbers
+/*
+ * @param {...num} Array of strings
+ * @description This function checks if all of the parameters provided are valid numbers
+ * @throws {BAD_REQUEST} if any of the numbers provided to this function are not valid numbers
+ **/
 const numberValidCheck = (...num) => {
   for (let i in num) {
     if (typeof num[i] !== 'number' || Number.isNaN(num[i]) || !Number.isFinite(num[i])) {
@@ -123,8 +154,12 @@ const numberValidCheck = (...num) => {
   }
 }
 
-// This function checks if dates provided are valid dates and are in the range 1920 - current year
-// and follow the MM/DD/YYYY format
+/*
+ * @param {date} string
+ * @description This function checks if date provided is a valid date
+ * @throws {BAD_REQUEST} if data provided is not in the MM/DD/YYYY format
+ * @throws {BAD_REQUEST} if data provided is not within the range 1920 and the current year
+ **/
 const validDateCheck = (date) => {
   const d = moment(date, 'MM/DD/YYYY');
   if (!d.isValid()) throw throwErr('BAD_REQUEST', `${d}. Date must be in MM/DD/YYYY format.`);

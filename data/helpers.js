@@ -1,12 +1,16 @@
 /*
-  * This file exports helper funcitons
-  * */
+ * This file exports helper funcitons
+ **/
 
 import EmailValidator from 'email-validator';
 import moment from 'moment';
 import validation from '../utils/validation.js';
 
-// This function checks if the age of a user is over 13
+/*
+ * @param {dob} string
+ * @description This function checks if the age of a user is over 13
+ * @throws {FORBIDDEN} if user trying to register is below 13 years of age
+ **/
 const checkAge = (dob) => {
   let minimumAge = 13;
   let birtday = moment(dob, 'MM/DD/YYYY');
@@ -15,7 +19,11 @@ const checkAge = (dob) => {
     throw validation.throwErr('FORBIDDEN', `Minimum age for registration is ${minimumAge}.`);
 }
 
-// This function makes sure the email address provided as param is valid
+/*
+ * @param {email} string
+ * @description This function makes sure the email address provided as param is valid
+ * @throws {BAD_REQUEST} if user trying to register with an invalid email address
+ **/
 const checkEmail = (email) => {
   let isValid = EmailValidator.validate(email);
   if (!isValid) throw validation.throwErr('BAD_REQUEST', `'${email}' is an invalid email address.`);
@@ -23,7 +31,15 @@ const checkEmail = (email) => {
   return email.trim().toLowerCase()
 }
 
-// This function makes sure username is valid
+/*
+ * @param {username} string
+ * @description This function makes sure username is validjl
+ * @throws {BAD_REQUEST} if username is less than 3 characters long
+ * @throws {BAD_REQUEST} if username is more than 20 characters long
+ * @throws {BAD_REQUEST} if username contains anything other than alphabets, numbers and underscores
+ * @throws {BAD_REQUEST} if username does not contain at least one alphabet
+ * @return {username} Returns validated username after running trim() and toLowerCase() on it
+ **/
 const checkUsername = (username) => {
   if (username.length < 3) throw validation.throwErr('BAD_REQUEST', `Username needs to be at least 3 characters long.`);
   if (username.length > 20) throw validation.throwErr('BAD_REQUEST', `Username can not be longer than 20 characters.`);
@@ -36,7 +52,15 @@ const checkUsername = (username) => {
   return username.trim().toLowerCase()
 }
 
-// This function makes sure password is valid
+/*
+ * @param {password} string
+ * @description This function makes sure password is valid
+ * @throws {BAD_REQUEST} if user tries to set a password with less than 6 characters
+ * @throws {BAD_REQUEST} if user tries to set a password with more than 20 characters
+ * @throws {BAD_REQUEST} if user tries to set a password without a minimum of 1 numeric character
+ * @throws {BAD_REQUEST} if user tries to set a password without a minimum of 1 special character
+ * @throws {BAD_REQUEST} if user tries to set a password with spaces in it
+ **/
 const checkPassword = (password) => {
   validation.strValidCheck(password);
   if (password.length < 6) throw validation.throwErr('BAD_REQUEST', `Password must be longer than 6 characters.`);
@@ -49,6 +73,14 @@ const checkPassword = (password) => {
   if (!regex3.test(password)) throw validation.throwErr('BAD_REQUEST', `Password can not contain spaces.`)
 }
 
+/*
+ * @param {name} string
+ * @description This function makes sure user follows constraints while providing their name for registration
+ * @throws {BAD_REQUEST} if user tries to provide a name that is less than 1 character long
+ * @throws {BAD_REQUEST} if user tries to provide a name that is longer than 20 characters
+ * @throws {BAD_REQUEST} if user tries to provide a name that contains special characters
+ * @return {name} Returns the name after removing leading and trailing spaces if there are any
+ **/
 const checkName = (name) => {
   if (name.length < 1) throw validation.throwErr('BAD_REQUEST', `Name must be longer than 1 character.`);
   if (name.length > 20) throw validation.throwErr('BAD_REQUEST', `Name can not be longer than 20 characters.`);
