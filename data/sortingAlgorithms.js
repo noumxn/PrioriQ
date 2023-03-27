@@ -37,11 +37,23 @@ const exportedMethods = {
     return currentPriority;
   }
 };
-const createdAt = new Date("2023-03-26T00:58:00.000-04:00");
-const priority = 0;
 
+function convertEstimatedTimeToMs(hours, mins) {
+  const totalMinutes = hours * 60 + mins;
+  const totalSeconds = totalMinutes * 60;
+  const totalMicroseconds = totalSeconds * 1000000;
+  return totalMicroseconds;
+}
 
-const currentPriority = priorityBasedScheduling(createdAt, priority, deadline);
-console.log(currentPriority); // prints the current priority based on the current time
+// const hours = 0;
+// const mins = 2;
+
+// const createdAt = new Date("2023-03-26T11:10:00.000Z");
+// const priority = 2;
+// const deadline = new Date("2023-03-26T11:14:00.000Z");
+// const estimatedTime = convertEstimatedTimeToMs(0, 2);
+
+// const currentPriority = schedulingAlgorithm(createdAt, priority, deadline, estimatedTime);
+// console.log(currentPriority); // prints the current priority based on the current time
 
 export default exportedMethods;
