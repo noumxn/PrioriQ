@@ -21,7 +21,7 @@ import {userData} from '../data/index.js';
     console.log(e);
   }
   try {
-    john = await userData.createUser("John", "Arbuckle", "10/28/1995", "john@stevens.edu", "john23", "hello123#");
+    john = await userData.createUser("John", "Arbuckle", "10/28/1995", "john@stevens.go", "john23", "hello123*");
     console.log(john);
   } catch (e) {
     console.log(e);
