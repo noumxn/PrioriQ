@@ -37,14 +37,11 @@ const exportedMethods = {
     return currentPriority;
   }
 };
-// const createdAt = new Date("2023-03-26T00:58:00.000-04:00");
-// const priority = 0;
-// const estimatedTime = 
-// let x = estimatedTime.minutes;
-// console.log("minutes: ", x);
-// const deadline = new Date("2023-03-26T01:00:00.000-04:00");
-//
-// const currentPriority = priorityBasedScheduling(createdAt, priority, deadline);
-// console.log(currentPriority); // prints the current priority based on the current time
+const createdAt = new Date("2023-03-26T00:58:00.000-04:00");
+const priority = 0;
+
+
+const currentPriority = priorityBasedScheduling(createdAt, priority, deadline);
+console.log(currentPriority); // prints the current priority based on the current time
 
 export default exportedMethods;
