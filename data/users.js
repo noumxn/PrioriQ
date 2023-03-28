@@ -79,9 +79,51 @@ const exportedMethods = {
     return user;
   },
 
-  async updateUser(userId, firstName, lastName, dob, email, username, password) {},
+  async updateUser(userId, firstName, lastName, dob, email, username, password) {
+    validation.parameterCheck(userId, firstName, lastName, dob, email, username, password);
+    validation.strValidCheck(userId, firstName, lastName, dob, email, username, password);
+    userId = validation.idCheck(userId);
+    firstName = helpers.checkName(firstName);
+    lastName = helpers.checkName(lastName);
+    dob = dob.trim()
+    validation.validDateCheck(dob);
+    helpers.checkAge(dob);
+    email = helpers.checkEmail(email);
+    username = helpers.checkUsername(username);
+    helpers.checkPassword(password);
 
-  async deleteUser(userId) {},
+    let updatedUser = {
+      firstName: firstName,
+      lastName: lastName,
+      dob: dob,
+      email: email,
+      username: username,
+      password: password
+    };
+    const userCollection = await users();
+    const updateInfo = await userCollection.findOneAndUpdate(
+      {_id: new ObjectId(userId)},
+      {$set:  updatedUser},
+      {returnDocument: 'after'}
+    );
+    if(updateInfo.lastErrorObject.n == 0){
+      throw `Could not update user Successfully`;
+    }
+    return await this.getUserById(userId);
+  },
+
+  async deleteUser(userId) {
+    validation.parameterCheck(userId);
+    validation.strValidCheck(userId);
+    userId = validation.idCheck(userId);
+
+    const userCollection = await users();
+    const deleteInfo = await userCollection.findOneAndDelete(
+      {_id: new ObjectId(userId)}
+    );
+    if(deleteInfo.lastErrorObject.n == 0) throw `Could not delte user with id ${userId}`
+    return `User ${deleteInfo.value.username} has been deleted.`
+  },
 };
 
 export default exportedMethods;
