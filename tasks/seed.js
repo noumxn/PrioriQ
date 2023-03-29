@@ -4,6 +4,7 @@ import {userData} from '../data/index.js';
 (async () => {
   let tom = undefined;
   let john = undefined;
+  let johnUpdated = undefined;
 
   console.log("Seeding Database");
   console.log("├─ Setting up Database Connection")
@@ -21,7 +22,16 @@ import {userData} from '../data/index.js';
   }
   try {
     john = await userData.createUser("John", "Arbuckle", "10/28/1995", "john@stevens.go", "john23", "hello123*");
-    console.log(john);
+  } catch (e) {
+    console.log(e);
+  }
+  try {
+    johnUpdated = await userData.updateUser(john._id, "John", "Arbuckle", "10/28/1995", "john@google.go", "john23", "hello123*");
+  } catch (e) {
+    console.log(e);
+  }
+  try {
+    johnUpdated = await userData.updateUser(john._id, "John", "Arbuckle", "10/28/1995", "john@google.go", "john23", "world456@");
   } catch (e) {
     console.log(e);
   }

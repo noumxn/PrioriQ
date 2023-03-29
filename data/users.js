@@ -7,6 +7,8 @@ import helpers from './helpers.js';
 dotenv.config();
 
 const exportedMethods = {
+  async getAllUsers() {},
+
   /*
    * @param {userId} ObjectId
    * @description This funciton finds an retrieves a user given a valid ObjectId
@@ -55,6 +57,7 @@ const exportedMethods = {
     // Hashing the password
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     password = await bcrypt.hash(password, saltRounds);
+    // TODO: Make sure username is unique
 
     // Creating User
     const newUser = {
@@ -79,8 +82,7 @@ const exportedMethods = {
     return user;
   },
 
-  async updateUser(userId, firstName, lastName, dob, email, username, password) {
-      /*
+  /*
    * @param {userId} string
    * @param {firstName} string 
    * @param {lastName} string 
@@ -92,6 +94,7 @@ const exportedMethods = {
    * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but funciton fails to create a user
    * @return {user} Returns the user after updating
    **/
+  async updateUser(userId, firstName, lastName, dob, email, username, password) {
     validation.parameterCheck(userId, firstName, lastName, dob, email, username, password);
     validation.strValidCheck(userId, firstName, lastName, dob, email, username, password);
     userId = validation.idCheck(userId);
@@ -103,50 +106,57 @@ const exportedMethods = {
     email = helpers.checkEmail(email);
     username = helpers.checkUsername(username);
     helpers.checkPassword(password);
-    //create updated user
+    // TODO: Make sure username is unique
+
+
+    // create updated user
     let updatedUser = {
       firstName: firstName,
       lastName: lastName,
       dob: dob,
       email: email,
-      username: username,
-      password: password
+      username: username
     };
-    //TO DO: password hashing if password changes
+    // password hashing if password changes
+    const user = await this.getUserById(userId);
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      const saltRounds = parseInt(process.env.SALT_ROUNDS);
+      updatedUser.password = await bcrypt.hash(password, saltRounds);
+    }
 
-
-    //update user from given userId with new info
+    // update user from given userId with new info
     const userCollection = await users();
     const updateInfo = await userCollection.findOneAndUpdate(
       {_id: new ObjectId(userId)},
-      {$set:  updatedUser},
+      {$set: updatedUser},
       {returnDocument: 'after'}
     );
-    if(updateInfo.lastErrorObject.n == 0){
+    if (updateInfo.lastErrorObject.n == 0) {
       throw throwErr('INTERNAL_SERVER_ERROR', `Could not update user Successfully`);
     }
-    //const newId = up
+    // const newId = up
     return await this.getUserById(userId);
   },
 
-  async deleteUser(userId) {
-      /*
+  /*
    * @param {userId} string 
    * @description This function deletes an user based off the userId inputted
    * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but funciton fails to create a user
    * @return {user} Returns the username of user removed
    **/
+  async deleteUser(userId) {
     validation.parameterCheck(userId);
     validation.strValidCheck(userId);
     userId = validation.idCheck(userId);
 
-    //remove user based off userId
+    // remove user based off userId
     const userCollection = await users();
     const deleteInfo = await userCollection.findOneAndDelete(
       {_id: new ObjectId(userId)}
     );
-    if(deleteInfo.lastErrorObject.n == 0) throw throwErr(`INTERNAL_SERVER_ERROR`,`Could not delte user with id ${userId}`)
-    //return username of deleted user saying they have been deleted
+    if (deleteInfo.lastErrorObject.n == 0) throw throwErr(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
+    // return username of deleted user saying they have been deleted
     return `User ${deleteInfo.value.username} has been deleted.`
   },
 };
