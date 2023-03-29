@@ -10,6 +10,25 @@ const exportedMethods = {
   async getAllUsers() {},
 
   /*
+   * @param {usesrname} string
+   * @description This funciton finds an retrieves a user given a valid username
+   * @throws {NOT_FOUND} if no user exists with given username
+   * @return {searchedUser} Returns the user with given username
+   **/
+  async getUserByUsername(username) {
+    // Data validation
+    validation.parameterCheck(username);
+    validation.strValidCheck(username);
+
+    // Searching user by username
+    const userCollection = await users();
+    const searchedUser = await userCollection.findOne({username: username});
+    if (!searchedUser) throw validation.throwErr('NOT_FOUND', `No user with the username: ${username}.`);
+
+    return searchedUser;
+  },
+
+  /*
    * @param {userId} ObjectId
    * @description This funciton finds an retrieves a user given a valid ObjectId
    * @throws {NOT_FOUND} if no user exists with given userId
@@ -24,7 +43,7 @@ const exportedMethods = {
     // Searching user by ID
     const userCollection = await users();
     const searchedUser = await userCollection.findOne({_id: new ObjectId(userId)});
-    if (!searchedUser) throw validation.throwErr('NOT_FOUND', `No use with id: ${userId}.`);
+    if (!searchedUser) throw validation.throwErr('NOT_FOUND', `No user with ID: ${userId}.`);
     searchedUser._id = searchedUser._id.toString();
 
     return searchedUser;
@@ -57,7 +76,7 @@ const exportedMethods = {
     // Hashing the password
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     password = await bcrypt.hash(password, saltRounds);
-    // TODO: Make sure username is unique
+    // TODO: Make sure username is unique, throw CONFLICT
 
     // Creating User
     const newUser = {
@@ -106,7 +125,7 @@ const exportedMethods = {
     email = helpers.checkEmail(email);
     username = helpers.checkUsername(username);
     helpers.checkPassword(password);
-    // TODO: Make sure username is unique
+    // TODO: Make sure username is unique, throw CONFLICT
 
 
     // create updated user
@@ -158,6 +177,28 @@ const exportedMethods = {
     if (deleteInfo.lastErrorObject.n == 0) throw throwErr(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
     // return username of deleted user saying they have been deleted
     return `User ${deleteInfo.value.username} has been deleted.`
+  },
+
+  /*
+   * @param {username} string 
+   * @param {password} string
+   * @description This function verifies the password a user enters while logging in
+   * @throws {UNAUTHORIZED} if all user enters an invalid password
+   * @return {user} Returns a Success object with status: 200 and message: `You are now logged in as '${username}'.`
+   **/
+  async authenticateUser(username, password) {
+    // Data validation
+    validation.parameterCheck(username, password);
+    validation.strValidCheck(username, password);
+
+    // Verifying username and password entered match
+    const user = await this.getUserByUsername(username);
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw validation.throwErr('UNAUTHORIZED', `The username and password do not match.`);
+    } else {
+      return validation.throwErr('SUCCESS', `You are now logged in as '${username}'.`);
+    }
   },
 };
 

@@ -25,16 +25,6 @@ import {userData} from '../data/index.js';
   } catch (e) {
     console.log(e);
   }
-  try {
-    johnUpdated = await userData.updateUser(john._id, "John", "Arbuckle", "10/28/1995", "john@google.go", "john23", "hello123*");
-  } catch (e) {
-    console.log(e);
-  }
-  try {
-    johnUpdated = await userData.updateUser(john._id, "John", "Arbuckle", "10/28/1995", "john@google.go", "john23", "world456@");
-  } catch (e) {
-    console.log(e);
-  }
   console.log("├─ Verifying Users...");
   console.log("├─ Adding Boards...");
   console.log("├─ Adding Shared Boards...");
