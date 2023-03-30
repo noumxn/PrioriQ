@@ -170,6 +170,17 @@ const validDateCheck = (date) => {
     throw throwErr('BAD_REQUEST', `Date must be within the range ${minYear} and ${maxYear}.`);
 }
 
+/*
+ * @param {date} string
+ * @description This function checks if param provided is in the correct ISO date format
+ * @throws {BAD_REQUEST} if data provided is not in the correct ISO date format
+ **/
+const validDateTimeFormatCheck = (date) => {
+  const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+  if (!regex.test(date)) {
+    throw throwErr('BAD_REQUEST', `Input needs to be in the the format: YYYY-MM-DDTHH:MM:SSZ`)
+  }
+}
 
 export default {
   throwErr,
@@ -181,4 +192,5 @@ export default {
   objValidCheck,
   numberValidCheck,
   validDateCheck,
+  validDateTimeFormatCheck,
 }
