@@ -17,7 +17,7 @@ const exportedMethods = {
    * @param {assignedTo} array
    * @description This function creates a new task object and stores it in the database
    * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but function fails to create a task
-   * @return {task} Returns the task that was just created.
+   * @return {task} Returns the task that was just created
    **/
   async createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo) {
     validation.parameterCheck(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
