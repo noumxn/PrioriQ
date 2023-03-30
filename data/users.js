@@ -152,7 +152,7 @@ const exportedMethods = {
       {returnDocument: 'after'}
     );
     if (updateInfo.lastErrorObject.n == 0) {
-      throw throwErr('INTERNAL_SERVER_ERROR', `Could not update user Successfully`);
+      throw validation.throwErr('INTERNAL_SERVER_ERROR', `Could not update user Successfully`);
     }
     // const newId = up
     return await this.getUserById(userId);
@@ -174,7 +174,7 @@ const exportedMethods = {
     const deleteInfo = await userCollection.findOneAndDelete(
       {_id: new ObjectId(userId)}
     );
-    if (deleteInfo.lastErrorObject.n == 0) throw throwErr(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
+    if (deleteInfo.lastErrorObject.n == 0) throw validation.throwErr(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
     // return username of deleted user saying they have been deleted
     return `User ${deleteInfo.value.username} has been deleted.`
   },
