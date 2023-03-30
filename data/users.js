@@ -7,7 +7,17 @@ import helpers from './helpers.js';
 dotenv.config();
 
 const exportedMethods = {
-  async getAllUsers() {},
+  async getAllUsers() {
+    //Gets all users in the Users Database
+    const userCollection = await users();
+    const userlist = await userCollection.find({}, {}).toArray();
+    //throw error if userList is not able to be found
+    if(!userlist) throw throwErr(`INTERNAL_SERVER_ERROR`, `Could not get all posts`);
+    userlist.forEach(function(x) {
+      x["_id"] = x["_id"].toString();
+    });
+    return userlist;
+  },
 
   /*
    * @param {usesrname} string
