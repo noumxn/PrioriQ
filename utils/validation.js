@@ -8,6 +8,10 @@ import moment from 'moment';
 
 // Define response types
 const response = Object.freeze({
+  SUCCESS: {
+    status: 200,
+    message: "Successful."
+  },
   NO_CONTENT: {
     status: 204,
     message: "Request processed but no changes made."
@@ -80,7 +84,7 @@ const parameterCheck = (...param) => {
  * @return {id} Returns the ID after trimming leading and trailing spaces
  **/
 const idCheck = (id) => {
-  if (!id) throw badReqErr('BAD_REQUEST', `You must provide an ID.`);
+  if (!id) throw throwErr('BAD_REQUEST', `You must provide an ID.`);
   if (typeof id !== 'string') throw throwErr('BAD_REQUEST', `ID must be a string.`);
   id = id.trim();
   if (id.length === 0)

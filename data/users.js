@@ -7,6 +7,27 @@ import helpers from './helpers.js';
 dotenv.config();
 
 const exportedMethods = {
+  async getAllUsers() {},
+
+  /*
+   * @param {usesrname} string
+   * @description This funciton finds an retrieves a user given a valid username
+   * @throws {NOT_FOUND} if no user exists with given username
+   * @return {searchedUser} Returns the user with given username
+   **/
+  async getUserByUsername(username) {
+    // Data validation
+    validation.parameterCheck(username);
+    validation.strValidCheck(username);
+
+    // Searching user by username
+    const userCollection = await users();
+    const searchedUser = await userCollection.findOne({username: username});
+    if (!searchedUser) throw validation.throwErr('NOT_FOUND', `No user with the username: ${username}.`);
+
+    return searchedUser;
+  },
+
   /*
    * @param {userId} ObjectId
    * @description This funciton finds an retrieves a user given a valid ObjectId
@@ -22,7 +43,7 @@ const exportedMethods = {
     // Searching user by ID
     const userCollection = await users();
     const searchedUser = await userCollection.findOne({_id: new ObjectId(userId)});
-    if (!searchedUser) throw validation.throwErr('NOT_FOUND', `No use with id: ${userId}.`);
+    if (!searchedUser) throw validation.throwErr('NOT_FOUND', `No user with ID: ${userId}.`);
     searchedUser._id = searchedUser._id.toString();
 
     return searchedUser;
@@ -55,6 +76,7 @@ const exportedMethods = {
     // Hashing the password
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     password = await bcrypt.hash(password, saltRounds);
+    // TODO: Make sure username is unique, throw CONFLICT
 
     // Creating User
     const newUser = {
@@ -79,9 +101,105 @@ const exportedMethods = {
     return user;
   },
 
-  async updateUser(userId, firstName, lastName, dob, email, username, password) {},
+  /*
+   * @param {userId} string
+   * @param {firstName} string 
+   * @param {lastName} string 
+   * @param {dob} string 
+   * @param {email} string 
+   * @param {username} string 
+   * @param {password} string 
+   * @description This funciton updates the users info based on parameters
+   * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but funciton fails to create a user
+   * @return {user} Returns the user after updating
+   **/
+  async updateUser(userId, firstName, lastName, dob, email, username, password) {
+    validation.parameterCheck(userId, firstName, lastName, dob, email, username, password);
+    validation.strValidCheck(userId, firstName, lastName, dob, email, username, password);
+    userId = validation.idCheck(userId);
+    firstName = helpers.checkName(firstName);
+    lastName = helpers.checkName(lastName);
+    dob = dob.trim()
+    validation.validDateCheck(dob);
+    helpers.checkAge(dob);
+    email = helpers.checkEmail(email);
+    username = helpers.checkUsername(username);
+    helpers.checkPassword(password);
+    // TODO: Make sure username is unique, throw CONFLICT
 
-  async deleteUser(userId) {},
+
+    // create updated user
+    let updatedUser = {
+      firstName: firstName,
+      lastName: lastName,
+      dob: dob,
+      email: email,
+      username: username
+    };
+    // password hashing if password changes
+    const user = await this.getUserById(userId);
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      const saltRounds = parseInt(process.env.SALT_ROUNDS);
+      updatedUser.password = await bcrypt.hash(password, saltRounds);
+    }
+
+    // update user from given userId with new info
+    const userCollection = await users();
+    const updateInfo = await userCollection.findOneAndUpdate(
+      {_id: new ObjectId(userId)},
+      {$set: updatedUser},
+      {returnDocument: 'after'}
+    );
+    if (updateInfo.lastErrorObject.n == 0) {
+      throw validation.throwErr('INTERNAL_SERVER_ERROR', `Could not update user Successfully`);
+    }
+    // const newId = up
+    return await this.getUserById(userId);
+  },
+
+  /*
+   * @param {userId} string 
+   * @description This function deletes an user based off the userId inputted
+   * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but funciton fails to create a user
+   * @return {user} Returns the username of user removed
+   **/
+  async deleteUser(userId) {
+    validation.parameterCheck(userId);
+    validation.strValidCheck(userId);
+    userId = validation.idCheck(userId);
+
+    // remove user based off userId
+    const userCollection = await users();
+    const deleteInfo = await userCollection.findOneAndDelete(
+      {_id: new ObjectId(userId)}
+    );
+    if (deleteInfo.lastErrorObject.n == 0) throw validation.throwErr(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
+    // return username of deleted user saying they have been deleted
+    return `User ${deleteInfo.value.username} has been deleted.`
+  },
+
+  /*
+   * @param {username} string 
+   * @param {password} string
+   * @description This function verifies the password a user enters while logging in
+   * @throws {UNAUTHORIZED} if all user enters an invalid password
+   * @return {user} Returns a Success object with status: 200 and message: `You are now logged in as '${username}'.`
+   **/
+  async authenticateUser(username, password) {
+    // Data validation
+    validation.parameterCheck(username, password);
+    validation.strValidCheck(username, password);
+
+    // Verifying username and password entered match
+    const user = await this.getUserByUsername(username);
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw validation.throwErr('UNAUTHORIZED', `The username and password do not match.`);
+    } else {
+      return validation.throwErr('SUCCESS', `You are now logged in as '${username}'.`);
+    }
+  },
 };
 
 export default exportedMethods;
