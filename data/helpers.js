@@ -90,10 +90,25 @@ const checkName = (name) => {
   return name.trim()
 }
 
+/*
+ * @param {hours} string
+ * @param {mins} string
+ * @description This function takes the estimated time given in hours and mins in the string format 
+ *              and converts it to millisecods for the priorityBasedSorting() function
+ * @return {totalMilliseconds} Returns the total estimatedTime after converting it to millisecods
+ **/
+const convertEstimatedTimeToMs = (hours, mins) => {
+  const totalMinutes = Number(hours) * 60 + Number(mins);
+  const totalSeconds = totalMinutes * 60;
+  const totalMilliseconds = totalSeconds * 1000;
+  return totalMilliseconds;
+}
+
 export default {
   checkAge,
   checkEmail,
   checkUsername,
   checkPassword,
   checkName,
+  convertEstimatedTimeToMs,
 }
