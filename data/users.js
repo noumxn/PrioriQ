@@ -12,7 +12,7 @@ const exportedMethods = {
     const userCollection = await users();
     const userlist = await userCollection.find({}, {}).toArray();
     //throw error if userList is not able to be found
-    if(!userlist) throw throwErr(`INTERNAL_SERVER_ERROR`, `Could not get all posts`);
+    if(!userlist) throw returnRes(`INTERNAL_SERVER_ERROR`, `Could not get all posts`);
     userlist.forEach(function(x) {
       x["_id"] = x["_id"].toString();
     });
@@ -33,7 +33,7 @@ const exportedMethods = {
     // Searching user by username
     const userCollection = await users();
     const searchedUser = await userCollection.findOne({username: username});
-    if (!searchedUser) throw validation.throwErr('NOT_FOUND', `No user with the username: ${username}.`);
+    if (!searchedUser) throw validation.returnRes('NOT_FOUND', `No user with the username: ${username}.`);
 
     return searchedUser;
   },
@@ -53,7 +53,7 @@ const exportedMethods = {
     // Searching user by ID
     const userCollection = await users();
     const searchedUser = await userCollection.findOne({_id: new ObjectId(userId)});
-    if (!searchedUser) throw validation.throwErr('NOT_FOUND', `No user with ID: ${userId}.`);
+    if (!searchedUser) throw validation.returnRes('NOT_FOUND', `No user with ID: ${userId}.`);
     searchedUser._id = searchedUser._id.toString();
 
     return searchedUser;
@@ -103,7 +103,7 @@ const exportedMethods = {
     const userCollection = await users();
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) {
-      throw validation.throwErr('INTERNAL_SERVER_ERROR', `Could not create new user. Try again.`);
+      throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not create new user. Try again.`);
     }
     const newId = insertInfo.insertedId.toString();
     const user = await this.getUserById(newId);
@@ -162,7 +162,7 @@ const exportedMethods = {
       {returnDocument: 'after'}
     );
     if (updateInfo.lastErrorObject.n == 0) {
-      throw validation.throwErr('INTERNAL_SERVER_ERROR', `Could not update user Successfully`);
+      throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not update user Successfully`);
     }
     // const newId = up
     return await this.getUserById(userId);
@@ -184,7 +184,7 @@ const exportedMethods = {
     const deleteInfo = await userCollection.findOneAndDelete(
       {_id: new ObjectId(userId)}
     );
-    if (deleteInfo.lastErrorObject.n == 0) throw validation.throwErr(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
+    if (deleteInfo.lastErrorObject.n == 0) throw validation.returnRes(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
     // return username of deleted user saying they have been deleted
     return `User ${deleteInfo.value.username} has been deleted.`
   },
@@ -205,9 +205,9 @@ const exportedMethods = {
     const user = await this.getUserByUsername(username);
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw validation.throwErr('UNAUTHORIZED', `The username and password do not match.`);
+      throw validation.returnRes('UNAUTHORIZED', `The username and password do not match.`);
     } else {
-      return validation.throwErr('SUCCESS', `You are now logged in as '${username}'.`);
+      return validation.returnRes('SUCCESS', `You are now logged in as '${username}'.`);
     }
   },
 };
