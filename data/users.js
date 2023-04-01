@@ -7,20 +7,25 @@ import helpers from './helpers.js';
 dotenv.config();
 
 const exportedMethods = {
+  /*
+   * @description This funciton finds an retrieves all existing users
+   * @throws {NOT_FOUND} if unable to retrive all users
+   * @return {userList} Returns a list of all existing users
+   **/
   async getAllUsers() {
     //Gets all users in the Users Database
     const userCollection = await users();
     const userlist = await userCollection.find({}, {}).toArray();
     //throw error if userList is not able to be found
-    if(!userlist) throw returnRes(`INTERNAL_SERVER_ERROR`, `Could not get all posts`);
-    userlist.forEach(function(x) {
+    if (!userlist) throw validation.returnRes('NOT_FOUND', `Could not get all users.`);
+    userlist.forEach(function (x) {
       x["_id"] = x["_id"].toString();
     });
     return userlist;
   },
 
   /*
-   * @param {usesrname} string
+   * @param {username} string
    * @description This funciton finds an retrieves a user given a valid username
    * @throws {NOT_FOUND} if no user exists with given username
    * @return {searchedUser} Returns the user with given username
@@ -83,10 +88,10 @@ const exportedMethods = {
     email = helpers.checkEmail(email);
     username = helpers.checkUsername(username);
     helpers.checkPassword(password);
+    await helpers.checkUsernameUnique(username);
     // Hashing the password
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     password = await bcrypt.hash(password, saltRounds);
-    // TODO: Make sure username is unique, throw CONFLICT
 
     // Creating User
     const newUser = {
@@ -135,8 +140,7 @@ const exportedMethods = {
     email = helpers.checkEmail(email);
     username = helpers.checkUsername(username);
     helpers.checkPassword(password);
-    // TODO: Make sure username is unique, throw CONFLICT
-
+    await helpers.checkUsernameUnique(username);
 
     // create updated user
     let updatedUser = {
@@ -162,7 +166,7 @@ const exportedMethods = {
       {returnDocument: 'after'}
     );
     if (updateInfo.lastErrorObject.n == 0) {
-      throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not update user Successfully`);
+      throw validation.returnRes('NOT_FOUND', `Could not find and update user`);
     }
     // const newId = up
     return await this.getUserById(userId);
@@ -184,7 +188,7 @@ const exportedMethods = {
     const deleteInfo = await userCollection.findOneAndDelete(
       {_id: new ObjectId(userId)}
     );
-    if (deleteInfo.lastErrorObject.n == 0) throw validation.returnRes(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
+    if (deleteInfo.lastErrorObject.n == 0) throw validation.returnRes(`NOT_FOUND`, `Could not find and delete user with ID: '${userId}'`)
     // return username of deleted user saying they have been deleted
     return `User ${deleteInfo.value.username} has been deleted.`
   },

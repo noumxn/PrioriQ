@@ -5,6 +5,7 @@
 import EmailValidator from 'email-validator';
 import moment from 'moment';
 import validation from '../utils/validation.js';
+import userData from './users.js';
 
 /*
  * @param {dob} string
@@ -104,6 +105,19 @@ const convertEstimatedTimeToMs = (hours, mins) => {
   return totalMilliseconds;
 }
 
+/*
+ * @param {username} string
+ * @description This function takes username a new user is trying to use, and makes sure it is not already in use
+ * @throws {CONFLICT} if username is already taken
+ **/
+const checkUsernameUnique = async (username) => {
+  const allUsers = await userData.getAllUsers();
+  const duplicateUsername = allUsers.find(user => user.username === username);
+  if (duplicateUsername) {
+    throw validation.returnRes('CONFLICT', `The username '${username}' is already taken.`)
+  }
+}
+
 export default {
   checkAge,
   checkEmail,
@@ -111,4 +125,5 @@ export default {
   checkPassword,
   checkName,
   convertEstimatedTimeToMs,
+  checkUsernameUnique,
 }
