@@ -4,8 +4,6 @@ import {userData} from '../data/index.js';
 (async () => {
   let tom = undefined;
   let john = undefined;
-  let johnNew = undefined;
-  let johnUpdated = undefined;
 
   console.log("Seeding Database");
   console.log("├─ Setting up Database Connection")

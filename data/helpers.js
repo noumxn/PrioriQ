@@ -5,6 +5,7 @@
 import EmailValidator from 'email-validator';
 import moment from 'moment';
 import validation from '../utils/validation.js';
+import {users} from '../config/mongoCollections.js';
 import userData from './users.js';
 
 /*
@@ -111,11 +112,9 @@ const convertEstimatedTimeToMs = (hours, mins) => {
  * @throws {CONFLICT} if username is already taken
  **/
 const checkUsernameUnique = async (username) => {
-  const allUsers = await userData.getAllUsers();
-  const duplicateUsername = allUsers.find(user => user.username === username);
-  if (duplicateUsername) {
-    throw validation.returnRes('CONFLICT', `The username '${username}' is already taken.`)
-  }
+  const userCollection = await users();
+  const searchedUser = await userCollection.findOne({username: username});
+  if (searchedUser) throw validation.returnRes('CONFLICT', `The username '${username}' is already taken.`);
 }
 
 export default {
