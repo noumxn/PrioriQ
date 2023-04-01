@@ -54,7 +54,7 @@ const createResponseObject = (obj, message) => {
 };
 
 // Convenience function to create error response object
-const throwErr = (type, message) => createResponseObject(response[type], message);
+const returnRes = (type, message) => createResponseObject(response[type], message);
 
 // Send error response to client
 const sendErrResponse = (res, {status, message}) => {
@@ -70,7 +70,7 @@ const sendErrResponse = (res, {status, message}) => {
 const parameterCheck = (...param) => {
   for (let i in param) {
     if (!param[i] && param[i] !== 0) // (!varName) also throws if param is 0. So making sure 0 doesn't get caught.
-      throw throwErr('BAD_REQUEST', `An Input Parameter is undefined.`);
+      throw returnRes('BAD_REQUEST', `An Input Parameter is undefined.`);
   }
 }
 
@@ -84,12 +84,12 @@ const parameterCheck = (...param) => {
  * @return {id} Returns the ID after trimming leading and trailing spaces
  **/
 const idCheck = (id) => {
-  if (!id) throw throwErr('BAD_REQUEST', `You must provide an ID.`);
-  if (typeof id !== 'string') throw throwErr('BAD_REQUEST', `ID must be a string.`);
+  if (!id) throw returnRes('BAD_REQUEST', `You must provide an ID.`);
+  if (typeof id !== 'string') throw returnRes('BAD_REQUEST', `ID must be a string.`);
   id = id.trim();
   if (id.length === 0)
-    throw throwErr('BAD_REQUEST', `ID cannot be an empty string or just spaces.`);
-  if (!ObjectId.isValid(id)) throw throwErr('BAD_REQUEST', `Invalid object ID.`);
+    throw returnRes('BAD_REQUEST', `ID cannot be an empty string or just spaces.`);
+  if (!ObjectId.isValid(id)) throw returnRes('BAD_REQUEST', `Invalid object ID.`);
   return id;
 }
 
@@ -102,10 +102,10 @@ const idCheck = (id) => {
 const arrayValidCheck = (...arr) => {
   for (let i in arr) {
     if (!Array.isArray(arr[i])) {
-      throw throwErr('BAD_REQUEST', `${arr[i]} is not of type Array.`);
+      throw returnRes('BAD_REQUEST', `${arr[i]} is not of type Array.`);
     }
     if (arr[i].length < 1) {
-      throw throwErr('BAD_REQUEST', `Array can not be empty.`);
+      throw returnRes('BAD_REQUEST', `Array can not be empty.`);
     }
   }
 }
@@ -119,10 +119,10 @@ const arrayValidCheck = (...arr) => {
 const strValidCheck = (...str) => {
   for (let i in str) {
     if (typeof str[i] !== 'string') {
-      throw throwErr('BAD_REQUEST', `${str[i]} is not of type string.`);
+      throw returnRes('BAD_REQUEST', `${str[i]} is not of type string.`);
     }
     if (str[i].trim().length === 0) {
-      throw throwErr('BAD_REQUEST', `A string can not be empty or just filled with spaces.`);
+      throw returnRes('BAD_REQUEST', `A string can not be empty or just filled with spaces.`);
     }
   }
 }
@@ -137,10 +137,10 @@ const objValidCheck = (...obj) => {
   for (let i in obj) {
     // Object.prototype.toString.call(obj[i]) !== '[object Object]'
     if (typeof obj[i] !== 'object' || obj[i] === null || Array.isArray(obj[i])) {
-      throw throwErr('BAD_REQUEST', `Input of type Object is required.`);
+      throw returnRes('BAD_REQUEST', `Input of type Object is required.`);
     }
     if (Object.keys(obj[i]).length === 0) {
-      throw throwErr('BAD_REQUEST', `Can not give empty Object as input.`);
+      throw returnRes('BAD_REQUEST', `Can not give empty Object as input.`);
     }
   }
 }
@@ -153,7 +153,7 @@ const objValidCheck = (...obj) => {
 const numberValidCheck = (...num) => {
   for (let i in num) {
     if (typeof num[i] !== 'number' || Number.isNaN(num[i]) || !Number.isFinite(num[i])) {
-      throw throwErr('BAD_REQUEST', `Input provided must be a number.`);
+      throw returnRes('BAD_REQUEST', `Input provided must be a number.`);
     }
   }
 }
@@ -166,12 +166,12 @@ const numberValidCheck = (...num) => {
  **/
 const validDateCheck = (date) => {
   const d = moment(date, 'MM/DD/YYYY');
-  if (!d.isValid()) throw throwErr('BAD_REQUEST', `${d}. Date must be in MM/DD/YYYY format.`);
+  if (!d.isValid()) throw returnRes('BAD_REQUEST', `${d}. Date must be in MM/DD/YYYY format.`);
   let year = parseInt(date.slice(6));
   let minYear = 1920;
   let maxYear = Number(moment().add(1, 'year').format('YYYY'));
   if (year < minYear || year > maxYear)
-    throw throwErr('BAD_REQUEST', `Date must be within the range ${minYear} and ${maxYear}.`);
+    throw returnRes('BAD_REQUEST', `Date must be within the range ${minYear} and ${maxYear}.`);
 }
 
 /*
@@ -182,12 +182,12 @@ const validDateCheck = (date) => {
 const validDateTimeFormatCheck = (date) => {
   const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
   if (!regex.test(date)) {
-    throw throwErr('BAD_REQUEST', `Input needs to be in the the format: YYYY-MM-DDTHH:MM:SSZ`)
+    throw returnRes('BAD_REQUEST', `Input needs to be in the the format: YYYY-MM-DDTHH:MM:SSZ`)
   }
 }
 
 export default {
-  throwErr,
+  returnRes,
   sendErrResponse,
   parameterCheck,
   idCheck,

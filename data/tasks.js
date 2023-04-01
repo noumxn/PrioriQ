@@ -46,7 +46,7 @@ const exportedMethods = {
     {_id: new ObjectId(boardId)}, 
     {$push: {toDo: newTask}},
     {returnNewDocument: true});
-    if (!boardWithNewTask) throw validation.throwErr('INTERNAL_SERVER_ERROR', `Could not insert new task into board.`)
+    if (!boardWithNewTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not insert new task into board.`)
 
     return boardWithNewTask;
   },
@@ -64,7 +64,7 @@ const exportedMethods = {
     const foundTask = await boardCollection.findOne(
     {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
     {_id: 0, 'toDo.$': 1, 'inProgress.$': 1, 'done._id': 1});
-    if (!foundTask) throw validation.throwErr('NOT_FOUND', `No task with given id found.`); //What kind of error/if at all should this be?
+    if (!foundTask) throw validation.returnRes('NOT_FOUND', `No task with given id found.`); //What kind of error/if at all should this be?
     
     if (foundTask.toDo.length === 0 && foundTask.inProgress === 0) {
       foundTask.done[0]._id = foundTask.done[0]._id.toString();
@@ -121,7 +121,7 @@ const exportedMethods = {
     {deadline: deadline}, {description: description}, {assignedTo: assignedTo}]},
     {returnDocument: 'after'});
     if (updatedInfo.lastErrorObject.n === 0) {
-      throw validation.throwErr('NOT_FOUND', `No task with given id found.`);
+      throw validation.returnRes('NOT_FOUND', `No task with given id found.`);
     };
   
     return await this.getTaskById(updatedTask._id);
@@ -142,7 +142,7 @@ const exportedMethods = {
     {$pull: {inProgress: {_id: new ObjectId(taskId)}} },
     {$pull: {done: {_id: new ObjectId(taskId)}} },
     {returnNewDocument: true});
-    if (!updatedBoard) throw validation.throwErr('NOT_FOUND', `No task with given id found in board.`);
+    if (!updatedBoard) throw validation.returnRes('NOT_FOUND', `No task with given id found in board.`);
 
     return updatedBoard;
   },
