@@ -23,14 +23,18 @@ const exportedMethods = {
     validation.parameterCheck(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
     validation.idCheck(boardId);
     validation.strValidCheck(taskName, difficulty, estimatedTime, description);
-    validation.numberValidCheck(priority);
+    taskName = helpers.checkTaskName(taskName);
+    difficulty = helpers.checkDifficulty(difficulty);
+    description = helpers.checkDescription(description);
+    priority = helpers.checkPriority(priority);
     validation.validDateTimeFormatCheck(deadline);
     validation.arrayValidCheck(assignedTo);
     for (let i in assignedTo) {
-      validation.strValidCheck(i);
+      validation.strValidCheck(assignedTo[i]);
+      // Making sure the user actually exsits
+      await userData.getUserByUsername(assignedTo[i]);
       // TODO: Need to make sure user is not on the blocked users list on the specific board, otherwise throw 'FORBIDDEN'
       // TODO: Need to make sure user is existing, and part in allowed users list on the specific board, otherwise throw 'UNAUTHORIZED'
-      helpers.checkUsername(i);
     }
     const createdAt = new Date().toISOString();
 
@@ -69,7 +73,7 @@ const exportedMethods = {
     const foundTask = await boardCollection.findOne(
       {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
       {_id: 0, 'toDo.$': 1, 'inProgress.$': 1, 'done._id': 1});
-    if (!foundTask) throw validation.returnRes('NOT_FOUND', `No task with given id found.`); //What kind of error/if at all should this be?
+    if (!foundTask) throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
 
     if (foundTask.toDo.length === 0 && foundTask.inProgress === 0) {
       foundTask.done[0]._id = foundTask.done[0]._id.toString();
@@ -100,14 +104,18 @@ const exportedMethods = {
     validation.parameterCheck(taskId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
     validation.idCheck(taskId);
     validation.strValidCheck(taskName, difficulty, estimatedTime, description);
-    validation.numberValidCheck(priority);
+    taskName = helpers.checkTaskName(taskName);
+    difficulty = helpers.checkDifficulty(difficulty);
+    description = helpers.checkDescription(description);
+    priority = helpers.checkPriority(priority);
     validation.validDateCheck(deadline);
     validation.arrayValidCheck(assignedTo);
     for (let i in assignedTo) {
-      validation.strValidCheck(i);
+      validation.strValidCheck(assignedTo[i]);
+      // Making sure the user actually exsits
+      await userData.getUserByUsername(assignedTo[i]);
       // TODO: Need to make sure user is not on the blocked users list on the specific board, otherwise throw 'FORBIDDEN'
       // TODO: Need to make sure user is existing, and part in allowed users list on the specific board, otherwise throw 'UNAUTHORIZED'
-      helpers.checkUsername(i);
     }
     const createdAt = new Date().toISOString();
 
