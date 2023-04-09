@@ -69,7 +69,7 @@ const sendErrResponse = (res, {status, message}) => {
  **/
 const parameterCheck = (...param) => {
   for (let i in param) {
-    if (!param[i] && param[i] !== 0) // (!varName) also throws if param is 0. So making sure 0 doesn't get caught.
+    if (typeof param[i] === 'undefined' || param[i] === null)
       throw returnRes('BAD_REQUEST', `An Input Parameter is undefined.`);
   }
 }
