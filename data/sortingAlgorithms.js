@@ -7,8 +7,87 @@ import validation from '../utils/validation.js';
 import helpers from './helpers.js';
 
 const exportedMethods = {
-  async difficultyBasedSorting() {},
-  async priorityBasedSorting(boardId) {},
+  /*
+   * @param {boardId} ObjectId
+   * @description This function sorts tasks in the toDo and inProgress subdocuments in ascending order of difficulty
+   * @throws {NOT_FOUND} if boardId doesn't correspond to any board in the Database
+   * @return {board} Returns board with tasks appropriately sorted
+   **/
+  // NOT TESTED YET
+  async difficultyBasedSortAscending(boardId) {
+    // Data validation
+    validation.parameterCheck(boardId);
+    validation.idCheck(boardId);
+
+    // Retriving board using boardId
+    const boardCollection = await boards()
+    const board = await boardData.getBoardById(boardId);
+    if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
+
+    // assigning numberic values to dfficulty levels
+    const difficultyOrder = {veryEasy: 1, easy: 2, medium: 3, hard: 4, veryHard: 5};
+    // sorting
+    board.toDo.sort((task1, task2) => difficultyOrder[task1.difficulty] - difficultyOrder[task2.difficulty]);
+    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    board.inProgress.sort((task1, task2) => difficultyOrder[task1.difficulty] - difficultyOrder[task2.difficulty]);
+    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
+
+    return board
+  },
+
+  /*
+   * @param {boardId} ObjectId
+   * @description This function sorts tasks in the toDo and inProgress subdocuments in descending order of difficulty
+   * @throws {NOT_FOUND} if boardId doesn't correspond to any board in the Database
+   * @return {board} Returns board with tasks appropriately sorted
+   **/
+  // NOT TESTED YET
+  async difficultyBasedSortDescending(boardId) {
+    // Data validation
+    validation.parameterCheck(boardId);
+    validation.idCheck(boardId);
+
+    // Retriving board using boardId
+    const boardCollection = await boards()
+    const board = await boardData.getBoardById(boardId);
+    if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
+
+    // assigning numberic values to dfficulty levels
+    const difficultyOrder = {veryEasy: 1, easy: 2, medium: 3, hard: 4, veryHard: 5};
+    // sorting
+    board.toDo.sort((task1, task2) => difficultyOrder[task2.difficulty] - difficultyOrder[task1.difficulty]);
+    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    board.inProgress.sort((task1, task2) => difficultyOrder[task2.difficulty] - difficultyOrder[task1.difficulty]);
+    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
+
+    return board
+  },
+
+  /*
+   * @param {boardId} ObjectId
+   * @description This function sorts tasks in the toDo and inProgress subdocuments in descending order of priority
+   * @throws {NOT_FOUND} if boardId doesn't correspond to any board in the Database
+   * @return {board} Returns board with tasks appropriately sorted
+   **/
+  // NOT TESTED YET
+  async priorityBasedSorting(boardId) {
+    // Data validation
+    validation.parameterCheck(boardId);
+    validation.idCheck(boardId);
+
+    // Retriving board using boardId
+    const boardCollection = await boards();
+    const board = await boardData.getBoardById(boardId);
+    if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
+
+    // sorting
+    board.toDo.sort((task1, task2) => task2.priority - task1.priority);
+    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    board.inProgress.sort((task1, task2) => task2.priority - task1.priority);
+    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
+
+    return board;
+  },
 
   /*
    * @param {createdAt} date
@@ -18,7 +97,7 @@ const exportedMethods = {
    * @description This function produces the current priority of any task based on the four params
    * @return {name} Returns the name after removing leading and trailing spaces if there are any
    **/
-  async priorityBasedScheduling(createdAt, priority, deadline, estimatedTime) {
+  async priorityAssignmentAlgorithm(createdAt, priority, deadline, estimatedTime) {
     // Data validation
     validation.parameterCheck(createdAt, priority, deadline, estimatedTime);
     validation.strValidCheck(createdAt, deadline);
