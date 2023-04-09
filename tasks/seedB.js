@@ -51,7 +51,7 @@ try {
 
 console.log('1*************************************');
 try {
-  upBoard1 = await boardData.updateBoard(board1['_id'].toString(), 'Boardy', 'easy', 'boards');
+  upBoard1 = await boardData.updateBoard(board1['_id'].toString(), 'Boardy', 'easy', 'hahaha');
   console.log(upBoard1);
 } catch (e) {
   console.log(e);
