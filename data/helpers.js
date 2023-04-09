@@ -118,6 +118,9 @@ const checkUsernameUnique = async (username) => {
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4caedbd1a56e84ba9a50cd85d90da3bb4db34d91
  * @param {priority} Number
  * @description This function takes priority and makes sure it is a valid number in the range 1-10
  * @throws {BAD_REQUEST} if number is a float
