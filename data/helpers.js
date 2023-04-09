@@ -2,12 +2,11 @@
  * This file exports helper funcitons
  **/
 
+import Ajv from 'ajv';
 import EmailValidator from 'email-validator';
 import moment from 'moment';
-import validation from '../utils/validation.js';
 import {users} from '../config/mongoCollections.js';
-import Ajv from 'ajv';
-import userData from './users.js';
+import validation from '../utils/validation.js';
 
 /*
  * @param {dob} string
@@ -168,10 +167,10 @@ const checkDescription = (description) => {
 const checkDifficulty = (difficulty) => {
   difficulty = difficulty.trim()
   if (
-    difficulty != "veryEasy" ||
-    difficulty != "easy" ||
-    difficulty != "medium" ||
-    difficulty != "hard" ||
+    difficulty != "veryEasy" &&
+    difficulty != "easy" &&
+    difficulty != "medium" &&
+    difficulty != "hard" &&
     difficulty != "veryHard"
   ) throw validation.returnRes('BAD_REQUEST', `The only valid values for difficulty are: veryEasy, easy, medium, hard, veryHard.`)
 

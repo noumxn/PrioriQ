@@ -1,9 +1,10 @@
 import {ObjectId} from 'mongodb';
 import {boards} from '../config/mongoCollections.js';
-import userData from './users.js';
-import boardData from './boards.js';
 import validation from '../utils/validation.js';
+import boardData from './boards.js';
 import helpers from './helpers.js';
+import sorting from './sortingAlgorithms.js';
+import userData from './users.js';
 
 const exportedMethods = {
   /*
@@ -20,7 +21,9 @@ const exportedMethods = {
   * @return {boardWithNewTask} Returns the board document with the newly created task in the toDo array
   **/
   async createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo) {
-    validation.parameterCheck(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
+    // TODO: Check if the board task is being created for is set to priority or difficulty.
+    //       Based on that, you either priority or difficulty is set to null. and the other one requires values from the user.
+    validation.parameterCheck(boardId, taskName, estimatedTime, deadline, description, assignedTo);
     validation.idCheck(boardId);
     validation.strValidCheck(taskName, difficulty, estimatedTime, description);
     taskName = helpers.checkTaskName(taskName);
@@ -38,8 +41,9 @@ const exportedMethods = {
     }
     const createdAt = new Date().toISOString();
 
+
     const newTask = {
-      _id: new ObjectId(),
+      _id: new ObjectId().toString(),
       taskName: taskName,
       createdAt: createdAt,
       priority: priority,
@@ -50,15 +54,34 @@ const exportedMethods = {
       assignedTo: assignedTo
     }
 
+
     const boardCollection = await boards();
     const boardWithNewTask = await boardCollection.findOneAndUpdate(
       {_id: new ObjectId(boardId)},
       {$push: {toDo: newTask}},
       {returnNewDocument: true});
     if (!boardWithNewTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not insert new task into board.`)
+    boardWithNewTask.value._id = boardWithNewTask.value._id.toString();
+    let sortedBoard = await sorting.priorityBasedSorting(boardWithNewTask.value._id);
+    // Sorting board to accomodate new task
+    sortedBoard._id = sortedBoard._id.toString();
+    //-----------------------------------------------------------------------------------------------------------------
+    // ignore this please
+    //-----------------------------------------------------------------------------------------------------------------
+    // let updatedBoard = sortedBoard;
+    // for (let i in sortedBoard.toDo.length) {
+    //   updatedBoard.toDo[i] = await sorting.priorityAssignmentAlgorithm(
+    //     sortedBoard.toDo[i].createdAt,
+    //     sortedBoard.toDo[i].priority,
+    //     sortedBoard.toDo[i].deadline,
+    //     sortedBoard.toDo[i].estimatedTime
+    //   );
+    // }
+    //-----------------------------------------------------------------------------------------------------------------
 
-    return boardWithNewTask;
+    return await boardData.getBoardById(sortedBoard._id);
   },
+
   /*
    * @param {taskId} string
    * @description This function finds a task document by its id
