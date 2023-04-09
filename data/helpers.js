@@ -204,6 +204,14 @@ const checkTaskJson = (taskJson) => {
   }
 }
 
+/*
+ * @param {priorityScheduling} boolean
+ * @param {sortOrder} [boolean, 'asc', 'desc']
+ * @description This function sets sortOrder value to null if priorityScheduling is set to true
+ *              If priorityScheduling is false, it makes sure sortOrder is either 'asc' or 'desc'
+ * @throws {BAD_REQUEST} if priorityScheduling is false and sortOrder is  not 'asc' or 'desc'
+ * @return {sortOrder} after trimming leading and trailing spaces, and converting to lower case
+ **/
 const checkSortOrderValue = (priorityScheduling, sortOrder) => {
   if (priorityScheduling === true) {
     sortOrder = null;
