@@ -204,6 +204,20 @@ const checkTaskJson = (taskJson) => {
   }
 }
 
+const checkSortOrderValue = (priorityScheduling, sortOrder) => {
+  if (priorityScheduling === true) {
+    sortOrder = null;
+    return sortOrder
+  } else if (priorityScheduling === false) {
+    if (sortOrder === null) throw validation.returnRes("BAD_REQUEST", `Sort Order needs to be either 'asc' or 'desc'.`);
+    if (sortOrder.trim().toLowerCase() !== 'asc' && sortOrder.trim().toLowerCase() !== 'desc') {
+      throw validation.returnRes("BAD_REQUEST", `Sort Order needs to be either 'asc' or 'desc'.`);
+    }
+  }
+
+  return sortOrder.trim().toLowerCase();
+}
+
 export default {
   checkAge,
   checkEmail,
@@ -215,4 +229,5 @@ export default {
   checkUserJson,
   checkBoardJson,
   checkTaskJson,
+  checkSortOrderValue,
 }

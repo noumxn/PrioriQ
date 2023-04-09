@@ -1,6 +1,6 @@
-import { ObjectId } from "mongodb";
+import {ObjectId} from "mongodb";
 import userData from "./users.js";
-import { boards } from "../config/mongoCollections.js";
+import {boards} from "../config/mongoCollections.js";
 import validation from "../utils/validation.js";
 import helper from "./helpers.js";
 import bcrypt from "bcrypt";
@@ -10,38 +10,39 @@ dotenv.config();
 const exportedMethods = {
   /*
    * @param {boardName} string
-   * @param {username} string
+   * @param {owner} string
    * @param {priorityScheduling} string
-   * @param {sortOrder} string
    * @param {boardPassword} string
    * @description This function creates a new board object and stores it in the database
-   * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but funciton fails to create a user
+   * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but funciton fails to create a board
    * @return {board} Returns the board that was just created
    **/
   async createBoard(
     boardName,
-    username,
+    owner,
     priorityScheduling,
     sortOrder,
     boardPassword
   ) {
     validation.parameterCheck(
       boardName,
-      username,
+      owner,
       priorityScheduling,
       boardPassword
     );
-    validation.strValidCheck(boardName, username, boardPassword);
-    //boolcheck
+    validation.strValidCheck(boardName, owner, boardPassword);
+    await userData.getUserByUsername(owner);
+    sortOrder = helper.checkSortOrderValue(priorityScheduling, sortOrder);
 
     // Hashing the board password
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     boardPassword = await bcrypt.hash(boardPassword, saltRounds);
 
+
     //create data for new board
     const newBoard = {
       boardName: boardName,
-      username: username,
+      owner: owner,
       priorityScheduling: priorityScheduling,
       sortOrder: sortOrder,
       allowedUsers: [],
@@ -85,8 +86,8 @@ const exportedMethods = {
 
     const boardCollection = await boards();
 
-    const board = await boardCollection.findOne({ _id: new ObjectId(boardId) });
-    if (board === null)
+    const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
+    if (!board)
       throw validation.returnRes("NOT_FOUND", `No user with ID: ${boardId}.`);
     board._id = board._id.toString();
     return board;
@@ -104,10 +105,10 @@ const exportedMethods = {
 
     const boardCollection = await boards();
 
-    const boards = await boardCollection.find({ username: username }).toArray();
-    if (boards === null)
-      throw validation.returnRes("NOT_FOUND", `No boards from that user.`);
-    return boards;
+    const board = await boardCollection.find({owner: username}).toArray();
+    if (!board)
+      throw validation.returnRes("NOT_FOUND", `Could not get any boards.`);
+    return board;
   },
 
   /*
@@ -115,9 +116,9 @@ const exportedMethods = {
    * @param {newBoardName} string
    * @param {newSortOrder} string
    * @param {newSortOrder} string
-   * @description This function finds all boards created by user given the username
-   * @throws {NOT_FOUND} if no user exists with that username
-   * @return {board} Returns all boards from user with that given username
+   * @description This function finds a board and updates it
+   * @throws {NOT_FOUND} if no board with given boardId is found
+   * @return {board} Returns board that was updated
    **/
   async updateBoard(boardId, newBoardName, newSortOrder, newBoardPassword) {
     validation.parameterCheck(
@@ -151,10 +152,11 @@ const exportedMethods = {
       newBoardPassword = board.boardPassword;
     }
 
-    console.log(newBoardPassword);
+    // TODO: Need to make sure sortOrder is not updated when the board is using the priority setting.
+    //       The sortOrder only applies to boards that have the difficulty setting
 
     await boardCollection.updateOne(
-      { _id: new ObjectId(boardId) },
+      {_id: new ObjectId(boardId)},
       {
         $set: {
           boardName: newBoardName,
@@ -166,6 +168,13 @@ const exportedMethods = {
 
     return await this.getBoardById(boardId);
   },
+
+  /*
+   * @param {boardId} ObjectId
+   * @description This function finds board with boardId and deletes it
+   * @throws {NOT_FOUND} if no board with boardId was found
+   * @return {board} message indicating board has been deleted
+   **/
   async deleteBoard(boardId) {
     validation.parameterCheck(boardId);
     validation.strValidCheck(boardId);
@@ -178,10 +187,10 @@ const exportedMethods = {
     });
 
     if (deletionInfo.lastErrorObject.n === 0) {
-      throw `Could not delete band with id of ${boardId}`;
+      throw validation.returnRes('NOT_FOUND', `Could not delete board with ID: ${boardId}`);
     }
 
-    return `Board ${deletionInfo.value.boardName} has been deleted.`;
+    return `Board '${deletionInfo.value.boardName}' has been deleted.`;
   },
 };
 
