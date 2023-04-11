@@ -2,12 +2,11 @@
  * This file exports helper funcitons
  **/
 
+import Ajv from 'ajv';
 import EmailValidator from 'email-validator';
 import moment from 'moment';
-import validation from '../utils/validation.js';
 import {users} from '../config/mongoCollections.js';
-import Ajv from 'ajv';
-import userData from './users.js';
+import validation from '../utils/validation.js';
 
 /*
  * @param {dob} string
@@ -50,7 +49,6 @@ const checkUsername = (username) => {
   if (!regex.test(username)) throw validation.returnRes('BAD_REQUEST', `The username can only contain alphabets, numbers, and underscores.`);
   let regex2 = /[a-zA-Z]/;
   if (!regex2.test(username)) throw validation.returnRes('BAD_REQUEST', `Username must contain at least one alphabet.`);
-  // TODO: Add check to make sure username doesn't already exist in the database, throw CONFLICT error
 
   return username.trim().toLowerCase()
 }
@@ -116,6 +114,70 @@ const checkUsernameUnique = async (username) => {
   const userCollection = await users();
   const searchedUser = await userCollection.findOne({username: username});
   if (searchedUser) throw validation.returnRes('CONFLICT', `The username '${username}' is already taken.`);
+}
+
+/*
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4caedbd1a56e84ba9a50cd85d90da3bb4db34d91
+ * @param {priority} Number
+ * @description This function takes priority and makes sure it is a valid number in the range 1-10
+ * @throws {BAD_REQUEST} if number is a float
+ * @throws {BAD_REQUEST} if number is not in the range 1-10
+ * @return {priority}
+ **/
+const checkPriority = (priority) => {
+  priority = Number(priority);
+  validation.numberValidCheck(priority);
+  if (priority > 10 || priority < 1)
+    throw validation.returnRes('BAD_REQUEST', `Priority needs to be in the range 1 - 10.`);
+  if (!Number.isInteger(priority))
+    throw validation.returnRes('BAD_REQUEST', `Priority should be a whole number.`);
+
+  return priority
+}
+
+/*
+ * @param {taskName} string
+ * @description This function takes taskName and makes sure it is less than 30 chars
+ * @throws {BAD_REQUEST} if taskName longer than 30 chars
+ * @return {taskName} after trimming leading and trailing spaces
+ **/
+const checkTaskName = (taskName) => {
+  taskName = taskName.trim()
+  if (taskName.length > 30)
+    throw validation.returnRes('BAD_REQUEST', `Name of the task can not exceed 30 characters.`);
+}
+
+/*
+ * @param {description} string
+ * @description This function takes description and makes sure it is less than 100 chars
+ * @throws {BAD_REQUEST} if description longer than 100 chars
+ * @return {description} after trimming leading and trailing spaces
+ **/
+const checkDescription = (description) => {
+  if (description.length > 100)
+    throw validation.returnRes('BAD_REQUEST', `Name of the task can not exceed 100 characters.`);
+}
+
+/*
+ * @param {difficulty} string
+ * @description This function takes difficulty and makes sure it is a valid difficulty level
+ * @throws {BAD_REQUEST} if difficulty is anything other than: veryEasy, easy, medium, hard, veryHard.
+ * @return {difficulty} after trimming leading and trailing spaces
+ **/
+const checkDifficulty = (difficulty) => {
+  difficulty = difficulty.trim()
+  if (
+    difficulty != "veryEasy" &&
+    difficulty != "easy" &&
+    difficulty != "medium" &&
+    difficulty != "hard" &&
+    difficulty != "veryHard"
+  ) throw validation.returnRes('BAD_REQUEST', `The only valid values for difficulty are: veryEasy, easy, medium, hard, veryHard.`)
+
+  return difficulty
 }
 
 /*
@@ -234,6 +296,10 @@ export default {
   checkName,
   convertEstimatedTimeToMs,
   checkUsernameUnique,
+  checkPriority,
+  checkTaskName,
+  checkDescription,
+  checkDifficulty,
   checkUserJson,
   checkBoardJson,
   checkTaskJson,

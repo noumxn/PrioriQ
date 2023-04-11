@@ -1,4 +1,4 @@
-import {boardData, userData} from '../data/index.js';
+import {boardData, taskData, userData} from '../data/index.js';
 import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 
 
@@ -16,8 +16,9 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   let board2 = undefined;
   let getBoard1 = undefined;
   let getBoard2 = undefined;
-  let upBoard1 = undefined;
-  let delBoard1 = undefined;
+  let task1 = undefined;
+  let task2 = undefined;
+  let task3 = undefined;
 
   console.log('1*************************************')
   await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#')
@@ -62,14 +63,27 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 
   }
 
-  // console.log('1*************************************');
-  // try {
-  //   upBoard1 = await boardData.updateBoard(board1['_id'].toString(), 'Boardy', 'easy', 'hahaha');
-  //   console.log(upBoard1);
-  // } catch (e) {
-  //   console.log(e);
-
-  // }
+  console.log('1*************************************');
+  try {
+    task1 = await taskData.createTask(board1._id, "groceries", 2, "veryEasy", '02 hours 00 mins', '2023-04-09T16:56:13.357Z', 'get the bread', ["user1"]);
+    console.log(task1);
+  } catch (e) {
+    console.log(e);
+  }
+  console.log('1*************************************');
+  try {
+    task2 = await taskData.createTask(board1._id, "assignment", 7, "veryEasy", '06 hours 00 mins', '2023-04-09T18:56:13.357Z', 'lab 9', ["user1"]);
+    console.log(task2);
+  } catch (e) {
+    console.log(e);
+  }
+  console.log('1*************************************');
+  try {
+    task3 = await taskData.createTask(board1._id, "lab", 6, "veryEasy", '06 hours 00 mins', '2023-04-09T18:56:13.357Z', 'lab 7', ["user1"]);
+    console.log(task3);
+  } catch (e) {
+    console.log(e);
+  }
 
   // console.log('1*************************************');
   // try {

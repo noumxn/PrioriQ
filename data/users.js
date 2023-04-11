@@ -166,7 +166,11 @@ const exportedMethods = {
       {returnDocument: 'after'}
     );
     if (updateInfo.lastErrorObject.n == 0) {
+<<<<<<< HEAD
       throw validation.throwErr('INTERNAL_SERVER_ERROR', `Could not update user Successfully`);
+=======
+      throw validation.returnRes('NOT_FOUND', `Could not find and update user`);
+>>>>>>> bd2616a107855f69a705bb3b1350b928d1a58fb2
     }
     // const newId = up
     return await this.getUserById(userId);
@@ -188,7 +192,11 @@ const exportedMethods = {
     const deleteInfo = await userCollection.findOneAndDelete(
       {_id: new ObjectId(userId)}
     );
+<<<<<<< HEAD
     if (deleteInfo.lastErrorObject.n == 0) throw validation.throwErr(`INTERNAL_SERVER_ERROR`, `Could not delte user with id ${userId}`)
+=======
+    if (deleteInfo.lastErrorObject.n == 0) throw validation.returnRes(`NOT_FOUND`, `Could not find and delete user with ID: '${userId}'`)
+>>>>>>> bd2616a107855f69a705bb3b1350b928d1a58fb2
     // return username of deleted user saying they have been deleted
     return `User ${deleteInfo.value.username} has been deleted.`
   },
