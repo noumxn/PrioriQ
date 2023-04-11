@@ -1,5 +1,8 @@
+import dotenv, {config} from 'dotenv';
+dotenv.config()
+
 export const mongoConfig = {
-  serverUrl: 'mongodb://localhost:27017/',
-  database: 'taskManagementApplication'
+  serverUrl: process.env.MONGO_SERVER_URL,
+  database: process.env.MONGO_DATABASE_NAME
 };
 
