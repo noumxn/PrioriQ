@@ -62,24 +62,22 @@ const exportedMethods = {
       {returnNewDocument: true});
     if (!boardWithNewTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not insert new task into board.`)
     boardWithNewTask.value._id = boardWithNewTask.value._id.toString();
-    let sortedBoard = await sorting.priorityBasedSorting(boardWithNewTask.value._id);
-    // Sorting board to accomodate new task
-    sortedBoard._id = sortedBoard._id.toString();
     //-----------------------------------------------------------------------------------------------------------------
     // ignore this please
     //-----------------------------------------------------------------------------------------------------------------
-    // let updatedBoard = sortedBoard;
-    // for (let i in sortedBoard.toDo.length) {
-    //   updatedBoard.toDo[i] = await sorting.priorityAssignmentAlgorithm(
-    //     sortedBoard.toDo[i].createdAt,
-    //     sortedBoard.toDo[i].priority,
-    //     sortedBoard.toDo[i].deadline,
-    //     sortedBoard.toDo[i].estimatedTime
-    //   );
+    // // Sorting board to accomodate new task
+    // let sortedBoard;
+    // if (boardWithNewTask.priorityScheduling === true) {
+    //   sortedBoard = await sorting.priorityBasedSorting(boardWithNewTask.value._id);
+    // } else if (boardWithNewTask.priorityScheduling === false && boardWithNewTask.sortOrder === 'asc') {
+    //   sortedBoard = await sorting.difficultyBasedSortAscending(boardWithNewTask.value._id)
+    // } else if (boardWithNewTask.priorityScheduling === false && boardWithNewTask.sortOrder === 'desc') {
+    //   sortedBoard = await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
     // }
+    // sortedBoard._id = sortedBoard._id.toString();
     //-----------------------------------------------------------------------------------------------------------------
 
-    return await boardData.getBoardById(sortedBoard._id);
+    return await boardData.getBoardById(boardWithNewTask.value._id);
   },
 
   /*
