@@ -11,7 +11,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon --exec yarn start",
-    "seed": "node ./tasks/seed.js"
+    "seed": "node ./tasks/seed.js",
+    "seedB": "node ./tasks/seedB.js"
   },
   "repository": {
     "type": "git",

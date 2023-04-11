@@ -6,6 +6,7 @@ import EmailValidator from 'email-validator';
 import moment from 'moment';
 import validation from '../utils/validation.js';
 import {users} from '../config/mongoCollections.js';
+import Ajv from 'ajv';
 import userData from './users.js';
 
 /*
@@ -117,6 +118,114 @@ const checkUsernameUnique = async (username) => {
   if (searchedUser) throw validation.returnRes('CONFLICT', `The username '${username}' is already taken.`);
 }
 
+/*
+ * @param {userJson} object
+ * @description This function should be called in the post and patch route where we get user data from the user
+ *              Validates the json object we get as input from the user
+ *              Makes sure no extra unrequired data is being sent in the request body
+ * @throws {FORBIDDEN} if there is any extra unexpected field in the request body
+ **/
+const checkUserJson = (userJson) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      firstName: {type: 'string'},
+      lastName: {type: 'string'},
+      dob: {type: 'string'},
+      email: {type: 'string'},
+      username: {type: 'string'},
+      password: {type: 'string'}
+    },
+    required: ['firstName', 'lastName', 'dob', 'username', 'email', 'password'],
+    additionalProperties: false
+  }
+  const ajv = new Ajv();
+  const validate = ajv.compile(schema);
+  const isValid = validate(userJson);
+  if (!isValid) {
+    throw validation.returnRes('FORBIDDEN', `There are unrequired fields in the request being sent.`)
+  }
+}
+
+/*
+ * @param {boardJson} object
+ * @description This function should be called in the post and patch route where we get board data from the user
+ *              Validates the json object we get as input from the user
+ *              Makes sure no extra unrequired data is being sent in the request body
+ * @throws {FORBIDDEN} if there is any extra unexpected field in the request body
+ **/
+const checkBoardJson = (boardJson) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      boardName: {type: 'string'},
+      owner: {type: 'string'},
+      priorityScheduling: {type: 'boolean'},
+      sortOrder: {type: ['string', 'null'], enum: ['asc', 'desc', null]},
+      boardPassword: 'string'
+    },
+    required: ['boardName', 'owner', 'priorityScheduling', 'sortOrder', 'boardPassword'],
+    additionalProperties: false
+  }
+  const ajv = new Ajv();
+  const validate = ajv.compile(schema);
+  const isValid = validate(boardJson);
+  if (!isValid) {
+    throw validation.returnRes('FORBIDDEN', `There are unrequired fields in the request being sent.`)
+  }
+}
+
+/*
+ * @param {boardJson} object
+ * @description This function should be called in the post and patch route where we get task data from the user
+ *              Validates the json object we get as input from the user
+ *              Makes sure no extra unrequired data is being sent in the request body
+ * @throws {FORBIDDEN} if there is any extra unexpected field in the request body
+ **/
+const checkTaskJson = (taskJson) => {
+  const schema = {
+    type: 'object',
+    properties: {
+      taskName: {type: 'string'},
+      priority: {type: 'number'},
+      difficulty: {type: ['string', 'null'], enum: ['veryEasy', 'easy', 'medium', 'hard', 'veryHard', null]},
+      estimatedTime: {type: 'string'},
+      deadline: {type: 'string'},
+      description: {type: 'string'}
+    },
+    required: ['taskName', 'priority', 'difficulty', 'estimatedTime', 'deadline', 'description'],
+    additionalProperties: false
+  }
+  const ajv = new Ajv();
+  const validate = ajv.compile(schema);
+  const isValid = validate(taskJson);
+  if (!isValid) {
+    throw validation.returnRes('FORBIDDEN', `There are unrequired fields in the request being sent.`)
+  }
+}
+
+/*
+ * @param {priorityScheduling} boolean
+ * @param {sortOrder} [boolean, 'asc', 'desc']
+ * @description This function sets sortOrder value to null if priorityScheduling is set to true
+ *              If priorityScheduling is false, it makes sure sortOrder is either 'asc' or 'desc'
+ * @throws {BAD_REQUEST} if priorityScheduling is false and sortOrder is  not 'asc' or 'desc'
+ * @return {sortOrder} after trimming leading and trailing spaces, and converting to lower case
+ **/
+const checkSortOrderValue = (priorityScheduling, sortOrder) => {
+  if (priorityScheduling === true) {
+    sortOrder = null;
+    return sortOrder
+  } else if (priorityScheduling === false) {
+    if (sortOrder === null) throw validation.returnRes("BAD_REQUEST", `Sort Order needs to be either 'asc' or 'desc'.`);
+    if (sortOrder.trim().toLowerCase() !== 'asc' && sortOrder.trim().toLowerCase() !== 'desc') {
+      throw validation.returnRes("BAD_REQUEST", `Sort Order needs to be either 'asc' or 'desc'.`);
+    }
+  }
+
+  return sortOrder.trim().toLowerCase();
+}
+
 export default {
   checkAge,
   checkEmail,
@@ -125,4 +234,8 @@ export default {
   checkName,
   convertEstimatedTimeToMs,
   checkUsernameUnique,
+  checkUserJson,
+  checkBoardJson,
+  checkTaskJson,
+  checkSortOrderValue,
 }
