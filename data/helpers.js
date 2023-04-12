@@ -148,6 +148,7 @@ const checkTaskName = (taskName) => {
   taskName = taskName.trim()
   if (taskName.length > 30)
     throw validation.returnRes('BAD_REQUEST', `Name of the task can not exceed 30 characters.`);
+  return taskName;
 }
 
 /*
@@ -159,6 +160,7 @@ const checkTaskName = (taskName) => {
 const checkDescription = (description) => {
   if (description.length > 100)
     throw validation.returnRes('BAD_REQUEST', `Name of the task can not exceed 100 characters.`);
+  return description;
 }
 
 /*

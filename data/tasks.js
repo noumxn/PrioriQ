@@ -30,7 +30,7 @@ const exportedMethods = {
     difficulty = helpers.checkDifficulty(difficulty);
     description = helpers.checkDescription(description);
     priority = helpers.checkPriority(priority);
-    validation.validDateTimeFormatCheck(deadline);
+    validation.validDateCheck(deadline);
     validation.arrayValidCheck(assignedTo);
     for (let i in assignedTo) {
       validation.strValidCheck(assignedTo[i]);
@@ -43,7 +43,7 @@ const exportedMethods = {
 
 
     const newTask = {
-      _id: new ObjectId().toString(),
+      _id: new ObjectId(),
       taskName: taskName,
       createdAt: createdAt,
       priority: priority,
@@ -88,19 +88,21 @@ const exportedMethods = {
    **/
   async getTaskById(taskId) {
     validation.parameterCheck(taskId);
-    validation.idCheck(taskId);
+    taskId = validation.idCheck(taskId);
+
 
     const boardCollection = await boards();
+
     const foundTask = await boardCollection.findOne(
       {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
-      {_id: 0, 'toDo.$': 1, 'inProgress.$': 1, 'done._id': 1});
+      {_id: 0, 'toDo.$': 1, 'inProgress.$': 1, 'done.$': 1});
     if (!foundTask) throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
 
-    if (foundTask.toDo.length === 0 && foundTask.inProgress === 0) {
+    if (foundTask.toDo.length === 0 && foundTask.inProgress.length === 0) {
       foundTask.done[0]._id = foundTask.done[0]._id.toString();
       return foundTask.done[0];
     }
-    if (foundTask.inProgress === 0) {
+    if (foundTask.inProgress.length === 0) {
       foundTask.toDo[0]._id = foundTask.toDo[0]._id.toString();
       return foundTask.toDo[0];
     }
@@ -140,31 +142,49 @@ const exportedMethods = {
     }
     const createdAt = new Date().toISOString();
 
-    const updatedTask = {
-      _id: new ObjectId(taskId),
-      createdAt: createdAt,
-      taskName: taskName,
-      priority: priority,
-      difficulty: difficulty,
-      estimatedTime: estimatedTime,
-      deadline: deadline,
-      description: description,
-      assignedTo: assignedTo
-    }
-
     const boardCollection = await boards();
-    const updatedInfo = await boardCollection.findOneAndUpdate(
-      {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
+    let updatedInfo = undefined;
+
+    // First checks toDo list, then inProgress, then done.
+    // This is ugly, but I couldn't find a nicer way to do it.
+    updatedInfo = await boardCollection.findOneAndUpdate(
+      {'toDo._id': new ObjectId(taskId)},
       {
-        $set: [{_id: taskId}, {createdAt: createdAt}, {taskName: taskName}, {priority: priority}, {difficulty: difficulty}, {estimatedTime: estimatedTime},
-        {deadline: deadline}, {description: description}, {assignedTo: assignedTo}]
+        $set: {'toDo.$.createdAt': createdAt, 'toDo.$.taskName': taskName, 'toDo.$.priority': priority, 'toDo.$.difficulty': difficulty, 
+        'toDo.$.estimatedTime': estimatedTime, 'toDo.$.deadline': deadline, 'toDo.$.description': description, 'toDo.$.assignedTo': assignedTo}
       },
       {returnDocument: 'after'});
+      if (updatedInfo.lastErrorObject.n !== 0) {
+        return await this.getTaskById(taskId);
+      };
+
+    updatedInfo = await boardCollection.findOneAndUpdate(
+      {'inProgress._id': new ObjectId(taskId)},
+      {
+        $set: {'inProgress.$.createdAt': createdAt, 'inProgress.$.taskName': taskName, 'inProgress.$.priority': priority, 'inProgress.$.difficulty': difficulty, 
+        'inProgress.$.estimatedTime': estimatedTime, 'inProgress.$.deadline': deadline, 'inProgress.$.description': description, 'inProgress.$.assignedTo': assignedTo}
+      },
+      {returnDocument: 'after'});
+      if (updatedInfo.lastErrorObject.n !== 0) {
+        return await this.getTaskById(taskId);
+      };
+
+    updatedInfo = await boardCollection.findOneAndUpdate(
+      {'done._id': new ObjectId(taskId)},
+      {
+        $set: {'done.$.createdAt': createdAt, 'done.$.taskName': taskName, 'done.$.priority': priority, 'done.$.difficulty': difficulty, 
+        'done.$.estimatedTime': estimatedTime, 'done.$.deadline': deadline, 'done.$.description': description, 'done.$.assignedTo': assignedTo}
+      },
+      {returnDocument: 'after'});
+      if (updatedInfo.lastErrorObject.n !== 0) {
+        return await this.getTaskById(taskId);
+      };
+ 
     if (updatedInfo.lastErrorObject.n === 0) {
       throw validation.returnRes('NOT_FOUND', `No task with given id found.`);
     };
 
-    return await this.getTaskById(updatedTask._id);
+    return await this.getTaskById(taskId);
   },
   /*
   * @param {taskId} string
@@ -175,6 +195,8 @@ const exportedMethods = {
   async deleteTask(taskId) {
     validation.parameterCheck(taskId);
     validation.idCheck(taskId);
+
+    const boardCollection = await boards();
 
     const updatedBoard = await boardCollection.updateOne(
       {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
