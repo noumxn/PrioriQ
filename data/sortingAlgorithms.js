@@ -1,10 +1,7 @@
 import {ObjectId} from 'mongodb';
-import {users} from '../config/mongoCollections.js';
 import {boards} from '../config/mongoCollections.js';
-import userData from './users.js'
-import boardData from './boards.js';
 import validation from '../utils/validation.js';
-import helpers from './helpers.js';
+import boardData from './boards.js';
 
 const exportedMethods = {
   /*
@@ -28,9 +25,9 @@ const exportedMethods = {
     const difficultyOrder = {veryEasy: 1, easy: 2, medium: 3, hard: 4, veryHard: 5};
     // sorting
     board.toDo.sort((task1, task2) => difficultyOrder[task1.difficulty] - difficultyOrder[task2.difficulty]);
-    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
     board.inProgress.sort((task1, task2) => difficultyOrder[task1.difficulty] - difficultyOrder[task2.difficulty]);
-    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
 
     return board
   },
@@ -56,9 +53,9 @@ const exportedMethods = {
     const difficultyOrder = {veryEasy: 1, easy: 2, medium: 3, hard: 4, veryHard: 5};
     // sorting
     board.toDo.sort((task1, task2) => difficultyOrder[task2.difficulty] - difficultyOrder[task1.difficulty]);
-    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
     board.inProgress.sort((task1, task2) => difficultyOrder[task2.difficulty] - difficultyOrder[task1.difficulty]);
-    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
 
     return board
   },
@@ -77,14 +74,16 @@ const exportedMethods = {
 
     // Retriving board using boardId
     const boardCollection = await boards();
-    const board = await boardData.getBoardById(boardId);
+    const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
 
     // sorting
     board.toDo.sort((task1, task2) => task2.priority - task1.priority);
-    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {toDo: board.toDo}});
-    board.inProgress.sort((task1, task2) => task2.priority - task1.priority);
-    await boardCollection.updateOne({_id: ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    if (board.inProgress.length >= 1) {
+      board.inProgress.sort((task1, task2) => task2.priority - task1.priority);
+      await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
+    }
 
     return board;
   },
