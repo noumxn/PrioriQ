@@ -3,7 +3,7 @@ import userData from "./users.js";
 import {boards} from "../config/mongoCollections.js";
 import validation from "../utils/validation.js";
 import helper from "./helpers.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
 

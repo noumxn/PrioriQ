@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import {ObjectId} from 'mongodb';
 import {users} from '../config/mongoCollections.js';
@@ -6,23 +6,6 @@ import validation from '../utils/validation.js';
 import helpers from './helpers.js';
 dotenv.config();
 
-//helper for Create and Update
-async function IsEmailInUse(email){
- /* Checks to see if email is already in use by someone else when creating/updating an account
- parameters: email : string
- */
-email=email.trim().toLowerCase();
-const userCollection = await users();
-const userList = await userCollection.find({},{}).toArray();
-if(userList.length != 0){
-for(let i = 0; i<userList.length; i++){
-  if(email == userList[i].email){
-    return true;
-  }
-}
-}
-return false;
-}
 
 
 const exportedMethods = {
@@ -125,8 +108,8 @@ const exportedMethods = {
       checkList: []
     }
     //check if email is already in use
-    let inUse = await IsEmailInUse(email);
-    if(inUse){
+    let inUse = await helpers.checkEmailInUse(email);
+    if (inUse) {
       throw validation.returnRes('CONFLICT', `The email ${email} is already in use. Please try another`)
     }
     const userCollection = await users();
@@ -181,16 +164,16 @@ const exportedMethods = {
       updatedUser.password = await bcrypt.hash(password, saltRounds);
     }
     //check if username and email are changed, and if so check to see if unique
-    if(user.username != username){
-        await helpers.checkUsernameUnique(username);
-      }
-    if(user.email != email){
-      let inUse = await IsEmailInUse(email);
-      if(inUse){
+    if (user.username != username) {
+      await helpers.checkUsernameUnique(username);
+    }
+    if (user.email != email) {
+      let inUse = await helpers.checkEmailInUse(email);
+      if (inUse) {
         throw validation.returnRes('CONFLICT', `The email ${email} is already in use. Please try another`)
       }
     }
-    
+
 
     // update user from given userId with new info
     const userCollection = await users();

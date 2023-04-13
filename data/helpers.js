@@ -290,6 +290,26 @@ const checkSortOrderValue = (priorityScheduling, sortOrder) => {
   return sortOrder.trim().toLowerCase();
 }
 
+/*
+ * @param {email} string
+ * @description This function checks if an email is in currently in use 
+ * @return {true} if email is in use already
+ * @return {false} if email is not in use already
+ **/
+async function checkEmailInUse(email) {
+  email = email.trim().toLowerCase();
+  const userCollection = await users();
+  const userList = await userCollection.find({}, {}).toArray();
+  if (userList.length != 0) {
+    for (let i = 0; i < userList.length; i++) {
+      if (email == userList[i].email) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 export default {
   checkAge,
   checkEmail,
@@ -306,4 +326,5 @@ export default {
   checkBoardJson,
   checkTaskJson,
   checkSortOrderValue,
+  checkEmailInUse,
 }
