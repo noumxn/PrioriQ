@@ -21,27 +21,42 @@ const exportedMethods = {
   * @return {boardWithNewTask} Returns the board document with the newly created task in the toDo array
   **/
   async createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo) {
-    // TODO: Check if the board task is being created for is set to priority or difficulty.
-    //       Based on that, you either priority or difficulty is set to null. and the other one requires values from the user.
     validation.parameterCheck(boardId, taskName, estimatedTime, deadline, description, assignedTo);
     validation.idCheck(boardId);
-    validation.strValidCheck(taskName, difficulty, estimatedTime, description);
+    validation.strValidCheck(taskName, estimatedTime, description);
     taskName = helpers.checkTaskName(taskName);
-    difficulty = helpers.checkDifficulty(difficulty);
     description = helpers.checkDescription(description);
-    priority = helpers.checkPriority(priority);
     validation.validDateCheck(deadline);
     validation.arrayValidCheck(assignedTo);
+
+    const boardCollection = await boards();
+    const originBoard = await boardData.getBoardById(boardId);
+
     for (let i in assignedTo) {
       validation.strValidCheck(assignedTo[i]);
       // Making sure the user actually exsits
       await userData.getUserByUsername(assignedTo[i]);
-      // TODO: Need to make sure user is not on the blocked users list on the specific board, otherwise throw 'FORBIDDEN'
-      // TODO: Need to make sure user is existing, and part in allowed users list on the specific board, otherwise throw 'UNAUTHORIZED'
+      // Makes sure each user in assignedTo is not blocked from the board and is allowed access to the board
+      if (originBoard.blockedUsers.includes(assignedTo[i])) {
+        throw validation.returnRes('FORBIDDEN', `${assignedTo[i]} is blocked from the board.`);
+      }
+      // This can be uncommented after Athena implements adding the creator of the board to the allowed users list upon creation
+     // if (!originBoard.allowedUsers.includes(assignedTo[i])) {
+     //   throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
+     // }
+    }
+
+    if (originBoard.priorityScheduling) {
+      priority = helpers.checkPriority(priority);
+      difficulty = null;
+    }
+    else {
+      difficulty = helpers.checkDifficulty(difficulty);
+      priority = null;
     }
     const createdAt = new Date().toISOString();
 
-
+    if (!difficulty) {}
     const newTask = {
       _id: new ObjectId(),
       taskName: taskName,
@@ -54,8 +69,6 @@ const exportedMethods = {
       assignedTo: assignedTo
     }
 
-
-    const boardCollection = await boards();
     const boardWithNewTask = await boardCollection.findOneAndUpdate(
       {_id: new ObjectId(boardId)},
       {$push: {toDo: newTask}},
@@ -110,6 +123,24 @@ const exportedMethods = {
     return foundTask.inProgress[0];
   },
 
+ /*
+  * @param {taskId} string
+  * @description This function gets the board to which the task with the given id belongs
+  * @throws {NOT_FOUND} if all valid params are provided but function fails to find a board
+  * @return {board} Returns the found board
+  **/
+  async getBoardByTaskId(taskId) {
+    validation.parameterCheck(taskId);
+    taskId = validation.idCheck(taskId);
+    const boardCollection = await boards();
+
+    const board = await boardCollection.findOne(
+      {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]});
+      if (!board) throw validation.returnRes('NOT_FOUND', `No board with a task with ID: '${taskId}'`);
+    board._id = board._id.toString();
+    return board;
+  },
+
   /*
    * @param {taskId} string
    * @param {taskName} string 
@@ -124,25 +155,40 @@ const exportedMethods = {
    * @return {task} Returns the updated task.
    **/
   async updateTask(taskId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo) {
-    validation.parameterCheck(taskId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
-    validation.idCheck(taskId);
-    validation.strValidCheck(taskName, difficulty, estimatedTime, description);
+    validation.parameterCheck(taskId, taskName, estimatedTime, deadline, description, assignedTo);
+    taskId = validation.idCheck(taskId);
+    validation.strValidCheck(taskName, estimatedTime, description);
+    estimatedTime = estimatedTime.trim();
+    description = description.trim();
     taskName = helpers.checkTaskName(taskName);
-    difficulty = helpers.checkDifficulty(difficulty);
-    description = helpers.checkDescription(description);
-    priority = helpers.checkPriority(priority);
     validation.validDateCheck(deadline);
     validation.arrayValidCheck(assignedTo);
+
+    const boardCollection = await boards();
+    const originBoard = await this.getBoardByTaskId(taskId);
+
     for (let i in assignedTo) {
       validation.strValidCheck(assignedTo[i]);
       // Making sure the user actually exsits
       await userData.getUserByUsername(assignedTo[i]);
-      // TODO: Need to make sure user is not on the blocked users list on the specific board, otherwise throw 'FORBIDDEN'
-      // TODO: Need to make sure user is existing, and part in allowed users list on the specific board, otherwise throw 'UNAUTHORIZED'
+      if (originBoard.blockedUsers.includes(assignedTo[i])) {
+        throw validation.returnRes('FORBIDDEN', `${assignedTo[i]} is blocked from the board.`);
+      }
+      // This can be uncommented after Athena implements adding the creator of the board to the allowed users list upon creation
+     // if (!originBoard.allowedUsers.includes(assignedTo[i])) {
+     //   throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
+     // }
+    }
+    if (originBoard.priorityScheduling) {
+      priority = helpers.checkPriority(priority);
+      difficulty = null;
+    }
+    else {
+      difficulty = helpers.checkDifficulty(difficulty);
+      priority = null;
     }
     const createdAt = new Date().toISOString();
 
-    const boardCollection = await boards();
     let updatedInfo = undefined;
 
     // First checks toDo list, then inProgress, then done.
@@ -190,13 +236,14 @@ const exportedMethods = {
   * @param {taskId} string
   * @description This function deletes the task with the given id from the database
   * @throws {NOT_FOUND} if all valid params are provided but function fails to delete a task
-  * @return {task} Returns the updated board with the successfully deleted task
+  * @return {board} Returns the updated board with the successfully deleted task
   **/
   async deleteTask(taskId) {
     validation.parameterCheck(taskId);
     validation.idCheck(taskId);
 
     const boardCollection = await boards();
+    const board = await this.getBoardByTaskId(taskId);
 
     const updatedBoard = await boardCollection.updateOne(
       {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
@@ -206,8 +253,89 @@ const exportedMethods = {
       {returnNewDocument: true});
     if (!updatedBoard) throw validation.returnRes('NOT_FOUND', `No task with given id found in board.`);
 
-    return updatedBoard;
+    return await boardData.getBoardById(board._id.toString());
   },
+
+ /*
+  * @param {taskId} string
+  * @description This function moves the task from wherever it is to the toDo list on the board
+  * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but function fails to move task
+  * @return {boardWithMovedTask} Returns the updated board with the successfully moved task
+  **/
+  async moveToToDo(taskId) {
+    validation.parameterCheck(taskId);
+    validation.idCheck(taskId);
+
+    const taskToMove = await this.getTaskById(taskId);
+
+    const boardCollection = await boards();
+    const board = await this.getBoardByTaskId(taskId);
+
+    await this.deleteTask(taskId);
+
+    const boardWithMovedTask = await boardCollection.findOneAndUpdate(
+      {_id: new ObjectId(board._id)},
+      {$push: {toDo: taskToMove}},
+      {returnNewDocument: true});
+
+    if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'To Do' column on board.`)
+    boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
+    return await boardData.getBoardById(boardWithMovedTask.value._id);
+  },
+
+ /*
+  * @param {taskId} string
+  * @description This function moves the task from wherever it is to the inProgress list on the board
+  * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but function fails to move task
+  * @return {boardWithMovedTask} Returns the updated board with the successfully moved task
+  **/
+  async moveToInProgress(taskId) {
+    validation.parameterCheck(taskId);
+    validation.idCheck(taskId);
+
+    const taskToMove = await this.getTaskById(taskId);
+
+    const boardCollection = await boards();
+    const board = await this.getBoardByTaskId(taskId);
+
+    await this.deleteTask(taskId);
+
+    const boardWithMovedTask = await boardCollection.findOneAndUpdate(
+      {_id: new ObjectId(board._id)},
+      {$push: {inProgress: taskToMove}},
+      {returnNewDocument: true});
+
+    if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'In Progress' column on board.`)
+    boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
+    return await boardData.getBoardById(boardWithMovedTask.value._id);
+  },
+
+ /*
+  * @param {taskId} string
+  * @description This function moves the task from wherever it is to the done list on the board
+  * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but function fails to move task
+  * @return {boardWithMovedTask} Returns the updated board with the successfully moved task
+  **/
+  async moveToDone(taskId) {
+    validation.parameterCheck(taskId);
+    validation.idCheck(taskId);
+
+    const taskToMove = await this.getTaskById(taskId);
+
+    const boardCollection = await boards();
+    const board = await this.getBoardByTaskId(taskId);
+
+    await this.deleteTask(taskId);
+
+    const boardWithMovedTask = await boardCollection.findOneAndUpdate(
+      {_id: new ObjectId(board._id)},
+      {$push: {done: taskToMove}},
+      {returnNewDocument: true});
+
+    if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'Done' column on board.`)
+    boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
+    return await boardData.getBoardById(boardWithMovedTask.value._id);
+  }
 };
 
 export default exportedMethods;

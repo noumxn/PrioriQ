@@ -49,9 +49,12 @@ import {taskData} from '../data/index.js';
   try {
     //console.log(await taskData.getTaskById(secondTask.toDo[0]._id, tomBoard._id));
     //console.log(secondTask.toDo[0]._id);
-    updatedTask = await taskData.updateTask(secondTask.toDo[0]._id.toString(), "New name!", 7, "hard", "60 minutes", "12/16/2016", "Lol. Lmao.", ["tom_smith"]);
-    //console.log(await taskData.getTaskById(updatedTask._id.toString()));
-    //await taskData.deleteTask(secondTask.toDo[1]._id.toString());
+    console.log(secondTask.toDo[0]._id.toString());
+    console.log(await taskData.moveToInProgress(secondTask.toDo[0]._id.toString()));
+    //updatedTask = await taskData.updateTask(secondTask.toDo[0]._id.toString(), "New name!", 7, "hard", "60 minutes", "12/16/2016", "Lol. Lmao.", ["tom_smith"]);
+   // console.log(await taskData.getTaskById(updatedTask._id.toString()));
+    //console.log(await taskData.getBoardByTaskId(updatedTask._id.toString()));
+   // console.log(await taskData.deleteTask(secondTask.toDo[1]._id.toString()));
    // await taskData.deleteTask(secondTask.toDo[0]._id.toString());
     //console.log(await boardData.getBoardById(tomBoard._id));
   } catch (e) {
