@@ -90,6 +90,8 @@ const exportedMethods = {
     if (!board)
       throw validation.returnRes("NOT_FOUND", `No user with ID: ${boardId}.`);
     board._id = board._id.toString();
+    board.toDo.forEach(task => {task._id = task._id.toString();});
+
     return board;
   },
 

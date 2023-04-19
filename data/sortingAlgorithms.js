@@ -78,9 +78,20 @@ const exportedMethods = {
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
 
     // sorting
-    board.toDo.sort((task1, task2) => task2.priority - task1.priority);
-    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    if (board.toDo.length >= 1) {
+      // update priority before sorting
+      for (const task of board.toDo) {
+        const currentPriority = await this.priorityAssignmentAlgorithm(task.createdAt, task.priority, task.deadline, task.estimatedTime);
+        task.priority = currentPriority;
+      }
+      board.toDo.sort((task1, task2) => task2.priority - task1.priority);
+      await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    }
     if (board.inProgress.length >= 1) {
+      for (const task of board.inProgress) {
+        const currentPriority = await this.priorityAssignmentAlgorithm(task.createdAt, task.priority, task.deadline, task.estimatedTime);
+        task.priority = currentPriority;
+      }
       board.inProgress.sort((task1, task2) => task2.priority - task1.priority);
       await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
     }
