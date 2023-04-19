@@ -109,19 +109,10 @@ const exportedMethods = {
       {_id: 0, 'toDo.$': 1, 'inProgress.$': 1, 'done.$': 1});
     if (!foundTask) throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
 
-    for (let i = 0; i < foundTask.done.length; i++) {
-      foundTask.done[i]._id = foundTask.done[i]._id.toString();
-      if (foundTask.done[i]._id == taskId) {
-        return foundTask.done[i];
-      }
-    }
-
-    if (foundTask.inProgress.length === 0) {
-      for (let i = 0; i < foundTask.toDo.length; i++) {
-        foundTask.toDo[i]._id = foundTask.toDo[i]._id.toString();
-        if (foundTask.toDo[i]._id == taskId) {
-          return foundTask.toDo[i];
-        }
+    for (let i = 0; i < foundTask.toDo.length; i++) {
+      foundTask.toDo[i]._id = foundTask.toDo[i]._id.toString();
+      if (foundTask.toDo[i]._id == taskId) {
+        return foundTask.toDo[i];
       }
     }
 
@@ -129,6 +120,13 @@ const exportedMethods = {
       foundTask.inProgress[i]._id = foundTask.inProgress[i]._id.toString();
       if (foundTask.inProgress[i]._id == taskId) {
         return foundTask.inProgress[i];
+      }
+    }
+
+    for (let i = 0; i < foundTask.done.length; i++) {
+      foundTask.done[i]._id = foundTask.done[i]._id.toString();
+      if (foundTask.done[i]._id == taskId) {
+        return foundTask.done[i];
       }
     }
 
