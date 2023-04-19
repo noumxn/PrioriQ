@@ -47,10 +47,15 @@ import {taskData} from '../data/index.js';
     console.log(e);
   }
   try {
-    //console.log(await taskData.getTaskById(secondTask.toDo[0]._id, tomBoard._id));
+    const id = secondTask.toDo[0]._id.toString();
+    console.log(await taskData.getTaskById(id));
     //console.log(secondTask.toDo[0]._id);
-    console.log(secondTask.toDo[0]._id.toString());
-    console.log(await taskData.moveToInProgress(secondTask.toDo[0]._id.toString()));
+   // console.log(secondTask.toDo[0]._id.toString());
+    console.log(await taskData.moveToDone(id));
+    console.log("board");
+    console.log(await boardData.getBoardById(tomBoard._id));
+    console.log("getting task")
+    console.log(await taskData.getTaskById(id));
     //updatedTask = await taskData.updateTask(secondTask.toDo[0]._id.toString(), "New name!", 7, "hard", "60 minutes", "12/16/2016", "Lol. Lmao.", ["tom_smith"]);
    // console.log(await taskData.getTaskById(updatedTask._id.toString()));
     //console.log(await taskData.getBoardByTaskId(updatedTask._id.toString()));

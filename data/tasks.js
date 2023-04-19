@@ -26,7 +26,7 @@ const exportedMethods = {
     validation.strValidCheck(taskName, estimatedTime, description);
     taskName = helpers.checkTaskName(taskName);
     description = helpers.checkDescription(description);
-    validation.validDateCheck(deadline);
+    validation.validDateTimeFormatCheck(deadline);
     validation.arrayValidCheck(assignedTo);
 
     const boardCollection = await boards();
@@ -56,7 +56,6 @@ const exportedMethods = {
     }
     const createdAt = new Date().toISOString();
 
-    if (!difficulty) {}
     const newTask = {
       _id: new ObjectId(),
       taskName: taskName,
@@ -103,7 +102,6 @@ const exportedMethods = {
     validation.parameterCheck(taskId);
     taskId = validation.idCheck(taskId);
 
-
     const boardCollection = await boards();
 
     const foundTask = await boardCollection.findOne(
@@ -111,16 +109,30 @@ const exportedMethods = {
       {_id: 0, 'toDo.$': 1, 'inProgress.$': 1, 'done.$': 1});
     if (!foundTask) throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
 
-    if (foundTask.toDo.length === 0 && foundTask.inProgress.length === 0) {
-      foundTask.done[0]._id = foundTask.done[0]._id.toString();
-      return foundTask.done[0];
+    for (let i = 0; i < foundTask.done.length; i++) {
+      foundTask.done[i]._id = foundTask.done[i]._id.toString();
+      if (foundTask.done[i]._id == taskId) {
+        return foundTask.done[i];
+      }
     }
+
     if (foundTask.inProgress.length === 0) {
-      foundTask.toDo[0]._id = foundTask.toDo[0]._id.toString();
-      return foundTask.toDo[0];
+      for (let i = 0; i < foundTask.toDo.length; i++) {
+        foundTask.toDo[i]._id = foundTask.toDo[i]._id.toString();
+        if (foundTask.toDo[i]._id == taskId) {
+          return foundTask.toDo[i];
+        }
+      }
     }
-    foundTask.inProgress[0]._id = foundTask.inProgress[0]._id.toString();
-    return foundTask.inProgress[0];
+
+    for (let i = 0; i < foundTask.inProgress.length; i++) {
+      foundTask.inProgress[i]._id = foundTask.inProgress[i]._id.toString();
+      if (foundTask.inProgress[i]._id == taskId) {
+        return foundTask.inProgress[i];
+      }
+    }
+
+    throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
   },
 
  /*
@@ -267,6 +279,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
@@ -294,6 +307,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
@@ -321,6 +335,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
