@@ -18,7 +18,7 @@ const exportedMethods = {
   * @param {assignedTo} array
   * @description This function creates a new task object and stores it in the database
   * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but function fails to create a task
-  * @return {boardWithNewTask} Returns the board document with the newly created task in the toDo array
+  * @return {newTask} Returns the new task document
   **/
   async createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo) {
     validation.parameterCheck(boardId, taskName, estimatedTime, deadline, description, assignedTo);
@@ -56,7 +56,6 @@ const exportedMethods = {
     }
     const createdAt = new Date().toISOString();
 
-    if (!difficulty) {}
     const newTask = {
       _id: new ObjectId(),
       taskName: taskName,
@@ -74,7 +73,7 @@ const exportedMethods = {
       {$push: {toDo: newTask}},
       {returnNewDocument: true});
     if (!boardWithNewTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not insert new task into board.`)
-    boardWithNewTask.value._id = boardWithNewTask.value._id.toString();
+    newTask._id = newTask._id.toString();
     //-----------------------------------------------------------------------------------------------------------------
     // ignore this please
     //-----------------------------------------------------------------------------------------------------------------
@@ -112,20 +111,28 @@ const exportedMethods = {
       board.inProgress.forEach(task => {task._id = task._id.toString();});
       board.done.forEach(task => {task._id = task._id.toString();});
 
-      const toDoTask = board.toDo.find(task => task._id === taskId);
-      if (toDoTask) {
-        return toDoTask;
+      for (let i = 0; i < foundTask.done.length; i++) {
+        foundTask.done[i]._id = foundTask.done[i]._id.toString();
+        if (foundTask.done[i]._id == taskId) {
+          return foundTask.done[i];
+        }
       }
-      const inProgressTask = board.inProgress.find(task => task._id === taskId);
-      if (inProgressTask) {
-        return inProgressTask;
+      if (foundTask.inProgress.length === 0) {
+        for (let i = 0; i < foundTask.toDo.length; i++) {
+          foundTask.toDo[i]._id = foundTask.toDo[i]._id.toString();
+          if (foundTask.toDo[i]._id == taskId) {
+            return foundTask.toDo[i];
+          }
+        }
       }
-      const doneTask = board.done.find(task => task._id === taskId);
-      if (doneTask) {
-        return doneTask;
+      for (let i = 0; i < foundTask.inProgress.length; i++) {
+        foundTask.inProgress[i]._id = foundTask.inProgress[i]._id.toString();
+        if (foundTask.inProgress[i]._id == taskId) {
+          return foundTask.inProgress[i];
+        }
       }
+      throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
     }
-    return validation.returnRes('NOT_FOUND', `No task found with ID: '${taskId}'`);
   },
 
 
@@ -279,6 +286,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
@@ -306,6 +314,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
@@ -333,6 +342,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
