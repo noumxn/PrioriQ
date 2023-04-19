@@ -73,7 +73,7 @@ const exportedMethods = {
       {$push: {toDo: newTask}},
       {returnNewDocument: true});
     if (!boardWithNewTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not insert new task into board.`)
-    boardWithNewTask.value._id = boardWithNewTask.value._id.toString();
+    newTask._id = newTask._id.toString();
     //-----------------------------------------------------------------------------------------------------------------
     // ignore this please
     //-----------------------------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ const exportedMethods = {
     // sortedBoard._id = sortedBoard._id.toString();
     //-----------------------------------------------------------------------------------------------------------------
 
-    return await boardData.getBoardById(boardWithNewTask.value._id);
+    return newTask;
   },
 
   /*
