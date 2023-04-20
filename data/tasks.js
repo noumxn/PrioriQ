@@ -255,15 +255,46 @@ const exportedMethods = {
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
 
-    const updatedBoard = await boardCollection.updateOne(
-      {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
-      {$pull: {toDo: {_id: new ObjectId(taskId)}}},
-      {$pull: {inProgress: {_id: new ObjectId(taskId)}}},
-      {$pull: {done: {_id: new ObjectId(taskId)}}},
-      {returnNewDocument: true});
-    if (!updatedBoard) throw validation.returnRes('NOT_FOUND', `No task with given id found in board.`);
+    let updatedBoard = undefined;
 
-    return await boardData.getBoardById(board._id.toString());
+    updatedBoard = await boardCollection.updateOne(
+      {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
+      {$pull: {'toDo': {_id: new ObjectId(taskId)}}},
+      {returnNewDocument: true});
+    
+    if (!updatedBoard || updatedBoard.matchedCount == 0) {
+      throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
+    }
+    else if (updatedBoard.modifiedCount > 0) {
+      return validation.returnRes("SUCCESS", `Task with ID ${taskId} successfully deleted from board.`);
+    }
+    else {
+      updatedBoard = await boardCollection.updateOne(
+        {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
+        {$pull: {'inProgress': {_id: new ObjectId(taskId)}}},
+        {returnNewDocument: true});
+        if (!updatedBoard || updatedBoard.matchedCount == 0) {
+          throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
+        }
+        else if (updatedBoard.modifiedCount > 0) {
+          return validation.returnRes("SUCCESS", `Task with ID ${taskId} successfully deleted from board.`);
+        }
+        else {
+          updatedBoard = await boardCollection.updateOne(
+            {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
+            {$pull: {'done': {_id: new ObjectId(taskId)}}},
+            {returnNewDocument: true});
+            if (!updatedBoard || updatedBoard.matchedCount == 0) {
+              throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
+            }
+            else if (updatedBoard.modifiedCount > 0) {
+              return validation.returnRes("SUCCESS", `Task with ID ${taskId} successfully deleted from board.`);
+            }
+            else {
+              throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not delete task with ID: '${taskId}'`);
+            }
+        }
+      }
   },
 
  /*
