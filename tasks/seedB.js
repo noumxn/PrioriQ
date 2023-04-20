@@ -16,12 +16,15 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   let board2 = undefined;
   let getBoard1 = undefined;
   let getBoard2 = undefined;
+  let addUser1 = undefined;
+  let blockUser1 = undefined;
   let task1 = undefined;
   let task2 = undefined;
   let task3 = undefined;
 
   console.log('1*************************************')
-  await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#')
+  await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#');
+  await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'CantSeeMe', 'hello123#');
 
   console.log('1*************************************');
   try {
@@ -51,6 +54,29 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
     console.log(e);
 
   }
+
+  console.log('1*************************************');
+
+  try {
+    addUser1 = await boardData.AddUserAllowedUsers(board1._id.toString(), 'CantSeeMe');
+    console.log(addUser1);
+  } catch (e) {
+    console.log(e);
+
+  }
+
+  console.log('1*************************************');
+
+  try {
+    blockUser1 = await boardData.AddUserBlockedUsers(board1._id.toString(), 'CantSeeMe');
+    console.log(blockUser1);
+  } catch (e) {
+    console.log(e);
+
+  }
+
+
+  console.log('#############Tasks################');
 
 
   console.log('1*************************************');
@@ -84,6 +110,8 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   } catch (e) {
     console.log(e);
   }
+
+
 
   // console.log('1*************************************');
   // try {
