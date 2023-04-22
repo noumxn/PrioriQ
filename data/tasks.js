@@ -8,18 +8,18 @@ import userData from './users.js';
 
 const exportedMethods = {
   /*
-  * @param {boardId} string
-  * @param {taskName} string 
-  * @param {priority} number
-  * @param {difficulty} string 
-  * @param {estimatedTime} string
-  * @param {deadline} date 
-  * @param {description} string 
-  * @param {assignedTo} array
-  * @description This function creates a new task object and stores it in the database
-  * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but function fails to create a task
-  * @return {newTask} Returns the new task document
-  **/
+   * @param {boardId} string
+   * @param {taskName} string 
+   * @param {priority} number
+   * @param {difficulty} string 
+   * @param {estimatedTime} string
+   * @param {deadline} date 
+   * @param {description} string 
+   * @param {assignedTo} array
+   * @description This function creates a new task object and stores it in the database
+   * @throws {INTERNAL_SERVER_ERROR} if all valid params are provided but function fails to create a task
+   * @return {newTask} Returns the new task document
+   **/
   async createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo) {
     validation.parameterCheck(boardId, taskName, estimatedTime, deadline, description, assignedTo);
     validation.idCheck(boardId);
@@ -28,6 +28,7 @@ const exportedMethods = {
     description = helpers.checkDescription(description);
     validation.validDateTimeFormatCheck(deadline);
     validation.arrayValidCheck(assignedTo);
+    estimatedTime = helpers.convertEstimatedTimeToMs(estimatedTime);
 
     const boardCollection = await boards();
     const originBoard = await boardData.getBoardById(boardId);
@@ -73,24 +74,20 @@ const exportedMethods = {
       {$push: {toDo: newTask}},
       {returnNewDocument: true});
     if (!boardWithNewTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not insert new task into board.`)
-    newTask._id = newTask._id.toString();
-    //-----------------------------------------------------------------------------------------------------------------
-    // ignore this please
-    //-----------------------------------------------------------------------------------------------------------------
+    boardWithNewTask.value._id = boardWithNewTask.value._id.toString();
+
     // Sorting board to accomodate new task
-    let sortedBoard;
     if (boardWithNewTask.value.priorityScheduling === true) {
-      sortedBoard = await sorting.priorityBasedSorting(boardWithNewTask.value._id);
+      await sorting.priorityBasedSorting(boardWithNewTask.value._id);
     } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'asc') {
-      sortedBoard = await sorting.difficultyBasedSortAscending(boardWithNewTask.value._id)
+      await sorting.difficultyBasedSortAscending(boardWithNewTask.value._id)
     } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'desc') {
-      sortedBoard = await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
+      await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
     }
-    sortedBoard._id = sortedBoard._id.toString();
-    //-----------------------------------------------------------------------------------------------------------------
+
     newTask._id = newTask._id.toString();
 
-    return sortedBoard;
+    return newTask;
   },
 
   /*
@@ -102,39 +99,24 @@ const exportedMethods = {
   async getTaskById(taskId) {
     validation.parameterCheck(taskId);
     taskId = validation.idCheck(taskId);
-
     const boardCollection = await boards();
-
     const foundBoards = await boardCollection.find().toArray();
     for (const board of foundBoards) {
-      board.toDo.forEach(task => {task._id = task._id.toString();});
-      board.inProgress.forEach(task => {task._id = task._id.toString();});
-      board.done.forEach(task => {task._id = task._id.toString();});
-
-      for (let i = 0; i < foundTask.done.length; i++) {
-        foundTask.done[i]._id = foundTask.done[i]._id.toString();
-        if (foundTask.done[i]._id == taskId) {
-          return foundTask.done[i];
-        }
+      const toDoTask = board.toDo.find(task => task._id === taskId);
+      if (toDoTask) {
+        return toDoTask;
       }
-      if (foundTask.inProgress.length === 0) {
-        for (let i = 0; i < foundTask.toDo.length; i++) {
-          foundTask.toDo[i]._id = foundTask.toDo[i]._id.toString();
-          if (foundTask.toDo[i]._id == taskId) {
-            return foundTask.toDo[i];
-          }
-        }
+      const inProgressTask = board.inProgress.find(task => task._id === taskId);
+      if (inProgressTask) {
+        return inProgressTask;
       }
-      for (let i = 0; i < foundTask.inProgress.length; i++) {
-        foundTask.inProgress[i]._id = foundTask.inProgress[i]._id.toString();
-        if (foundTask.inProgress[i]._id == taskId) {
-          return foundTask.inProgress[i];
-        }
+      const doneTask = board.done.find(task => task._id === taskId);
+      if (doneTask) {
+        return doneTask;
       }
-      throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
     }
+    throw validation.returnRes('NOT_FOUND', `No task with ID: '${taskId}'`);
   },
-
 
   /*
    * @param {taskId} string
@@ -146,12 +128,22 @@ const exportedMethods = {
     validation.parameterCheck(taskId);
     taskId = validation.idCheck(taskId);
     const boardCollection = await boards();
-
-    const board = await boardCollection.findOne(
-      {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]});
-    if (!board) throw validation.returnRes('NOT_FOUND', `No board with a task with ID: '${taskId}'`);
-    board._id = board._id.toString();
-    return board;
+    const foundBoards = await boardCollection.find().toArray();
+    for (const board of foundBoards) {
+      const toDoTask = board.toDo.find(task => task._id === taskId);
+      if (toDoTask) {
+        return board;
+      }
+      const inProgressTask = board.inProgress.find(task => task._id === taskId);
+      if (inProgressTask) {
+        return board;
+      }
+      const doneTask = board.done.find(task => task._id === taskId);
+      if (doneTask) {
+        return board;
+      }
+    }
+    throw validation.returnRes('NOT_FOUND', `No board that has a task with ID: '${taskId}'`);
   },
 
   /*
@@ -248,6 +240,14 @@ const exportedMethods = {
     if (updatedInfo.lastErrorObject.n === 0) {
       throw validation.returnRes('NOT_FOUND', `No task with given id found.`);
     };
+    // Sorting board to accomodate new task
+    if (boardWithNewTask.value.priorityScheduling === true) {
+      await sorting.priorityBasedSorting(boardWithNewTask.value._id);
+    } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'asc') {
+      await sorting.difficultyBasedSortAscending(boardWithNewTask.value._id)
+    } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'desc') {
+      await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
+    }
 
     return await this.getTaskById(taskId);
   },
@@ -262,17 +262,35 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const boardCollection = await boards();
-    const board = await this.getBoardByTaskId(taskId);
+    const board = await boardCollection.findOne(
+      {
+        $or: [
+          {"toDo._id": taskId},
+          {"inProgress._id": taskId},
+          {"done._id": taskId}
+        ]
+      },
+      {projection: {_id: 1}}
+    );
 
-    const updatedBoard = await boardCollection.updateOne(
-      {$or: [{'toDo._id': new ObjectId(taskId)}, {'inProgress._id': new ObjectId(taskId)}, {'done._id': new ObjectId(taskId)}]},
-      {$pull: {toDo: {_id: new ObjectId(taskId)}}},
-      {$pull: {inProgress: {_id: new ObjectId(taskId)}}},
-      {$pull: {done: {_id: new ObjectId(taskId)}}},
-      {returnNewDocument: true});
-    if (!updatedBoard) throw validation.returnRes('NOT_FOUND', `No task with given id found in board.`);
+    if (!board) {
+      throw validation.returnRes('NOT_FOUND', `Task with ID ${taskId} not found in any board.`)
+    }
 
-    return await boardData.getBoardById(board._id.toString());
+    await boardCollection.updateOne(
+      {
+        _id: board._id
+      },
+      {
+        $pull: {
+          toDo: {_id: taskId},
+          inProgress: {_id: taskId},
+          done: {_id: taskId}
+        }
+      }
+    );
+
+    return validation.returnRes('SUCCESS', `Task with ID ${taskId} successfully deleted from board.`)
   },
 
   /*
@@ -300,7 +318,18 @@ const exportedMethods = {
 
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'To Do' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
+    // Sorting board
+    if (boardWithMovedTask.value.priorityScheduling === true) {
+      await sorting.priorityBasedSorting(boardWithMovedTask.value._id);
+    } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'asc') {
+      await sorting.difficultyBasedSortAscending(boardWithMovedTask.value._id)
+    } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'desc') {
+      await sorting.difficultyBasedSortDescending(boardWithMovedTask.value._id)
+    }
+
     return await boardData.getBoardById(boardWithMovedTask.value._id);
+
+
   },
 
   /*
@@ -314,7 +343,6 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
-    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
@@ -328,6 +356,16 @@ const exportedMethods = {
 
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'In Progress' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
+
+    // Sorting board
+    // if (boardWithMovedTask.value.priorityScheduling === true) {
+    //   await sorting.priorityBasedSorting(boardWithMovedTask.value._id);
+    // } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'asc') {
+    //   await sorting.difficultyBasedSortAscending(boardWithMovedTask.value._id)
+    // } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'desc') {
+    //   await sorting.difficultyBasedSortDescending(boardWithMovedTask.value._id)
+    // }
+
     return await boardData.getBoardById(boardWithMovedTask.value._id);
   },
 
@@ -356,6 +394,16 @@ const exportedMethods = {
 
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'Done' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
+
+    // Sorting board
+    if (boardWithMovedTask.value.priorityScheduling === true) {
+      await sorting.priorityBasedSorting(boardWithMovedTask.value._id);
+    } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'asc') {
+      await sorting.difficultyBasedSortAscending(boardWithMovedTask.value._id)
+    } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'desc') {
+      await sorting.difficultyBasedSortDescending(boardWithMovedTask.value._id)
+    }
+
     return await boardData.getBoardById(boardWithMovedTask.value._id);
   }
 };

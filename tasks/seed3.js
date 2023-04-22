@@ -35,22 +35,20 @@ import {taskData} from '../data/index.js';
   }
   console.log("└─ Adding Tasks...");
   try {
-    task1 = await taskData.createTask(tomBoard._id, "task1", 7, null, "0 hour 02 minutes", "2023-04-19T04:04:38.072Z", "This is a test task1", ["tom_smith"]);
-    task2 = await taskData.createTask(tomBoard._id, "task2", 2, null, "0 hour 01 minutes", "2023-04-19T04:04:38.072Z", "This is a test task2", ["tom_smith"]);
-    task3 = await taskData.createTask(tomBoard._id, "task3", 1, null, "0 hour 02 minutes", "2023-04-19T04:04:38.072Z", "This is a test task3", ["tom_smith"]);
-    task4 = await taskData.createTask(tomBoard._id, "task4", 8, null, "0 hour 01 minutes", "2023-04-19T04:04:38.072Z", "This is a test task4", ["tom_smith"]);
-    task5 = await taskData.createTask(tomBoard._id, "task5", 10, null, "0 hour 02 minutes", "2023-04-19T04:04:38.072Z", "This is a test task5", ["tom_smith"]);
-    task6 = await taskData.createTask(tomBoard._id, "task6", 9, null, "0 hour 01 minutes", "2023-04-19T04:04:38.072Z", "This is a test task6", ["tom_smith"]);
-    console.log(task2);
-    console.log(task4);
-    console.log(task5);
+    task1 = await taskData.createTask(tomBoard._id, "task1", 1, null, "00 hour 01 mins", "2023-04-21T04:41:23.881Z", "This is a test task1", ["tom_smith"]);
+    // task2 = await taskData.createTask(tomBoard._id, "task2", 2, null, "00 hour 10 mins", "2023-04-19T23:51:24.864Z", "This is a test task2", ["tom_smith"]);
+    // task3 = await taskData.createTask(tomBoard._id, "task3", 3, null, "00 hour 01 mins", "2023-04-19T23:27:24.864Z", "This is a test task3", ["tom_smith"]);
+    // task4 = await taskData.createTask(tomBoard._id, "task4", 8, null, "00 hour 01 mins", "2023-04-19T23:31:24.864Z", "This is a test task4", ["tom_smith"]);
+    // task5 = await taskData.createTask(tomBoard._id, "task5", 10, null, "00 hour 02 mins", "2023-04-19T23:31:24.864Z", "This is a test task5", ["tom_smith"]);
+    let boardWith5Tasks = await boardData.getBoardById(tomBoard._id)
+    console.log(boardWith5Tasks);
   } catch (e) {
     console.log(e);
   }
   try {
-    await taskData.moveToInProgress(task2._id);
-    await taskData.moveToInProgress(task4._id);
-    await taskData.moveToDone(task5._id);
+    // await taskData.moveToInProgress(task2._id);
+    // await taskData.moveToInProgress(task4._id);
+    // await taskData.moveToDone(task5._id);
     let updatedBoard = await boardData.getBoardById(tomBoard._id);
     console.log(updatedBoard);
   } catch (e) {

@@ -92,20 +92,6 @@ const checkName = (name) => {
 }
 
 /*
- * @param {hours} string
- * @param {mins} string
- * @description This function takes the estimated time given in hours and mins in the string format 
- *              and converts it to millisecods for the priorityBasedSorting() function
- * @return {totalMilliseconds} Returns the total estimatedTime after converting it to millisecods
- **/
-const convertEstimatedTimeToMs = (hours, mins) => {
-  const totalMinutes = Number(hours) * 60 + Number(mins);
-  const totalSeconds = totalMinutes * 60;
-  const totalMilliseconds = totalSeconds * 1000;
-  return totalMilliseconds;
-}
-
-/*
  * @param {username} string
  * @description This function takes username a new user is trying to use, and makes sure it is not already in use
  * @throws {CONFLICT} if username is already taken
@@ -304,6 +290,28 @@ const checkEmailInUse = async (email) => {
     }
   }
   return false;
+}
+
+/*
+ * @param {inputTime} string
+ * @description This function takes the estimated time given in hours and mins in the string format 
+ *              and converts it to millisecods for the priorityAssignmentAlgorithm() function
+ * @throws {BAD_REQUEST} if input is not in HH hours MM mins format
+ * @return {totalMilliseconds} Returns the total estimatedTime after converting it to millisecods
+ **/
+const convertEstimatedTimeToMs = (inputTime) => {
+  const regex = /^(\d+)\s*hours?\s*(\d+)\s*mins?$/;
+  const match = inputTime.match(regex);
+  if (!match) {
+    throw validation.returnRes('BAD_REQUEST', 'Invalid input format. Please use the format "HH hours MM mins".');
+  }
+  const hours = parseInt(match[1], 10);
+  const mins = parseInt(match[2], 10);
+  const totalMinutes = hours * 60 + mins;
+  const totalSeconds = totalMinutes * 60;
+  const totalMilliseconds = totalSeconds * 1000;
+
+  return totalMilliseconds;
 }
 
 export default {

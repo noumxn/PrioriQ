@@ -76,11 +76,21 @@ const exportedMethods = {
     const boardCollection = await boards();
     const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
+    board._id = board._id.toString();
+    for (let i in board.toDo) {
+      board.toDo[i]._id = board.toDo[i]._id.toString();
+    }
+    for (let i in board.inProgress) {
+      board.inProgress[i]._id = board.inProgress[i]._id.toString();
+    }
+    for (let i in board.done) {
+      board.done[i]._id = board.done[i]._id.toString();
+    }
 
     // sorting
     if (board.toDo.length >= 1) {
       // update priority before sorting
-      for (const task of board.toDo) {
+      for (let task of board.toDo) {
         const currentPriority = await this.priorityAssignmentAlgorithm(task.createdAt, task.priority, task.deadline, task.estimatedTime);
         task.priority = currentPriority;
       }
@@ -109,13 +119,16 @@ const exportedMethods = {
    **/
   async priorityAssignmentAlgorithm(createdAt, priority, deadline, estimatedTime) {
     // Data validation
-    validation.parameterCheck(createdAt, priority, deadline, estimatedTime);
-    validation.strValidCheck(createdAt, deadline);
-    validation.validDateTimeFormatCheck(createdAt, deadline);
-    validation.numberValidCheck(priority, estimatedTime);
+    // validation.parameterCheck(createdAt, priority, deadline, estimatedTime);
+    // validation.strValidCheck(createdAt, deadline);
+    // validation.validDateTimeFormatCheck(createdAt, deadline);
+    // validation.numberValidCheck(priority, estimatedTime);
+
+    deadline = new Date(deadline);
+    createdAt = new Date(createdAt);
 
     // Calculate time remaining until deadline
-    const timeRemainingMs = deadline - createdAt - estimatedTime;
+    const timeRemainingMs = deadline.getTime() - createdAt.getTime() - estimatedTime;
 
     // Calculate number of priority increments required
     const numIncrements = Math.max(10 - priority, 0);
@@ -125,7 +138,7 @@ const exportedMethods = {
     const timePerIncrement = timeRemainingMs / numIncrements;
 
     // Calculate how many priority increments have already occurred
-    const timeSinceCreationMs = Date.now() - createdAt.getTime();
+    const timeSinceCreationMs = Date.now() - createdAt;//.getTime();
     const numIncrementsSoFar = Math.min(Math.floor(timeSinceCreationMs / timePerIncrement), numIncrements);
 
     // Calculate current priority
