@@ -1,15 +1,12 @@
-import {ObjectId} from 'mongodb';
 import {users} from '../config/mongoCollections.js';
-import {boards} from '../config/mongoCollections.js';
-import userData from './users.js'
-import boardData from './boards.js';
-import taskData from './tasks.js';
 import validation from '../utils/validation.js';
-import helpers from './helpers.js';
+import taskData from './tasks.js';
+import userData from './users.js';
 
 
 const exportedMethods = {
   async addTaskToCheckList(taskId, username) {
+    // TODO: Make sure user is in the 'assignedTo' list before letting them add task to checkList. Throw 'UNAUTHORIZED'
     const task = await taskData.getTaskById(taskId);
     const checkListItem = {
       taskId: task._id,
@@ -61,7 +58,27 @@ const exportedMethods = {
 
     return await userData.getUserByUsername(username);
   },
-  async updateCheckListItem() {}
+
+  async updateCheckListItem(taskId, updatedName) {
+    const allUsers = await userData.getAllUsers();
+    for (let user of allUsers) {
+      for (let checkListItem of user.checkList) {
+        if (checkListItem.taskId === taskId) {
+          if (checkListItem.taskName === updatedName) {
+            return validation.returnRes('NO_CHANGE', `No changes were made.`);
+          }
+          checkListItem.taskName = updatedName;
+        }
+      }
+      const userCollection = await users();
+      await userCollection.updateOne(
+        {_id: user._id},
+        {$set: {checkList: user.checkList}}
+      );
+    }
+
+  }
+
 };
 
 export default exportedMethods;
