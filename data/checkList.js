@@ -59,6 +59,7 @@ const exportedMethods = {
       let checkList = user.checkList;
       let checkListItemIndex = checkList.findIndex(checkListItem => checkListItem.taskId === taskId);
       if (checkListItemIndex !== -1) {
+        if (checkList[checkListItemIndex].taskName === taskName) {return validation.returnRes('NO_CONTENT', `No changes were made.`)}
         checkList[checkListItemIndex].taskName = taskName;
         const userCollection = await users();
         await userCollection.updateOne(

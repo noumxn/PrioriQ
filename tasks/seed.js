@@ -75,7 +75,7 @@ import {boardData, checkListData, taskData, userData} from '../data/index.js';
     // await checkListData.completeCheckListItem(task3._id, "tom_smith");
     // await checkListData.completeCheckListItem(task5._id, "tom_smith");
     console.log("After name update:====================================")
-    await checkListData.updateCheckListItem(task1._id, "new task 1")
+    await checkListData.updateCheckListItem(task1._id, "task1")
     await checkListData.updateCheckListItem(task2._id, "new task 2")
     await checkListData.updateCheckListItem(task4._id, "new task 4")
     let updatedUser = await userData.getUserByUsername('tom_smith');
