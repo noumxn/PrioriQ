@@ -3,7 +3,6 @@
  **/
 
 import {ObjectId} from 'mongodb';
-import Ajv from 'ajv';
 import moment from 'moment';
 
 // Define response types
