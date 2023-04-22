@@ -21,8 +21,6 @@ const exportedMethods = {
       {username: username},
       {$set: {checkList: user.checkList}}
     );
-
-    return await userData.getUserByUsername(username);
   },
 
   async completeCheckListItem(taskId, username) {
@@ -38,8 +36,6 @@ const exportedMethods = {
       {username: username},
       {$set: {checkList: user.checkList}}
     );
-
-    return await userData.getUserByUsername(username);
   },
 
   async deleteTasksFromCheckList(username) {
@@ -55,29 +51,24 @@ const exportedMethods = {
       {username: username},
       {$set: {checkList: user.checkList}}
     );
-
-    return await userData.getUserByUsername(username);
   },
 
-  async updateCheckListItem(taskId, updatedName) {
+  async updateCheckListItem(taskId, taskName) {
     const allUsers = await userData.getAllUsers();
     for (let user of allUsers) {
-      for (let checkListItem of user.checkList) {
-        if (checkListItem.taskId === taskId) {
-          if (checkListItem.taskName === updatedName) {
-            return validation.returnRes('NO_CHANGE', `No changes were made.`);
-          }
-          checkListItem.taskName = updatedName;
-        }
+      let checkList = user.checkList;
+      let checkListItemIndex = checkList.findIndex(checkListItem => checkListItem.taskId === taskId);
+      if (checkListItemIndex !== -1) {
+        checkList[checkListItemIndex].taskName = taskName;
+        const userCollection = await users();
+        await userCollection.updateOne(
+          {username: user.username},
+          {$set: {checkList: checkList}}
+        );
       }
-      const userCollection = await users();
-      await userCollection.updateOne(
-        {_id: user._id},
-        {$set: {checkList: user.checkList}}
-      );
     }
-
   }
+
 
 };
 
