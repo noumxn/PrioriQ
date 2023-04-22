@@ -20,11 +20,10 @@ const exportedMethods = {
     user.checkList.push(checkListItem);
 
     const userCollection = await users();
-    const updatedUser = await userCollection.updateOne(
+    await userCollection.updateOne(
       {username: username},
       {$set: {checkList: user.checkList}}
     );
-    console.log(updatedUser);
 
     return await userData.getUserByUsername(username);
   },
@@ -41,11 +40,27 @@ const exportedMethods = {
     await userCollection.updateOne(
       {username: username},
       {$set: {checkList: user.checkList}}
-    )
+    );
 
     return await userData.getUserByUsername(username);
   },
-  async deleteTasksFromCheckList() {},
+
+  async deleteTasksFromCheckList(username) {
+    const user = await userData.getUserByUsername(username);
+    const completedItems = user.checkList.filter(checkListItem => checkListItem.completed === true);
+    for (let i = 0; i < completedItems.length; i++) {
+      const taskId = completedItems[i].taskId;
+      await taskData.moveToDone(taskId)
+    }
+    user.checkList = user.checkList.filter(checkListItem => checkListItem.completed === false)
+    const userCollection = await users();
+    await userCollection.updateOne(
+      {username: username},
+      {$set: {checkList: user.checkList}}
+    );
+
+    return await userData.getUserByUsername(username);
+  },
   async updateCheckListItem() {}
 };
 

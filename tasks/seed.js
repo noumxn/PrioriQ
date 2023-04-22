@@ -38,10 +38,10 @@ import {checkListData} from '../data/index.js';
   console.log("└─ Adding Tasks...");
   try {
     task1 = await taskData.createTask(tomBoard._id, "task1", 1, null, "00 hour 01 mins", "2023-04-19T23:26:24.864Z", "This is a test task1", ["tom_smith"]);
-    // task2 = await taskData.createTask(tomBoard._id, "task2", 2, null, "00 hour 10 mins", "2023-04-19T23:51:24.864Z", "This is a test task2", ["tom_smith"]);
-    // task3 = await taskData.createTask(tomBoard._id, "task3", 3, null, "00 hour 01 mins", "2023-04-19T23:27:24.864Z", "This is a test task3", ["tom_smith"]);
-    // task4 = await taskData.createTask(tomBoard._id, "task4", 8, null, "00 hour 01 mins", "2023-04-19T23:31:24.864Z", "This is a test task4", ["tom_smith"]);
-    // task5 = await taskData.createTask(tomBoard._id, "task5", 10, null, "00 hour 02 mins", "2023-04-19T23:31:24.864Z", "This is a test task5", ["tom_smith"]);
+    task2 = await taskData.createTask(tomBoard._id, "task2", 2, null, "00 hour 10 mins", "2023-04-19T23:51:24.864Z", "This is a test task2", ["tom_smith"]);
+    task3 = await taskData.createTask(tomBoard._id, "task3", 3, null, "00 hour 01 mins", "2023-04-19T23:27:24.864Z", "This is a test task3", ["tom_smith"]);
+    task4 = await taskData.createTask(tomBoard._id, "task4", 8, null, "00 hour 01 mins", "2023-04-19T23:31:24.864Z", "This is a test task4", ["tom_smith"]);
+    task5 = await taskData.createTask(tomBoard._id, "task5", 10, null, "00 hour 02 mins", "2023-04-19T23:31:24.864Z", "This is a test task5", ["tom_smith"]);
     let boardWith5Tasks = await boardData.getBoardById(tomBoard._id)
     console.log(boardWith5Tasks);
   } catch (e) {
@@ -56,6 +56,10 @@ import {checkListData} from '../data/index.js';
   // }
   try {
     await checkListData.addTaskToCheckList(task1._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task2._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task3._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task4._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task5._id, "tom_smith");
     let updatedUser = await userData.getUserByUsername('tom_smith');
     console.log(updatedUser);
   } catch (e) {
@@ -63,6 +67,15 @@ import {checkListData} from '../data/index.js';
   }
   try {
     await checkListData.completeCheckListItem(task1._id, "tom_smith");
+    await checkListData.completeCheckListItem(task3._id, "tom_smith");
+    await checkListData.completeCheckListItem(task5._id, "tom_smith");
+    let updatedUser = await userData.getUserByUsername('tom_smith');
+    console.log(updatedUser);
+  } catch (e) {
+    console.log(e);
+  }
+  try {
+    await checkListData.deleteTasksFromCheckList("tom_smith");
     let updatedUser = await userData.getUserByUsername('tom_smith');
     console.log(updatedUser);
   } catch (e) {
