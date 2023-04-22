@@ -1,11 +1,17 @@
+import {helpers} from 'handlebars';
 import {users} from '../config/mongoCollections.js';
 import validation from '../utils/validation.js';
+import helpers from './helpers.js';
 import taskData from './tasks.js';
 import userData from './users.js';
 
 
 const exportedMethods = {
   async addTaskToCheckList(taskId, username) {
+    validation.parameterCheck(taskId, username);
+    validation.strValidCheck(taskId, username);
+    taskId = validation.idCheck(taskId);
+
     // TODO: Make sure user is in the 'assignedTo' list before letting them add task to checkList. Throw 'UNAUTHORIZED'
     const task = await taskData.getTaskById(taskId);
     const checkListItem = {
@@ -24,6 +30,10 @@ const exportedMethods = {
   },
 
   async completeCheckListItem(taskId, username) {
+    validation.parameterCheck(taskId, username);
+    validation.strValidCheck(taskId, username);
+    taskId = validation.idCheck(taskId);
+
     const user = await userData.getUserByUsername(username);
     user.checkList.forEach(checkListItem => {
       if (checkListItem.taskId === taskId) {
@@ -39,6 +49,9 @@ const exportedMethods = {
   },
 
   async deleteTasksFromCheckList(username) {
+    validation.parameterCheck(username);
+    validation.strValidCheck(username);
+
     const user = await userData.getUserByUsername(username);
     const completedItems = user.checkList.filter(checkListItem => checkListItem.completed === true);
     for (let i = 0; i < completedItems.length; i++) {
@@ -54,6 +67,11 @@ const exportedMethods = {
   },
 
   async updateCheckListItem(taskId, taskName) {
+    validation.parameterCheck(taskId, taskName);
+    validation.strValidCheck(taskId, taskName);
+    taskName = helpers.checkTaskName(taskName);
+    taskId = validation.idCheck(taskId);
+
     const allUsers = await userData.getAllUsers();
     for (let user of allUsers) {
       let checkList = user.checkList;
