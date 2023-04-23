@@ -237,11 +237,32 @@ async AddUserAllowedUsers(boardId, username) {
 
 
   //update users
-  //const userCollection = await users();
+  const userCollection = await users();
   const newUser = await userData.getUserByUsername(username);
-  //if (!newUser) throw validation.returnRes("NOT_FOUND", `No user with that username: ${username}.`);
+  if (!newUser) throw validation.returnRes("NOT_FOUND", `No user with that username: ${username}.`);
 
+  let newSharedBoards = newUser.sharedBoards;
   console.log(newUser.firstName);
+
+  
+    newSharedBoards.push(boardId);
+
+  
+  console.log(newUser._id.toString());
+  await userCollection.updateOne(
+    {_id: new ObjectId(newUser._id.toString())},
+    {
+      $set: {
+        sharedBoards: newSharedBoards,
+      },
+    }
+  );
+
+  console.log(newUser.sharedBoards);
+
+
+
+  
 
 
 
