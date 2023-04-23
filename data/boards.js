@@ -1,5 +1,6 @@
 import {ObjectId} from "mongodb";
 import userData from "./users.js";
+import {users} from '../config/mongoCollections.js';
 import {boards} from "../config/mongoCollections.js";
 import validation from "../utils/validation.js";
 import helper from "./helpers.js";
@@ -89,7 +90,7 @@ const exportedMethods = {
 
     const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
     if (!board)
-      throw validation.returnRes("NOT_FOUND", `No user with ID: ${boardId}.`);
+      throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
     board._id = board._id.toString();
     return board;
   },
@@ -111,6 +112,7 @@ const exportedMethods = {
       throw validation.returnRes("NOT_FOUND", `Could not get any boards.`);
     return board;
   },
+
 
   /*
    * @param {boardId} ObjectId
@@ -142,14 +144,22 @@ const exportedMethods = {
     //if the passwords don't match, rehash it
 
     const board = await this.getBoardById(boardId);
+    if (!board) throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
 
-    //uses helper function to get newSortOrder
-    newSortOrder = helper.checkSortOrderValue(board.priorityScheduling, newSortOrder);
 
     const passwordsMatch = await bcrypt.compare(
       newBoardPassword,
       board.boardPassword
     );
+
+    //throw if data wasnt changed
+    if(newBoardName == board.boardName && newSortOrder == board.sortOrder && passwordsMatch){
+      throw validation.returnRes("NO_CONTENT", `all new parameters of board is same as before`);
+    }
+
+    //uses helper function to get newSortOrder
+    newSortOrder = helper.checkSortOrderValue(board.priorityScheduling, newSortOrder);
+
     if (!passwordsMatch) {
       const saltRounds = parseInt(process.env.SALT_ROUNDS);
       newBoardPassword = await bcrypt.hash(newBoardPassword, saltRounds);
@@ -208,6 +218,7 @@ async AddUserAllowedUsers(boardId, username) {
 
   const boardCollection = await boards();
   const board = await this.getBoardById(boardId);
+  if (!board) throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
 
   let newAllowedUsers = board.allowedUsers;
 
@@ -223,6 +234,16 @@ async AddUserAllowedUsers(boardId, username) {
       },
     }
   );
+
+
+  //update users
+  //const userCollection = await users();
+  const newUser = await userData.getUserByUsername(username);
+  //if (!newUser) throw validation.returnRes("NOT_FOUND", `No user with that username: ${username}.`);
+
+  console.log(newUser.firstName);
+
+
 
   return await this.getBoardById(boardId);
 

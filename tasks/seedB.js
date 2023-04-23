@@ -12,6 +12,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   const db = await dbConnection();
   await db.dropDatabase();
 
+  let user1 = undefined;
   let board1 = undefined;
   let board2 = undefined;
   let getBoard1 = undefined;
@@ -24,7 +25,21 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 
   console.log('1*************************************')
   await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#');
-  await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'CantSeeMe', 'hello123#');
+  await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'cantseeme', 'hello123#');
+
+  try{
+    
+  } catch (e){
+
+  }
+
+  try {
+    user1 = await userData.getUserByUsername('cantseeme');
+    console.log('user is now here');
+    console.log(user1);
+  } catch (e) {
+    console.log(e);
+  }
 
   console.log('1*************************************');
   try {
@@ -58,7 +73,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   console.log('1*************************************');
 
   try {
-    addUser1 = await boardData.AddUserAllowedUsers(board1._id.toString(), 'CantSeeMe');
+    addUser1 = await boardData.AddUserAllowedUsers(board1._id.toString(), 'cantseeme');
     console.log(addUser1);
   } catch (e) {
     console.log(e);
@@ -68,7 +83,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   console.log('1*************************************');
 
   try {
-    blockUser1 = await boardData.AddUserBlockedUsers(board1._id.toString(), 'CantSeeMe');
+    blockUser1 = await boardData.AddUserBlockedUsers(board1._id.toString(), 'cantseeme');
     console.log(blockUser1);
   } catch (e) {
     console.log(e);
