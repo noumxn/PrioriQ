@@ -1,7 +1,5 @@
 import {closeConnection, dbConnection} from '../config/mongoConnection.js';
-import {userData} from '../data/index.js';
-import {boardData} from '../data/index.js';
-import {taskData} from '../data/index.js';
+import {boardData, checkListData, taskData, userData} from '../data/index.js';
 
 (async () => {
   let tom = undefined;
@@ -27,6 +25,11 @@ import {taskData} from '../data/index.js';
   } catch (e) {
     console.log(e);
   }
+  try {
+    tom = await userData.createUser("John", "Doe", "01/12/1999", "john@gmail.com", "johndoe", "password123*");
+  } catch (e) {
+    console.log(e);
+  }
   console.log("├─ Adding Boards...");
   try {
     tomBoard = await boardData.createBoard("First Board", "tom_smith", true, "asc", "thepassword");
@@ -45,12 +48,47 @@ import {taskData} from '../data/index.js';
   } catch (e) {
     console.log(e);
   }
+  // try {
+  //   await taskData.moveToInProgress(task2._id);
+  //   await taskData.moveToInProgress(task4._id);
+  //   await taskData.moveToDone(task5._id);
+  // } catch (e) {
+  //   console.log(e);
+  // }
   try {
-    await taskData.moveToInProgress(task2._id);
-    await taskData.moveToInProgress(task4._id);
-    await taskData.moveToDone(task5._id);
-    let updatedBoard = await boardData.getBoardById(tomBoard._id);
-    console.log(updatedBoard);
+    await checkListData.addTaskToCheckList(task1._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task1._id, "johndoe");
+    await checkListData.addTaskToCheckList(task2._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task3._id, "johndoe");
+    await checkListData.addTaskToCheckList(task4._id, "johndoe");
+    await checkListData.addTaskToCheckList(task5._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task5._id, "johndoe");
+    let updatedUser = await userData.getUserByUsername('tom_smith');
+    console.log(updatedUser);
+    let updatedUserJohn = await userData.getUserByUsername('johndoe');
+    console.log(updatedUserJohn);
+  } catch (e) {
+    console.log(e);
+  }
+  try {
+    // await checkListData.completeCheckListItem(task1._id, "tom_smith");
+    // await checkListData.completeCheckListItem(task3._id, "tom_smith");
+    // await checkListData.completeCheckListItem(task5._id, "tom_smith");
+    console.log("After name update:====================================")
+    await checkListData.updateCheckListItem(task1._id, "task1")
+    await checkListData.updateCheckListItem(task2._id, "new task 2")
+    await checkListData.updateCheckListItem(task4._id, "new task 4")
+    let updatedUser = await userData.getUserByUsername('tom_smith');
+    console.log(updatedUser);
+    let updatedUserJohn = await userData.getUserByUsername('johndoe');
+    console.log(updatedUserJohn);
+  } catch (e) {
+    console.log(e);
+  }
+  try {
+    // await checkListData.deleteTasksFromCheckList("tom_smith");
+    // let updatedUser = await userData.getUserByUsername('tom_smith');
+    // console.log(updatedUser);
   } catch (e) {
     console.log(e);
   }
