@@ -1,5 +1,5 @@
-import {ObjectId} from 'mongodb';
-import {boards} from '../config/mongoCollections.js';
+import { ObjectId } from 'mongodb';
+import { boards } from '../config/mongoCollections.js';
 import validation from '../utils/validation.js';
 import boardData from './boards.js';
 import helpers from './helpers.js';
@@ -70,9 +70,9 @@ const exportedMethods = {
     }
 
     const boardWithNewTask = await boardCollection.findOneAndUpdate(
-      {_id: new ObjectId(boardId)},
-      {$push: {toDo: newTask}},
-      {returnNewDocument: true});
+      { _id: new ObjectId(boardId) },
+      { $push: { toDo: newTask } },
+      { returnNewDocument: true });
     if (!boardWithNewTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not insert new task into board.`)
     boardWithNewTask.value._id = boardWithNewTask.value._id.toString();
 
@@ -199,40 +199,40 @@ const exportedMethods = {
     // First checks toDo list, then inProgress, then done.
     // This is ugly, but I couldn't find a nicer way to do it.
     updatedInfo = await boardCollection.findOneAndUpdate(
-      {'toDo._id': new ObjectId(taskId)},
+      { 'toDo._id': new ObjectId(taskId) },
       {
         $set: {
           'toDo.$.createdAt': createdAt, 'toDo.$.taskName': taskName, 'toDo.$.priority': priority, 'toDo.$.difficulty': difficulty,
           'toDo.$.estimatedTime': estimatedTime, 'toDo.$.deadline': deadline, 'toDo.$.description': description, 'toDo.$.assignedTo': assignedTo
         }
       },
-      {returnDocument: 'after'});
+      { returnDocument: 'after' });
     if (updatedInfo.lastErrorObject.n !== 0) {
       return await this.getTaskById(taskId);
     };
 
     updatedInfo = await boardCollection.findOneAndUpdate(
-      {'inProgress._id': new ObjectId(taskId)},
+      { 'inProgress._id': new ObjectId(taskId) },
       {
         $set: {
           'inProgress.$.createdAt': createdAt, 'inProgress.$.taskName': taskName, 'inProgress.$.priority': priority, 'inProgress.$.difficulty': difficulty,
           'inProgress.$.estimatedTime': estimatedTime, 'inProgress.$.deadline': deadline, 'inProgress.$.description': description, 'inProgress.$.assignedTo': assignedTo
         }
       },
-      {returnDocument: 'after'});
+      { returnDocument: 'after' });
     if (updatedInfo.lastErrorObject.n !== 0) {
       return await this.getTaskById(taskId);
     };
 
     updatedInfo = await boardCollection.findOneAndUpdate(
-      {'done._id': new ObjectId(taskId)},
+      { 'done._id': new ObjectId(taskId) },
       {
         $set: {
           'done.$.createdAt': createdAt, 'done.$.taskName': taskName, 'done.$.priority': priority, 'done.$.difficulty': difficulty,
           'done.$.estimatedTime': estimatedTime, 'done.$.deadline': deadline, 'done.$.description': description, 'done.$.assignedTo': assignedTo
         }
       },
-      {returnDocument: 'after'});
+      { returnDocument: 'after' });
     if (updatedInfo.lastErrorObject.n !== 0) {
       return await this.getTaskById(taskId);
     };
@@ -265,12 +265,12 @@ const exportedMethods = {
     const board = await boardCollection.findOne(
       {
         $or: [
-          {"toDo._id": taskId},
-          {"inProgress._id": taskId},
-          {"done._id": taskId}
+          { "toDo._id": taskId },
+          { "inProgress._id": taskId },
+          { "done._id": taskId }
         ]
       },
-      {projection: {_id: 1}}
+      { projection: { _id: 1 } }
     );
 
     if (!board) {
@@ -283,9 +283,9 @@ const exportedMethods = {
       },
       {
         $pull: {
-          toDo: {_id: taskId},
-          inProgress: {_id: taskId},
-          done: {_id: taskId}
+          toDo: { _id: taskId },
+          inProgress: { _id: taskId },
+          done: { _id: taskId }
         }
       }
     );
@@ -312,9 +312,9 @@ const exportedMethods = {
     await this.deleteTask(taskId);
 
     const boardWithMovedTask = await boardCollection.findOneAndUpdate(
-      {_id: new ObjectId(board._id)},
-      {$push: {toDo: taskToMove}},
-      {returnNewDocument: true});
+      { _id: new ObjectId(board._id) },
+      { $push: { toDo: taskToMove } },
+      { returnNewDocument: true });
 
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'To Do' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
@@ -350,9 +350,9 @@ const exportedMethods = {
     await this.deleteTask(taskId);
 
     const boardWithMovedTask = await boardCollection.findOneAndUpdate(
-      {_id: new ObjectId(board._id)},
-      {$push: {inProgress: taskToMove}},
-      {returnNewDocument: true});
+      { _id: new ObjectId(board._id) },
+      { $push: { inProgress: taskToMove } },
+      { returnNewDocument: true });
 
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'In Progress' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
@@ -388,9 +388,9 @@ const exportedMethods = {
     await this.deleteTask(taskId);
 
     const boardWithMovedTask = await boardCollection.findOneAndUpdate(
-      {_id: new ObjectId(board._id)},
-      {$push: {done: taskToMove}},
-      {returnNewDocument: true});
+      { _id: new ObjectId(board._id) },
+      { $push: { done: taskToMove } },
+      { returnNewDocument: true });
 
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'Done' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();

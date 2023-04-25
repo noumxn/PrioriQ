@@ -1,6 +1,6 @@
 import {Router} from 'express';
 const router = Router();
-import boardData from '../data/boards.js'
+//add whatever imports you need
 
 
 
