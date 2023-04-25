@@ -1,5 +1,5 @@
-import { closeConnection, dbConnection } from '../config/mongoConnection.js';
-import { boardData, taskData, userData } from '../data/index.js';
+import {closeConnection, dbConnection} from '../config/mongoConnection.js';
+import {boardData, taskData, userData} from '../data/index.js';
 
 (async () => {
   let tom = undefined;

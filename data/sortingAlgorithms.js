@@ -1,5 +1,5 @@
-import { ObjectId } from 'mongodb';
-import { boards } from '../config/mongoCollections.js';
+import {ObjectId} from 'mongodb';
+import {boards} from '../config/mongoCollections.js';
 import validation from '../utils/validation.js';
 import boardData from './boards.js';
 
@@ -22,12 +22,12 @@ const exportedMethods = {
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
 
     // assigning numberic values to dfficulty levels
-    const difficultyOrder = { veryEasy: 1, easy: 2, medium: 3, hard: 4, veryHard: 5 };
+    const difficultyOrder = {veryEasy: 1, easy: 2, medium: 3, hard: 4, veryHard: 5};
     // sorting
     board.toDo.sort((task1, task2) => difficultyOrder[task1.difficulty] - difficultyOrder[task2.difficulty]);
-    await boardCollection.updateOne({ _id: new ObjectId(boardId) }, { $set: { toDo: board.toDo } });
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
     board.inProgress.sort((task1, task2) => difficultyOrder[task1.difficulty] - difficultyOrder[task2.difficulty]);
-    await boardCollection.updateOne({ _id: new ObjectId(boardId) }, { $set: { inProgress: board.inProgress } });
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
 
     return board
   },
@@ -50,12 +50,12 @@ const exportedMethods = {
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
 
     // assigning numberic values to dfficulty levels
-    const difficultyOrder = { veryEasy: 1, easy: 2, medium: 3, hard: 4, veryHard: 5 };
+    const difficultyOrder = {veryEasy: 1, easy: 2, medium: 3, hard: 4, veryHard: 5};
     // sorting
     board.toDo.sort((task1, task2) => difficultyOrder[task2.difficulty] - difficultyOrder[task1.difficulty]);
-    await boardCollection.updateOne({ _id: new ObjectId(boardId) }, { $set: { toDo: board.toDo } });
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
     board.inProgress.sort((task1, task2) => difficultyOrder[task2.difficulty] - difficultyOrder[task1.difficulty]);
-    await boardCollection.updateOne({ _id: new ObjectId(boardId) }, { $set: { inProgress: board.inProgress } });
+    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
 
     return board
   },
@@ -74,7 +74,7 @@ const exportedMethods = {
 
     // Retriving board using boardId
     const boardCollection = await boards();
-    const board = await boardCollection.findOne({ _id: new ObjectId(boardId) });
+    const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
     board._id = board._id.toString();
     for (let i in board.toDo) {
@@ -95,7 +95,7 @@ const exportedMethods = {
         task.priority = currentPriority;
       }
       board.toDo.sort((task1, task2) => task2.priority - task1.priority);
-      await boardCollection.updateOne({ _id: new ObjectId(boardId) }, { $set: { toDo: board.toDo } });
+      await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
     }
     if (board.inProgress.length >= 1) {
       for (const task of board.inProgress) {
@@ -103,7 +103,7 @@ const exportedMethods = {
         task.priority = currentPriority;
       }
       board.inProgress.sort((task1, task2) => task2.priority - task1.priority);
-      await boardCollection.updateOne({ _id: new ObjectId(boardId) }, { $set: { inProgress: board.inProgress } });
+      await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
     }
 
     return board;
@@ -132,7 +132,7 @@ const exportedMethods = {
 
     // Calculate number of priority increments required
     const numIncrements = Math.max(10 - priority, 0);
-    if (numIncrements === 0) { return priority; }
+    if (numIncrements === 0) {return priority;}
     const timePerIncrement = timeRemainingMs / numIncrements;
 
     // Calculate how many priority increments have already occurred
