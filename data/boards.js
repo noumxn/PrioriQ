@@ -2,6 +2,7 @@ import {ObjectId} from "mongodb";
 import userData from "./users.js";
 import {boards} from "../config/mongoCollections.js";
 import validation from "../utils/validation.js";
+import sorting from "./sortingAlgorithms.js";
 import helper from "./helpers.js";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
@@ -90,6 +91,16 @@ const exportedMethods = {
     if (!board)
       throw validation.returnRes("NOT_FOUND", `No user with ID: ${boardId}.`);
     board._id = board._id.toString();
+    board.toDo.forEach(task => {task._id = task._id.toString();});
+    // Sorting the board
+    if (board.priorityScheduling === true) {
+      await sorting.priorityBasedSorting(board._id);
+    } else if (board.priorityScheduling === false && board.sortOrder === 'asc') {
+      await sorting.difficultyBasedSortAscending(board._id)
+    } else if (board.priorityScheduling === false && board.sortOrder === 'desc') {
+      await sorting.difficultyBasedSortDescending(board._id)
+    }
+
     return board;
   },
 

@@ -12,7 +12,8 @@
     "start": "node app.js",
     "dev": "nodemon --exec yarn start",
     "seed": "node ./tasks/seed.js",
-    "seedB": "node ./tasks/seedB.js"
+    "seedB": "node ./tasks/seedB.js",
+    "seed3": "node ./tasks/seed3.js"
   },
   "repository": {
     "type": "git",

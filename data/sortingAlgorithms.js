@@ -76,11 +76,32 @@ const exportedMethods = {
     const boardCollection = await boards();
     const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
+    board._id = board._id.toString();
+    for (let i in board.toDo) {
+      board.toDo[i]._id = board.toDo[i]._id.toString();
+    }
+    for (let i in board.inProgress) {
+      board.inProgress[i]._id = board.inProgress[i]._id.toString();
+    }
+    for (let i in board.done) {
+      board.done[i]._id = board.done[i]._id.toString();
+    }
 
     // sorting
-    board.toDo.sort((task1, task2) => task2.priority - task1.priority);
-    await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    if (board.toDo.length >= 1) {
+      // update priority before sorting
+      for (let task of board.toDo) {
+        const currentPriority = await this.priorityAssignmentAlgorithm(task.createdAt, task.priority, task.deadline, task.estimatedTime);
+        task.priority = currentPriority;
+      }
+      board.toDo.sort((task1, task2) => task2.priority - task1.priority);
+      await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {toDo: board.toDo}});
+    }
     if (board.inProgress.length >= 1) {
+      for (const task of board.inProgress) {
+        const currentPriority = await this.priorityAssignmentAlgorithm(task.createdAt, task.priority, task.deadline, task.estimatedTime);
+        task.priority = currentPriority;
+      }
       board.inProgress.sort((task1, task2) => task2.priority - task1.priority);
       await boardCollection.updateOne({_id: new ObjectId(boardId)}, {$set: {inProgress: board.inProgress}});
     }
@@ -103,27 +124,25 @@ const exportedMethods = {
     validation.validDateTimeFormatCheck(createdAt, deadline);
     validation.numberValidCheck(priority, estimatedTime);
 
+    deadline = new Date(deadline);
+    createdAt = new Date(createdAt);
+
     // Calculate time remaining until deadline
-    const timeRemainingMs = deadline - createdAt - estimatedTime;
+    const timeRemainingMs = deadline.getTime() - createdAt.getTime() - estimatedTime;
 
     // Calculate number of priority increments required
     const numIncrements = Math.max(10 - priority, 0);
-    if (numIncrements === 0) {
-      return priority;
-    }
+    if (numIncrements === 0) {return priority;}
     const timePerIncrement = timeRemainingMs / numIncrements;
 
     // Calculate how many priority increments have already occurred
-    const timeSinceCreationMs = Date.now() - createdAt.getTime();
-    const numIncrementsSoFar = Math.min(Math.floor(timeSinceCreationMs / timePerIncrement), numIncrements);
+    const timeSinceCreationMs = Date.now() - createdAt;
+    const numIncrementsSoFar = Math.floor(timeSinceCreationMs / timePerIncrement);
 
     // Calculate current priority
-    const currentPriority = priority + numIncrementsSoFar;
-    if (priority > currentPriority) {
-      return priority
-    } else {
-      return currentPriority
-    }
+    let currentPriority = priority + numIncrementsSoFar;
+    currentPriority = (currentPriority > 10) ? 10 : currentPriority;
+    return (priority > currentPriority) ? priority : currentPriority;
   },
 };
 
