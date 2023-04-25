@@ -1,15 +1,15 @@
-import {closeConnection, dbConnection} from '../config/mongoConnection.js';
-import {userData} from '../data/index.js';
-import {boardData} from '../data/index.js';
-import {taskData} from '../data/index.js';
+import { closeConnection, dbConnection } from '../config/mongoConnection.js';
+import { boardData, taskData, userData } from '../data/index.js';
 
 (async () => {
   let tom = undefined;
-  let john = undefined;
   let tomBoard = undefined;
-  let firstTask = undefined;
-  let secondTask = undefined;
-  let updatedTask = undefined;
+  let task1 = undefined;
+  let task2 = undefined;
+  let task3 = undefined;
+  let task4 = undefined;
+  let task5 = undefined;
+  let task6 = undefined;
 
   console.log("Seeding Database");
   console.log("├─ Setting up Database Connection")
@@ -25,43 +25,28 @@ import {taskData} from '../data/index.js';
   } catch (e) {
     console.log(e);
   }
-  try {
-    john = await userData.createUser("John", "Arbuckle", "10/28/1995", "john@stevens.go", "john_brown", "hello123*");
-  } catch (e) {
-    console.log(e);
-  }
-  console.log("├─ Verifying Users...");
   console.log("├─ Adding Boards...");
-
   try {
-    tomBoard = await boardData.createBoard("First Board", "tom_smith", "true", "asc", "thepassword");
+    tomBoard = await boardData.createBoard("First Board", "tom_smith", true, "asc", "thepassword");
   } catch (e) {
     console.log(e);
   }
-  console.log("├─ Adding Shared Boards...");
   console.log("└─ Adding Tasks...");
   try {
-    firstTask = await taskData.createTask(tomBoard._id, "what", 7, "easy", "30 minutes", "12/15/2016", "This is a test task", ["tom_smith"]);
-    secondTask = await taskData.createTask(tomBoard._id, "yo", 10, "hard", "30 minutes", "12/15/2016", "This is a test task2", ["tom_smith"]);
+    task1 = await taskData.createTask(tomBoard._id, "task1", 1, null, "00 hour 01 mins", "2023-04-25T00:03:23.241Z", "This is a test task1", ["tom_smith"]);
+    task2 = await taskData.createTask(tomBoard._id, "task2", 8, null, "00 hour 00 mins", "2023-04-25T00:18:23.241Z", "This is a test task2", ["tom_smith"]);
+    task3 = await taskData.createTask(tomBoard._id, "task3", 4, null, "00 hour 01 mins", "2023-04-25T00:04:23.241Z", "This is a test task3", ["tom_smith"]);
+    task4 = await taskData.createTask(tomBoard._id, "task4", 8, null, "00 hour 02 mins", "2023-04-25T00:18:23.241Z", "This is a test task4", ["tom_smith"]);
+    task5 = await taskData.createTask(tomBoard._id, "task5", 1, null, "00 hour 02 mins", "2023-04-25T00:03:23.241Z", "This is a test task5", ["tom_smith"]);
+    task6 = await taskData.createTask(tomBoard._id, "task6", 10, null, "00 hour 10 mins", "2023-04-25T00:18:23.241Z", "This is a test task5", ["tom_smith"]);
   } catch (e) {
     console.log(e);
   }
   try {
-    const id = secondTask.toDo[0]._id.toString();
-    console.log(await taskData.getTaskById(id));
-    //console.log(secondTask.toDo[0]._id);
-   // console.log(secondTask.toDo[0]._id.toString());
-    console.log(await taskData.moveToDone(id));
-    console.log("board");
-    console.log(await boardData.getBoardById(tomBoard._id));
-    console.log("getting task")
-    console.log(await taskData.getTaskById(id));
-    //updatedTask = await taskData.updateTask(secondTask.toDo[0]._id.toString(), "New name!", 7, "hard", "60 minutes", "12/16/2016", "Lol. Lmao.", ["tom_smith"]);
-    // console.log(await taskData.getTaskById(updatedTask._id.toString()));
-    //console.log(await taskData.getBoardByTaskId(updatedTask._id.toString()));
-    // console.log(await taskData.deleteTask(secondTask.toDo[1]._id.toString()));
-    // await taskData.deleteTask(secondTask.toDo[0]._id.toString());
-    //console.log(await boardData.getBoardById(tomBoard._id));
+    await taskData.moveToInProgress(task1._id);
+    await taskData.moveToInProgress(task2._id);
+    await taskData.moveToDone(task5._id);
+    await taskData.moveToDone(task6._id);
   } catch (e) {
     console.log(e);
   }
