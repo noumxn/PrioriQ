@@ -1,5 +1,6 @@
 import {ObjectId} from "mongodb";
 import userData from "./users.js";
+import {users} from '../config/mongoCollections.js';
 import {boards} from "../config/mongoCollections.js";
 import validation from "../utils/validation.js";
 import sorting from "./sortingAlgorithms.js";
@@ -54,6 +55,7 @@ const exportedMethods = {
       done: [],
     };
 
+    newBoard['allowedUsers'].push(owner);
     //get the board data
     const boardCollection = await boards();
     //insert board into database
@@ -89,7 +91,7 @@ const exportedMethods = {
 
     const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
     if (!board)
-      throw validation.returnRes("NOT_FOUND", `No user with ID: ${boardId}.`);
+      throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
     board._id = board._id.toString();
     board.toDo.forEach(task => {task._id = task._id.toString();});
     // Sorting the board
@@ -122,6 +124,7 @@ const exportedMethods = {
     return board;
   },
 
+
   /*
    * @param {boardId} ObjectId
    * @param {newBoardName} string
@@ -152,10 +155,22 @@ const exportedMethods = {
     //if the passwords don't match, rehash it
 
     const board = await this.getBoardById(boardId);
+    if (!board) throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
+
+
     const passwordsMatch = await bcrypt.compare(
       newBoardPassword,
       board.boardPassword
     );
+
+    //throw if data wasnt changed
+    if(newBoardName == board.boardName && newSortOrder == board.sortOrder && passwordsMatch){
+      throw validation.returnRes("NO_CONTENT", `all new parameters of board is same as before`);
+    }
+
+    //uses helper function to get newSortOrder
+    newSortOrder = helper.checkSortOrderValue(board.priorityScheduling, newSortOrder);
+
     if (!passwordsMatch) {
       const saltRounds = parseInt(process.env.SALT_ROUNDS);
       newBoardPassword = await bcrypt.hash(newBoardPassword, saltRounds);
@@ -187,6 +202,7 @@ const exportedMethods = {
    * @return {board} message indicating board has been deleted
    **/
   async deleteBoard(boardId) {
+    //validation
     validation.parameterCheck(boardId);
     validation.strValidCheck(boardId);
 
@@ -203,6 +219,108 @@ const exportedMethods = {
 
     return `Board '${deletionInfo.value.boardName}' has been deleted.`;
   },
+
+
+async AddUserAllowedUsers(boardId, username) {
+  //validation
+  validation.parameterCheck(boardId, username);
+  validation.strValidCheck(boardId, username);
+  boardId = validation.idCheck(boardId);
+
+  const boardCollection = await boards();
+  const board = await this.getBoardById(boardId);
+  if (!board) throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
+
+  let newAllowedUsers = board.allowedUsers;
+
+  if(!(board.allowedUsers.includes(username))){
+    newAllowedUsers.push(username);
+  }
+
+  await boardCollection.updateOne(
+    {_id: new ObjectId(boardId)},
+    {
+      $set: {
+        allowedUsers: newAllowedUsers,
+      },
+    }
+  );
+
+
+  //update users
+  const userCollection = await users();
+  const newUser = await userData.getUserByUsername(username);
+  if (!newUser) throw validation.returnRes("NOT_FOUND", `No user with that username: ${username}.`);
+
+  let newSharedBoards = newUser.sharedBoards;
+  console.log(newUser.firstName);
+
+  
+    newSharedBoards.push(boardId);
+
+  
+  console.log(newUser._id.toString());
+  await userCollection.updateOne(
+    {_id: new ObjectId(newUser._id.toString())},
+    {
+      $set: {
+        sharedBoards: newSharedBoards,
+      },
+    }
+  );
+
+  console.log(newUser.sharedBoards);
+
+
+
+  
+
+
+
+  return await this.getBoardById(boardId);
+
+},
+
+
+async AddUserBlockedUsers(boardId, username) {
+  //validation
+  validation.parameterCheck(boardId, username);
+  validation.strValidCheck(boardId, username);
+  boardId = validation.idCheck(boardId);
+
+  const boardCollection = await boards();
+  const board = await this.getBoardById(boardId);
+
+
+  let newAllowedUsers = board.allowedUsers;
+  let newBlockedUsers = board.blockedUsers;
+
+  if(username == board.owner){
+    throw validation.returnRes('FORBIDDEN', `Owner of board cannot be blocked from board`)
+  }
+
+  if(!(board.blockedUsers.includes(username))){
+    newBlockedUsers.push(username);
+  }
+
+  if(board.allowedUsers.includes(username)){
+    newAllowedUsers = newAllowedUsers.filter(name => name != username);
+  }
+
+  await boardCollection.updateOne(
+    {_id: new ObjectId(boardId)},
+    {
+      $set: {
+        blockedUsers: newBlockedUsers,
+        allowedUsers: newAllowedUsers
+      },
+    }
+  );
+
+  return await this.getBoardById(boardId);
+
+}
+
 };
 
 export default exportedMethods;
