@@ -11,7 +11,7 @@ const constructorMethod = (app) => {
   app.use('/board', boardRoutes);
   app.use('/boardsettings', boardsettingsRoutes);
   app.use('*', (req, res) => {
-    res.redirect('/', authRoutes);
+    res.status(404).json({error: 'Route Not found'});;
   });
 };
 

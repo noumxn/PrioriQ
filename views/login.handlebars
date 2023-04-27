@@ -1,0 +1,20 @@
+<h1>Login</h1>
+<div id="error" class="error" hidden>Error</div>
+  {{#if error}}
+  <div id="serverError" class="error"> {{e}}</div>
+  {{/if}}
+    <p>
+         Please enter email and password:
+    </p>
+    <form action="/login" method = "POST" id="login-form"> 
+    <label for="emailAddressInput">
+      Email:
+      <input type="email" name="emailAddressInput" id="emailAddressInput"  class="full-width-input" >
+    </label>
+    <label for="passwordInput">
+      Password:
+      <input type="password" name="passwordInput" id="passwordInput"  class="full-width-input" >
+    </label>
+    <button type="submit">Login</button>
+    </form> 
+    <a href="http://localhost:3000/register">Click here to register</a>
