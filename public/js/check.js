@@ -2,7 +2,7 @@ let registration = document.getElementById('registration-form');
 let login = document.getElementById('login-form');
 
 if (login) {
-  let email = document.getElementById('emailAddressInput');
+  let username = document.getElementById('usernameInput');
   let password = document.getElementById('passwordInput');
   let errorDiv = document.getElementById('error');
   let serverErr = document.getElementById("serverError");
@@ -13,17 +13,17 @@ if (login) {
     if(serverErr !== null){
       serverErr.hidden = true;
     }
-    let format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if(email.value.trim().length == 0){
+    
+    if(username.value.trim().length == 0){
       event.preventDefault();
       errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Please input a Valid Email';
+      errorDiv.innerHTML = 'Please input a Valid userName';
       email.focus();
     } else
-    if(!email.value.match(format)){
+    if(username.value.trim().length < 3 || username.value.trim().length >20){
       event.preventDefault();
       errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Email is not correct format'
+      errorDiv.innerHTML = 'Username must be at least 3 characters or less than 20'
       email.focus();
     }else if(password.value.trim().length == 0){
       event.preventDefault();

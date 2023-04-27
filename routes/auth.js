@@ -41,8 +41,10 @@ router
     if(dob === null){
       return res.status(400).render("../views/register", {error:true, e:"Confirm Password is missing a value"});
     }
+    let year = dob.substring(0,4); let month=dob.substring(5,7); let day=dob.substring(8);
     first = first.trim(); last = last.trim(); email = email.trim().toLowerCase(); password = password.trim(); confirm = confirm.trim();
-    user = user.trim().toLowerCase();
+    user = user.trim().toLowerCase(); dob=month+"/"+day+"/"+year;
+    console.log(dob);
     try{
       await userData.createUser(first, last, dob, email, user, password);
       res.redirect("/login");
@@ -57,7 +59,20 @@ router
     return res.status(200).render("../views/login");
   })
   .post(async (req, res) => {
-
+    let user = req.body.usernameInput;
+    let password = req.body.passwordInput;
+    if(user === null){
+      return res.status(400).render("../views/login", {error:true, e:"User is missing a value"});
+    }
+    if(password === null){
+      return res.status(400).render("../views/login", {error:true, e:"Password is missing a value"});
+    }
+    try{
+      req.session.user = await userData.authenticateUser(user, password);
+      res.status(200).redirect("/homepage");
+    }catch(e){
+      return res.status(400).render("../views/login", {error:true, e:e});
+    }
   });
 
   router.route('/error').get(async (req, res) => {

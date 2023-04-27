@@ -40,7 +40,7 @@ const exportedMethods = {
     // Searching user by username
     const userCollection = await users();
     const searchedUser = await userCollection.findOne({username: username});
-    if (!searchedUser) throw validation.returnRes('NOT_FOUND', `No user with the username: ${username}.`);
+    if (!searchedUser) throw `No user with the username: ${username}.`;
 
     return searchedUser;
   },
@@ -226,9 +226,9 @@ const exportedMethods = {
     const user = await this.getUserByUsername(username);
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw validation.returnRes('UNAUTHORIZED', `The username and password do not match.`);
+      throw `Your username or password is incorrect`;
     } else {
-      return validation.returnRes('SUCCESS', `You are now logged in as '${username}'.`);
+      return user;
     }
   },
 };
