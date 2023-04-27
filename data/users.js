@@ -60,7 +60,7 @@ const exportedMethods = {
     // Searching user by ID
     const userCollection = await users();
     const searchedUser = await userCollection.findOne({_id: new ObjectId(userId)});
-    if (!searchedUser) throw validation.returnRes('NOT_FOUND', `No user with ID: ${userId}.`);
+    if (!searchedUser) throw `No user with ID: ${userId}.`;
     searchedUser._id = searchedUser._id.toString();
 
     return searchedUser;
@@ -110,12 +110,12 @@ const exportedMethods = {
     //check if email is already in use
     let inUse = await helpers.checkEmailInUse(email);
     if (inUse) {
-      throw validation.returnRes('CONFLICT', `The email ${email} is already in use. Please try another`)
+      throw  `The email ${email} is already in use. Please try another`
     }
     const userCollection = await users();
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) {
-      throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not create new user. Try again.`);
+      throw `Could not create new user. Try again.`
     }
     const newId = insertInfo.insertedId.toString();
     const user = await this.getUserById(newId);

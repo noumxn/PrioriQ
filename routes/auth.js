@@ -13,7 +13,42 @@ router
     res.status(200).render("../views/register");
   })
   .post(async (req, res) => {
-
+    let email = req.body.emailAddressInput;
+    let password = req.body.passwordInput;
+    let first = req.body.firstNameInput;
+    let last = req.body.lastNameInput;
+    let user = req.body.usernameInput;
+    let confirm = req.body.confirmPasswordInput;
+    let dob = req.body.dobInput;
+    if(email === null){
+      return res.status(400).render("../views/register", {error:true, e:"Email is missing a value"});
+    }
+    if(password === null){
+      return res.status(400).render("../views/register", {error:true, e:"Password is missing a value"});
+    }
+    if(first === null){
+      return res.status(400).render("../views/register", {error:true, e:"First name is missing a value"});
+    }
+    if(last === null){
+      return res.status(400).render("../views/register", {error:true, e:"Last name is missing a value"});
+    }
+    if(user === null){
+      return res.status(400).render("../views/register", {error:true, e:"User is missing a value"});
+    }
+    if(confirm === null){
+      return res.status(400).render("../views/register", {error:true, e:"Confirm Password is missing a value"});
+    }
+    if(dob === null){
+      return res.status(400).render("../views/register", {error:true, e:"Confirm Password is missing a value"});
+    }
+    first = first.trim(); last = last.trim(); email = email.trim().toLowerCase(); password = password.trim(); confirm = confirm.trim();
+    user = user.trim().toLowerCase();
+    try{
+      await userData.createUser(first, last, dob, email, user, password);
+      res.redirect("/login");
+    }catch(e){
+      return res.status(400).render("../views/register", {error:true, e:"Failed to create"});
+    }
   });
 
 router
@@ -22,6 +57,7 @@ router
     return res.status(200).render("../views/login");
   })
   .post(async (req, res) => {
+
   });
 
   router.route('/error').get(async (req, res) => {
