@@ -40,7 +40,7 @@ const exportedMethods = {
     // Searching user by username
     const userCollection = await users();
     const searchedUser = await userCollection.findOne({username: username});
-    if (!searchedUser) throw `No user with the username: ${username}.`;
+    if (!searchedUser) throw validation.returnRes('NOT_FOUND', `No user with the username: ${username}.`)
 
     return searchedUser;
   },
@@ -60,7 +60,7 @@ const exportedMethods = {
     // Searching user by ID
     const userCollection = await users();
     const searchedUser = await userCollection.findOne({_id: new ObjectId(userId)});
-    if (!searchedUser) throw `No user with ID: ${userId}.`;
+    if (!searchedUser) throw validation.returnRes('NOT_FOUND', `No user with the id: ${userId}.`);
     searchedUser._id = searchedUser._id.toString();
 
     return searchedUser;
@@ -110,12 +110,12 @@ const exportedMethods = {
     //check if email is already in use
     let inUse = await helpers.checkEmailInUse(email);
     if (inUse) {
-      throw  `The email ${email} is already in use. Please try another`
+      throw  validation.returnRes('CONFLICT',`The email ${email} is already in use. Please try another`);
     }
     const userCollection = await users();
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) {
-      throw `Could not create new user. Try again.`
+      throw validation.returnRes('UNAUTHROIZED', `Could not create new user. Try again.`);
     }
     const newId = insertInfo.insertedId.toString();
     const user = await this.getUserById(newId);
@@ -226,7 +226,7 @@ const exportedMethods = {
     const user = await this.getUserByUsername(username);
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw `Your username or password is incorrect`;
+      throw validation.returnRes('UNAUTHORIZED', `The username and password do not match.`);
     } else {
       return user;
     }

@@ -1,5 +1,15 @@
+//import moment from 'moment';
+
 let registration = document.getElementById('registration-form');
 let login = document.getElementById('login-form');
+
+//Helper function
+function calcAge(dob){
+  let birthday = new Date(dob);
+  let age = Date.now() - birthday.getTime();
+  let date = new Date(age);
+  return Math.floor(date.getUTCFullYear() - 1970);
+};
 
 if (login) {
   let username = document.getElementById('usernameInput');
@@ -65,6 +75,13 @@ if(registration){
   let passwordConfirm = document.getElementById('confirmPasswordInput');
   let username = document.getElementById('usernameInput');
   let dob = document.getElementById('dobInput');
+  let year, month, day, realDate;
+    if(dob.value.length == 10){
+      year=dob.value.substring(0,4);
+      month = dob.value.substring(5,7);
+      day = dob.value.substring(8);
+      //realDate = moment(month+"/"+day+"/"+year, "MM/DD/YYYY");
+    }
   let errorDiv = document.getElementById('error');
   let serverErr = document.getElementById('serverError');
   registration.addEventListener('submit', (event) => {
@@ -85,7 +102,12 @@ if(registration){
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name cannot have numbers'
       firstName.focus();
-    } else if(firstName.value.trim().length < 2 || firstName.value.trim().length > 25){
+    } else if(/^[a-zA-Z]*$/.test(firstName.value.trim()) == false){
+      event.preventDefault();
+      errorDiv.hidden = false;
+      errorDiv.innerHTML = 'First name can only contain letters'
+    }else
+    if(firstName.value.trim().length < 2 || firstName.value.trim().length > 25){
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name must have between 2 and 25 chars'
@@ -103,7 +125,12 @@ if(registration){
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Last name cannot have numbers'
       lastName.focus();
-  }   else if(lastName.value.trim().length < 2 || lastName.value.trim().length > 25){
+  }   else if(/^[a-zA-Z]*$/.test(lastName.value.trim()) == false){
+    event.preventDefault();
+    errorDiv.hidden = false;
+    errorDiv.innerHTML = 'First name can only contain letters'
+  }else
+  if(lastName.value.trim().length < 2 || lastName.value.trim().length > 25){
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Last name must have between 2 and 25 chars'
@@ -127,7 +154,17 @@ if(registration){
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input DOB'
       dob.focus();
-    }else 
+    }else if(dob.value.length > 10){
+      event.preventDefault();
+      errorDiv.hidden = false;
+      errorDiv.innerHTML = 'Please input DOB as MM/DD/YYYY'
+      dob.focus();
+    }else if(calcAge(dob.value) < 13){
+      event.preventDefault();
+      errorDiv.hidden = false;
+      errorDiv.innerHTML = 'You must be 13 years or older to create an account.'
+      dob.focus();
+    }else
     //validate username
     if(username.value.trim().length ==0 ){
       event.preventDefault();
