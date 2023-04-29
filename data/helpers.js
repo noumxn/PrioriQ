@@ -85,8 +85,8 @@ const checkPassword = (password) => {
 const checkName = (name) => {
   if (name.length < 1) throw validation.returnRes('BAD_REQUEST', `Name must be longer than 1 character.`);
   if (name.length > 20) throw validation.returnRes('BAD_REQUEST', `Name can not be longer than 20 characters.`);
-  let regex = /^[A-Za-z0-9 ]+$/;
-  if (!regex.test(name)) throw validation.returnRes('BAD_REQUEST', `Name can not contain special characters.`)
+  let regex = /^[A-Za-z ]+$/;
+  if (!regex.test(name)) throw validation.returnRes('BAD_REQUEST', `Name can not contain special characters or numbers.`)
 
   return name.trim()
 }
