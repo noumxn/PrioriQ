@@ -5,6 +5,7 @@ import boardData from './boards.js';
 import helpers from './helpers.js';
 import sorting from './sortingAlgorithms.js';
 import userData from './users.js';
+import checkListData from './checkList.js';
 
 const exportedMethods = {
   /*
@@ -171,6 +172,7 @@ const exportedMethods = {
 
     const boardCollection = await boards();
     const originBoard = await this.getBoardByTaskId(taskId);
+    const originalTask = await this.getTaskById(taskId);
 
     for (let i in assignedTo) {
       validation.strValidCheck(assignedTo[i]);
@@ -247,6 +249,10 @@ const exportedMethods = {
       await sorting.difficultyBasedSortAscending(boardWithNewTask.value._id)
     } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
+    }
+
+    if (originalTask.taskName != taskName) {
+      await checkListData.updateCheckListItem(taskId, taskName);
     }
 
     return await this.getTaskById(taskId);

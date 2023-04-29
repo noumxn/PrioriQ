@@ -1,5 +1,5 @@
 import {closeConnection, dbConnection} from '../config/mongoConnection.js';
-import {boardData, taskData, userData} from '../data/index.js';
+import {boardData, taskData, userData, checkListData} from '../data/index.js';
 
 (async () => {
   let tom = undefined;
@@ -21,13 +21,14 @@ import {boardData, taskData, userData} from '../data/index.js';
   }
   console.log("├─ Creating Users...");
   try {
-    tom = await userData.createUser("Tom", "Smith", "01/12/2000", "tom@gmail.com", "tom_smith", "hello123*");
+    tom = await userData.createUser("Tom", "Smith", "01/12/2000", "tom@gmail.com", "tom_smith", "Hello123*");
   } catch (e) {
     console.log(e);
   }
   console.log("├─ Adding Boards...");
   try {
     tomBoard = await boardData.createBoard("First Board", "tom_smith", true, "asc", "thepassword");
+    console.log(await userData.getUserById(tom._id.toString()));
   } catch (e) {
     console.log(e);
   }
@@ -47,6 +48,8 @@ import {boardData, taskData, userData} from '../data/index.js';
     await taskData.moveToInProgress(task2._id);
     await taskData.moveToDone(task5._id);
     await taskData.moveToDone(task6._id);
+    await checkListData.addTaskToCheckList(task2._id, "tom_smith");
+    console.log(await boardData.getBoardById(tomBoard._id));
   } catch (e) {
     console.log(e);
   }

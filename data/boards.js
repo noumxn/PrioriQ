@@ -33,7 +33,7 @@ const exportedMethods = {
       boardPassword
     );
     validation.strValidCheck(boardName, owner, boardPassword);
-    await userData.getUserByUsername(owner);
+    const boardOwner = await userData.getUserByUsername(owner); //
     sortOrder = helper.checkSortOrderValue(priorityScheduling, sortOrder);
 
     // Hashing the board password
@@ -66,6 +66,14 @@ const exportedMethods = {
         "INTERNAL_SERVER_ERROR",
         `Could not create new board.`
       );
+    //get the user data
+    const userCollection = await users();
+    //Adds the new board to the user's boards field
+    const updatedUserWithNewBoard = await userCollection.findOneAndUpdate(
+      {_id: new ObjectId(boardOwner._id)},
+      {$push: {boards: newBoard}},
+      {returnNewDocument: true});
+    if (!updatedUserWithNewBoard) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not add board to ${owner}'s boards.`);
 
     //get the new id
     const newId = insertInfo.insertedId.toString();
