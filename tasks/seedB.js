@@ -63,7 +63,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   console.log('1*************************************');
 
   try {
-    getBoard1 = await boardData.getBoardById(board1._id.toString());
+    getBoard1 = await boardData.getBoardById('6445a06ad291c4f39bd0f68a');
     console.log(getBoard1);
   } catch (e) {
     console.log(e);
