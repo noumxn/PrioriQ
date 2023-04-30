@@ -1,20 +1,64 @@
 <h1>{{titley}}</h1>
 
-<p>Welcome, {{user}}.</p>
+<h2>Welcome, {{user}}.</h2>
 <br>
-<ul>
+<a id="userSettings" href="/usersettings">Settings</a>
+
+<div id="userBoards">
+    <h2>Boards</h2>
+    <ul>
       {{#each userBoards}}
       <li>
           <a href="/boards/{{_id}}">{{boardName}}</a>
       </li>
       {{/each}}
 </ul>
+</div>
 <br>
+<div id="userChecklist">
+    <h2>Checklist</h2>
 <ul>
       {{#each checklist}}
       <li>
-          {{taskname}}
+          <div>
+            <label for={{taskId}}>{{taskName}}</label>
+            <input type="checkbox" id={{taskId}}>
+            <br>
+          </div>
       </li>
       {{/each}}
 </ul>
-<p>{{checklist}}</p>
+</div>
+<br>
+<form method="POST" id="create-board-form">
+    <label for="boardNameInput" id="board_name_label">
+        Enter board name:
+        <input type="text" id="boardNameInput" name="boardNameInput">
+    </label>
+    <br>
+    <label for="boardPasswordInput" id="board_password_label">
+        Enter board password:
+        <input type="password" id="boardPasswordInput" name="boardPasswordInput">
+    </label>
+    <br>
+    <label for="boardConfirmPasswordInput" id="board_confirm_password_label">
+        Confirm board password:
+        <input type="password" id="boardConfirmPasswordInput" name="boardConfirmPasswordInput">
+    </label>
+    <br>
+    <label for="sortingInput" id="sorting_label">
+        <select name="sortingInput" id="sortingInput">
+            <option value="true">Priority based scheduling</option>
+            <option value="false">Difficulty based scheduling</option>
+        </select>
+    </label>
+    <br>
+    <label for="sortOrderInput" id="sort_order_label">
+        <select name="sortOrderInput" id="sortOrderInput">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+    </label>
+    <br>
+    <button type="submit">Create</button>
+</form>

@@ -49,6 +49,7 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
     await taskData.moveToDone(task5._id);
     await taskData.moveToDone(task6._id);
     await checkListData.addTaskToCheckList(task2._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task1._id, "tom_smith");
     console.log(await boardData.getBoardById(tomBoard._id));
   } catch (e) {
     console.log(e);

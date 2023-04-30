@@ -8,32 +8,47 @@ router.route('/')
   .get( async (req, res) => {
     let userBoards = undefined;
     let userChecklist = undefined;
-    let myBoards = undefined;
-    let myChecklist = undefined;
-   // let username = req.body.username;
-   let username = "tom_smith";
+    let username = undefined;
     try {
+      username = req.session.user.username;
       userBoards = await boardData.getBoardsByUser(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
-
-     // console.log(userBoards)
-     // myBoards = JSON.stringify(userBoards);
-     // myChecklist = JSON.stringify(userChecklist);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e });
+      return res.render("error", { titley:"Error page", err: e.message });
     }
-    let boardNames = [];
-    for (let board in userBoards) {
-      boardNames.push(board.boardName);
-    }
-
-   // console.log
 
     try {
         res.render("homepage", { titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist});
       } catch (e) {
         res.status(500).json({ error: e });
       }
+
+  })
+  .post(async (req, res) => {
+    let boardName = undefined;
+    let boardPassword = undefined;
+    let confirmPassword = undefined;
+    let priorityScheduling = undefined;
+    let owner = undefined;
+    let newBoard = undefined;
+    let sortOrder = undefined;
+    //TODO: Input validation
+    try {
+      boardName = req.body.boardNameInput;
+      boardPassword = req.body.boardPasswordInput;
+      confirmPassword = req.body.boardConfirmPasswordInput;
+      priorityScheduling = req.body.sortingInput;
+      owner = req.session.user.username;
+      sortOrder = req.body.sortOrderInput;
+    } catch (e) {
+      return res.render("error", { titley:"Error page", err: e });
+    }
+    try {
+      newBoard = await boardData.createBoard(boardName, owner, priorityScheduling, sortOrder, boardPassword);
+      return res.redirect('/');
+    } catch (e) {
+      return res.status(400).render("../views/homepage", {titley: "Homepage",error:true, e:e.message});
+    }
 
   });
 
