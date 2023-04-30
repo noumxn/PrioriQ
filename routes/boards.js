@@ -7,7 +7,7 @@ import {boardData} from "../data/index.js";
 import {userData} from "../data/index.js";
 
 
-router.route("/boards")
+router.route("/id")
   .get( async (req, res) => {
     console.log("I got here");
     let boardId1;
@@ -21,6 +21,7 @@ router.route("/boards")
       console.log("I got in here2");
       console.log(userGet);
       boardy = userGet.toDo
+      //boardy2 = userGet.toDo
       //console.log(userget.toDo)
     } catch (e) {
       return res.render("error", { titley:"Error page", err: e });

@@ -112,7 +112,7 @@ const exportedMethods = {
       throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
     console.log('I got here4');
     board._id = board._id.toString();
-    /*
+  
     board.toDo.forEach(task => {task._id = task._id.toString();});
     // Sorting the board
     if (board.priorityScheduling === true) {
@@ -122,7 +122,7 @@ const exportedMethods = {
     } else if (board.priorityScheduling === false && board.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(board._id)
     }
-    */
+  
 
     return board;
   },

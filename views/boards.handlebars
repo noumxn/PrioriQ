@@ -3,7 +3,9 @@
 
   
   <p>boards yeah! This user has boards</p>
+    
       <div class="card">
+        <h1>Todo</h1>
       {{#each boardName}}
           <div class="container1">
                   <p>Name: {{this.taskName}}</p>
@@ -12,5 +14,29 @@
             {{/each}}
 
       </div>
+      
+
+    <div class="card">
+        <h1>shared</h1>
+      {{#each boardName}}
+          <div class="container1">
+                  <p>Name: {{this.taskName}}</p>
+                   <p>description: {{this.description}}</p>
+          </div>    
+            {{/each}}
+
+      </div>
+
+    <div class="card">
+        <h1>done</h1>
+      {{#each boardName}}
+          <div class="container1">
+                  <p>Name: {{this.taskName}}</p>
+                   <p>description: {{this.description}}</p>
+          </div>    
+            {{/each}}
+
+      </div>
+      
       
     

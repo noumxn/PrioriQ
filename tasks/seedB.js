@@ -43,7 +43,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 
   console.log('1*************************************');
   try {
-    board1 = await boardData.createBoard('ILikeBoards', 'user1', false, 'asc', 'hahaha');
+    board1 = await boardData.createBoard('ILikeBoards', 'user1', true, 'asc', 'hahaha');
     console.log('board1 is now here');
     console.log(board1);
   } catch (e) {
