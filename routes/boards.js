@@ -7,7 +7,7 @@ import {boardData} from "../data/index.js";
 import {userData} from "../data/index.js";
 
 
-router.route("/id")
+router.route("/:id")
   .get( async (req, res) => {
     console.log("I got here");
     let boardId1;
@@ -16,7 +16,7 @@ router.route("/id")
     let b1;
     try {
       console.log("I got in here");
-      boardId1 = '644eca3a93b403198e0a9b3d';
+      boardId1 = req.params.id;
       userGet = await boardData.getBoardById(boardId1);
       console.log("I got in here2");
       console.log(userGet);
