@@ -1,7 +1,6 @@
 import {ObjectId} from 'mongodb';
 import {boards} from '../config/mongoCollections.js';
 import validation from '../utils/validation.js';
-import boardData from './boards.js';
 
 const exportedMethods = {
   /*
@@ -18,7 +17,7 @@ const exportedMethods = {
 
     // Retriving board using boardId
     const boardCollection = await boards()
-    const board = await boardData.getBoardById(boardId);
+    const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
 
     // assigning numberic values to dfficulty levels
@@ -46,7 +45,7 @@ const exportedMethods = {
 
     // Retriving board using boardId
     const boardCollection = await boards()
-    const board = await boardData.getBoardById(boardId);
+    const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
 
     // assigning numberic values to dfficulty levels
