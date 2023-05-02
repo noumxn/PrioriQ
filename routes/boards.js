@@ -3,37 +3,85 @@ import { Router } from "express";
 const router = Router();
 import {boards} from "../config/mongoCollections.js";
 
-import {boardData} from "../data/index.js";
+import {boardData, taskData} from "../data/index.js";
 import {userData} from "../data/index.js";
 
 
 router.route("/:id")
   .get( async (req, res) => {
-    console.log("I got here");
     let boardId1;
     let userGet;
     let boardT;
     let boardS;
+    let boardD;
     let b1;
+    let addpriority;
     try {
-      console.log("I got in here");
+      addpriority = false;
       boardId1 = req.params.id;
       userGet = await boardData.getBoardById(boardId1);
-      console.log("I got in here2");
-      console.log(userGet);
+      //console.log(userGet);
+      console.log(userGet.priorityScheduling);
+      if(userGet.priorityScheduling){
+        addpriority = true;
+      }
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
-
-      //boardy2 = userGet.toDo
-      //console.log(userget.toDo)
+      boardD = userGet.Done;
+    
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e });
+      res.status(400).render('../views/boards', {titley: "Board page", boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority,  error: true, e:e.message});
     }
     try {
-        res.render("boards", { titley: "Board page", boardName:boardT});
+        res.render("boards", { titley: "Board page", boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority});
       } catch (e) {
-        res.status(500).json({ error: e });
+        res.status(400).render('../views/boards', {titley: "Board page", boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, addpriority:addpriority, e:e.message});
       }
+
+  })
+  .post(async (req, res) => {
+    console.log('I got herex');
+    let boardId;
+    let taskName;
+    let priority;
+    let difficulty;
+    let estimatedTime;
+    let deadline;
+    let description;
+    let assignedTo;
+    let newTask;
+
+      boardId = req.params.id;
+      taskName = req.body.taskNameInput;
+      priority = req.body.priorityInput;
+      difficulty = req.body.difficultyInput;
+      estimatedTime = req.body.estimatedTimeInput;
+      deadline = req.body.deadlineInput;
+      description = req.body.descriptionInput;
+      assignedTo = req.body.assignedToInput;
+
+    try{
+
+      validation.parameterCheck( taskName, estimatedTime, deadline, description, assignedTo);
+      validation.strValidCheck(taskName, estimatedTime, description);
+      taskName = helpers.checkTaskName(taskName);
+      description = helpers.checkDescription(description);
+      validation.validDateTimeFormatCheck(deadline);
+      validation.arrayValidCheck(assignedTo);
+      estimatedTime = helpers.convertEstimatedTimeToMs(estimatedTime);
+
+    } catch (e) {
+      console.log('I got herey');
+      return res.render("error", { titley:"Error page", err: e });
+    }
+
+    try {
+      newTask = await taskData.createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
+      console.log("hi");
+      res.redirect("/homepage");
+    } catch (e) {
+      res.status(400).render('../views/boards', {titley: "Board page", boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
+    }
 
   });
 

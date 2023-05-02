@@ -6,7 +6,7 @@
     
       <div class="card">
         <h1>Todo</h1>
-      {{#each boardName}}
+      {{#each boardTodo}}
           <div class="container1">
                   <p>Name: {{this.taskName}}</p>
                    <p>description: {{this.description}}</p>
@@ -18,7 +18,7 @@
 
     <div class="card">
         <h1>shared</h1>
-      {{#each boardName}}
+      {{#each boardProgress}}
           <div class="container1">
                   <p>Name: {{this.taskName}}</p>
                    <p>description: {{this.description}}</p>
@@ -29,14 +29,44 @@
 
     <div class="card">
         <h1>done</h1>
-      {{#each boardName}}
+      {{#each boardDone}}
           <div class="container1">
                   <p>Name: {{this.taskName}}</p>
                    <p>description: {{this.description}}</p>
           </div>    
             {{/each}}
-
       </div>
+
+
+    <form action = "/boards/{{boardId}}" id="create-task-form" method="POST">
+    <label for="taskNameInput">Task Name</label><br>
+    <input type="taskName" id="taskNameInput" name="taskNameInput" placeholder="Type task name here"><br>
+
+  {{#if addpriority}}
+    <label for="priorityInput">Priority</label><br>
+    <input type="priority" id="priorityInput" name="priorityInput" placeholder="Type here"><br>
+
+  {{else}}
+
+    <label for="difficultyInput">Difficulty</label><br>
+    <input type="difficulty" id="difficultyInput" name="difficultyInput" placeholder="Type here"><br>
+
+  {{/if}}
+
+    <label for="EstimatedTimeInput">Estimated Time</label><br>
+    <input type="EstimatedTime" id="EstimatedTimeInput" name="EstimatedTimeInput" placeholder="Type here"><br>
+
+    <label for="deadlineInput">Deadline</label><br>
+    <input type="deadline" id="deadlineInput" name="deadlineInput" placeholder="Type here"><br>
+
+    <label for="descriptionInput">Description</label><br>
+    <input type="description" id="descriptionInput" name="descriptionInput" placeholder="Type description here"><br>
+
+    <label for="assignedToInput">Assigned Users</label><br>
+    <input type="assignedTo" id="assignedToInput" name="assignedToInput" placeholder="Type here"><br>
+
+    <button type="submit" >Submit</button>
+</form>
       
       
     
