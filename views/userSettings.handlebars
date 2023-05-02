@@ -1,0 +1,40 @@
+<h1>Update your settings</h1>
+<div id="errorDiv" class="error" hidden> Hello</div>
+  {{#if error}}
+  <div id="serverError" class="error"> {{e}}</div>
+  {{/if}}
+    <p>
+         Please enter following information:
+    </p>
+    <form action="/usersettings" method = "POST" id="update-form"> 
+    <label for="firstNameInput">
+      First Name:
+      <input type="text" name="firstNameInput"value={{first}} id="firstNameInput"  class="full-width-input" >
+    </label>
+    <label for="lastNameInput">
+      Last Name:
+      <input type="text" name="lastNameInput"value={{last}} id="lastNameInput"  class="full-width-input" >
+    </label>
+    <label for="emailAddressInput">
+      Email:
+      <input type="email" name="emailAddressInput"value={{email}} id="emailAddressInput"  class="full-width-input" >
+    </label>
+    <label for="dobInput">
+      Date of Birth:
+      <input type="date" name="dobInput"value={{dob}} id="dobInput">
+    </label>
+    <label for="usernameInput">
+      Username:
+      <input type="username" name="usernameInput" id="usernameInput" value={{user}}  class="full-width-input" >
+    </label>
+    <label for="passwordInput">
+      Password:
+      <input type="password" name="passwordInput" id="passwordInput"  class="full-width-input" >
+    </label>
+    <label for="confirmPasswordInput">
+      Confirm Password:
+      <input type="password" name="confirmPasswordInput" id="confirmPasswordInput"  class="full-width-input" >
+    </label>
+    <button type="submit">Register</button>
+    </form> 
+</main>
