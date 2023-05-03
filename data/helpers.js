@@ -120,6 +120,13 @@ const checkPriority = (priority) => {
   return priority
 }
 
+const checkPriorityScheduling = (priorityScheduling) => {
+  if (priorityScheduling.trim() != "true" && priorityScheduling.trim() != "false") {
+    throw validation.returnRes('BAD_REQUEST', `Priority Scheduling must be true or false.`);
+  }
+  return priorityScheduling.trim();
+}
+
 /*
  * @param {taskName} string
  * @description This function takes taskName and makes sure it is less than 30 chars
@@ -323,6 +330,7 @@ export default {
   convertEstimatedTimeToMs,
   checkUsernameUnique,
   checkPriority,
+  checkPriorityScheduling,
   checkTaskName,
   checkDescription,
   checkDifficulty,

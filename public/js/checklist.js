@@ -1,0 +1,1 @@
+let checklist = document.getElementsByClassName("checklistItem");

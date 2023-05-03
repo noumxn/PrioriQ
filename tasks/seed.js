@@ -3,7 +3,9 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
 
 (async () => {
   let tom = undefined;
+  let john = undefined;
   let tomBoard = undefined;
+  let johnBoard = undefined;
   let task1 = undefined;
   let task2 = undefined;
   let task3 = undefined;
@@ -22,12 +24,15 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
   console.log("├─ Creating Users...");
   try {
     tom = await userData.createUser("Tom", "Smith", "01/12/2000", "tom@gmail.com", "tom_smith", "Hello123*");
+    john = await userData.createUser("John", "Brown", "02/11/2002", "john@gmail.com", "john_brown", "Hello123*");
   } catch (e) {
     console.log(e);
   }
   console.log("├─ Adding Boards...");
   try {
     tomBoard = await boardData.createBoard("First Board", "tom_smith", true, "asc", "thepassword");
+    johnBoard = await boardData.createBoard("John Board 1", "john_brown", true, "desc", "thepassword");
+    await boardData.AddUserAllowedUsers(tomBoard._id.toString(), "john_brown");
     console.log(await userData.getUserById(tom._id.toString()));
   } catch (e) {
     console.log(e);
