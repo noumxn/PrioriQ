@@ -9,7 +9,7 @@ import {boardData} from '../data/index.js';
     console.log(e);
   }
   try {
-    let updatedBoard = await boardData.getBoardById('644717e7eaa195c43efe482d');
+    let updatedBoard = await boardData.getBoardById('64514c33a50493fe818d19a3');
     console.log(updatedBoard);
   } catch (e) {
     console.log(e);

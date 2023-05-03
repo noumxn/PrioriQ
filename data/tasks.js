@@ -103,15 +103,18 @@ const exportedMethods = {
     const boardCollection = await boards();
     const foundBoards = await boardCollection.find().toArray();
     for (const board of foundBoards) {
-      const toDoTask = board.toDo.find(task => task._id === taskId);
+      board.toDo.forEach(task => {task._id = task._id.toString();});
+      board.inProgress.forEach(task => {task._id = task._id.toString();});
+      board.done.forEach(task => {task._id = task._id.toString();});
+      const toDoTask = board.toDo.find(task => task._id === taskId.toString());
       if (toDoTask) {
         return toDoTask;
       }
-      const inProgressTask = board.inProgress.find(task => task._id === taskId);
+      const inProgressTask = board.inProgress.find(task => task._id === taskId.toString());
       if (inProgressTask) {
         return inProgressTask;
       }
-      const doneTask = board.done.find(task => task._id === taskId);
+      const doneTask = board.done.find(task => task._id === taskId.toString());
       if (doneTask) {
         return doneTask;
       }
@@ -131,14 +134,17 @@ const exportedMethods = {
     const boardCollection = await boards();
     const foundBoards = await boardCollection.find().toArray();
     for (const board of foundBoards) {
+      board.toDo.forEach(task => {task._id = task._id.toString();});
       const toDoTask = board.toDo.find(task => task._id === taskId);
       if (toDoTask) {
         return board;
       }
+      board.inProgress.forEach(task => {task._id = task._id.toString();});
       const inProgressTask = board.inProgress.find(task => task._id === taskId);
       if (inProgressTask) {
         return board;
       }
+      board.done.forEach(task => {task._id = task._id.toString();});
       const doneTask = board.done.find(task => task._id === taskId);
       if (doneTask) {
         return board;
@@ -271,13 +277,14 @@ const exportedMethods = {
     const board = await boardCollection.findOne(
       {
         $or: [
-          {"toDo._id": taskId},
-          {"inProgress._id": taskId},
-          {"done._id": taskId}
+          {toDo: {$elemMatch: {_id: new ObjectId(taskId)}}},
+          {inProgress: {$elemMatch: {_id: new ObjectId(taskId)}}},
+          {done: {$elemMatch: {_id: new ObjectId(taskId)}}}
         ]
       },
       {projection: {_id: 1}}
     );
+
 
     if (!board) {
       throw validation.returnRes('NOT_FOUND', `Task with ID ${taskId} not found in any board.`)
@@ -287,9 +294,9 @@ const exportedMethods = {
       {_id: board._id},
       {
         $pull: {
-          toDo: {_id: taskId},
-          inProgress: {_id: taskId},
-          done: {_id: taskId}
+          toDo: {_id: new ObjectId(taskId)},
+          inProgress: {_id: new ObjectId(taskId)},
+          done: {_id: new ObjectId(taskId)}
         }
       }
     );
@@ -349,6 +356,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
+    taskToMove._id = taskToMove._id.toString()
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
@@ -387,7 +395,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
-    taskToMove._id = new ObjectId(taskToMove._id);
+    taskToMove._id = taskToMove._id.toString()
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);

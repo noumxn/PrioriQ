@@ -161,11 +161,11 @@ const checkDescription = (description) => {
 const checkDifficulty = (difficulty) => {
   difficulty = difficulty.trim()
   if (
-    difficulty != "veryEasy" &&
-    difficulty != "easy" &&
-    difficulty != "medium" &&
-    difficulty != "hard" &&
-    difficulty != "veryHard"
+    difficulty !== "veryEasy" &&
+    difficulty !== "easy" &&
+    difficulty !== "medium" &&
+    difficulty !== "hard" &&
+    difficulty !== "veryHard"
   ) throw validation.returnRes('BAD_REQUEST', `The only valid values for difficulty are: veryEasy, easy, medium, hard, veryHard.`)
 
   return difficulty
