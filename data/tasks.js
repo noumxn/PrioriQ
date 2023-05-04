@@ -271,7 +271,7 @@ const exportedMethods = {
   **/
   async deleteTask(taskId) {
     validation.parameterCheck(taskId);
-    validation.idCheck(taskId);
+    taskId = validation.idCheck(taskId);
 
     const boardCollection = await boards();
     const board = await boardCollection.findOne(
@@ -356,7 +356,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
-    taskToMove._id = taskToMove._id.toString()
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
@@ -395,7 +395,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
-    taskToMove._id = taskToMove._id.toString()
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);

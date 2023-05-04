@@ -33,6 +33,7 @@
 </div>
 <br>
 
+
 <div id="userChecklist">
     <h2>Checklist</h2>
     <ul>
@@ -54,21 +55,19 @@
 <script>
     function showCreateBoard() {
         const createBoardForm = document.getElementById("createBoard");
-        //const updateChecklistForm = document.getElementById("checklistButton");
   if (createBoardForm.style.display === "none") {
     createBoardForm.style.display = "block";
-    //checklistButton
   } else {
     createBoardForm.style.display = "none";
   }
 }
 </script>
 
-<button onclick="showCreateBoard()">Create new board</button>
+<button onclick="showCreateBoard()">Create New Board</button>
 <br>
 <div id="createBoard" style="display:none">
     <h2>Create New Board</h2>
-<form method="POST" id="create-board-form">
+<form action = "/homepage" method="POST" id="create-board-form">
     <label for="boardNameInput" id="board_name_label">
         Enter board name:
         <input type="text" id="boardNameInput" name="boardNameInput">
@@ -101,4 +100,37 @@
     <button type="submit">Create</button>
 </form>
 </div>
+<br>
 <script src="../../public/js/checklist.js"></script>
+
+<script>
+    function showJoinBoard() {
+        const joinBoardForm = document.getElementById("joinBoard");
+  if (joinBoardForm.style.display === "none") {
+    joinBoardForm.style.display = "block";
+  } else {
+    joinBoardForm.style.display = "none";
+  }
+}
+</script>
+
+<button onclick="showJoinBoard()">Join Existing Board</button>
+<br>
+
+<div id="joinBoard" style="display:none">
+    <h2>Join Existing Board</h2>
+    <form action = "/homepage/searchresult" method="POST" id="search-board-form">
+    <label for="searchBoardIdInput" id="search_board_id_label">
+        Enter board ID:
+        <input type="text" id="searchBoardIdInput" name="searchBoardIdInput">
+    </label>
+    <br>
+     <label for="searchBoardPasswordInput" id="search_board_password_label">
+        Enter board password:
+        <input type="password" id="searchBoardPasswordInput" name="searchBoardPasswordInput">
+    </label>
+    <br>
+    <button type="submit">Search</button>
+</form>
+
+</div>

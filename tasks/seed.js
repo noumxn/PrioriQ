@@ -33,10 +33,10 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
   }
   console.log("├─ Adding Boards...");
   try {
-    tomBoard = await boardData.createBoard("First Board", "tom_smith", true, "asc", "thepassword");
-    johnBoard = await boardData.createBoard("John Board 1", "john_brown", true, "desc", "thepassword");
+    tomBoard = await boardData.createBoard("First Board", "tom_smith", false, "asc", "thepassword");
+    johnBoard = await boardData.createBoard("John Board 1", "john_brown", false, "desc", "thepassword");
     await boardData.AddUserAllowedUsers(tomBoard._id.toString(), "john_brown");
-    console.log(await userData.getUserById(tom._id.toString()));
+   // console.log(await userData.getUserById(tom._id.toString()));
   } catch (e) {
     console.log(e);
   }
@@ -56,7 +56,7 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
   }
   try {
     let updatedBoard = await boardData.getBoardById(tomBoard._id);
-    console.dir(updatedBoard, {depth: null});
+   // console.dir(updatedBoard, {depth: null});
   } catch (e) {
     console.log(e);
   }
@@ -70,14 +70,14 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
     await taskData.moveToDone(task6._id);
     await checkListData.addTaskToCheckList(task2._id, "tom_smith");
     await checkListData.addTaskToCheckList(task1._id, "tom_smith");
-    console.log(await boardData.getBoardById(tomBoard._id));
+    //console.log(await boardData.getBoardById(tomBoard._id));
     await taskData.moveToDone(task5._id);
   } catch (e) {
     console.log(e);
   }
   try {
     let updatedBoard = await boardData.getBoardById(tomBoard._id);
-    console.dir(updatedBoard, {depth: null});
+    //console.dir(updatedBoard, {depth: null});
   } catch (e) {
     console.log(e);
   }
