@@ -86,6 +86,17 @@ const exportedMethods = {
         );
       }
     }
+  },
+
+  async getCheckListByUsername(username) {
+    validation.parameterCheck(username);
+    validation.strValidCheck(username);
+    username = username.trim().toLowerCase();
+
+    const userCollection = await users();
+    const user = await userData.getUserByUsername(username);
+
+    return user.checkList;
   }
 
 
