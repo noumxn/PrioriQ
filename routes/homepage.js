@@ -22,14 +22,14 @@ router.route('/')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
 
     try {
@@ -52,14 +52,14 @@ router.route('/')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
 
     let boardName = undefined;
@@ -110,7 +110,7 @@ router.route('/checklist/:taskId')
       await taskData.moveToDone(taskId);
       await checkListData.completeCheckListItem(taskId, username);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
     return res.redirect('/');
   });
@@ -129,14 +129,14 @@ router.route('/searchresult')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
 
     const boardId = xss(req.body.searchBoardIdInput);
@@ -147,8 +147,11 @@ router.route('/searchresult')
     } catch (e) {
       return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:e.message});
     }
-    if (board.allowedUsers.indexOf(username) != -1) {
-      return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:"You already joined this board"});
+    if (board.blockedUsers.includes(username)) {
+      return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:"You may not join this board."});
+    }
+    if (board.allowedUsers.includes(username)) {
+      return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:"You already joined this board."});
     }
     const hashedPassword = board.boardPassword;
     let match = await bcrypt.compare(password, hashedPassword);
@@ -158,7 +161,7 @@ router.route('/searchresult')
           req.session.user.sharedBoards.push(boardId);
           return res.redirect('/');
       } catch (e) {
-        return res.render("error", { titley:"Error page", err: e.message });
+        return res.render("error", { titley:"Error", err: e.message });
       }
     }
     else {

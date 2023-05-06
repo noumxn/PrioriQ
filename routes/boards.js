@@ -19,8 +19,10 @@ router.route("/:id")
     let b1;
     let addpriority;
     let boardName;
+    let username;
     try {
       addpriority = false;
+      username = req.session.user.username;
       boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
@@ -37,6 +39,12 @@ router.route("/:id")
     
     } catch (e) {
       return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:true,  error: true, e:e.message});
+    }
+    if (userGet.blockedUsers.includes(username)) {
+      return res.status(401).render("error", { titley: "Error", err:"You may not join this board."});
+    }
+    if (!userGet.allowedUsers.includes(username)) {
+      return res.status(403).render("error", { titley:"Error", err:"You have not joined this board."});
     }
     try {
       return res.render("boards", { titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority});
@@ -114,7 +122,7 @@ router.route("/:id")
 
     } catch (e) {
       //console.log('I got herey');
-      return res.render("error", { titley:"Error page", err: e });
+      return res.render("error", { titley:"Error", err: e });
     }
 
     try {

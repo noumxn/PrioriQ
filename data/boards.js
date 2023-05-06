@@ -282,13 +282,13 @@ async AddUserAllowedUsers(boardId, username) {
   if (!newUser) throw validation.returnRes("NOT_FOUND", `No user with that username: ${username}.`);
 
   let newSharedBoards = newUser.sharedBoards;
-  console.log(newUser.firstName);
+  //console.log(newUser.firstName);
 
   
     newSharedBoards.push(boardId);
 
   
-  console.log(newUser._id.toString());
+ // console.log(newUser._id.toString());
   await userCollection.updateOne(
     {_id: new ObjectId(newUser._id.toString())},
     {
@@ -298,7 +298,7 @@ async AddUserAllowedUsers(boardId, username) {
     }
   );
 
-  console.log(newUser.sharedBoards);
+  //console.log(newUser.sharedBoards);
 
 
 
