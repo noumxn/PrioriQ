@@ -30,7 +30,7 @@ app.use(
     secret: "This is a secret.. shhh don't tell anyone",
     saveUninitialized: false,
     resave: false,
-    cookie: {maxAge: 600000000000}
+    cookie: {maxAge: 600000000}
   })
 );
 
@@ -65,7 +65,7 @@ app.get('/usersettings', (req,res,next) =>{
     next();
   }
 });
-app.get('/board', (req,res,next) =>{
+app.get('/boards', (req,res,next) =>{
   if(!req.session.user){
     return res.redirect('/login');
   }else{
@@ -73,6 +73,13 @@ app.get('/board', (req,res,next) =>{
   }
 });
 app.get('/boardsettings', (req,res,next) =>{
+  if(!req.session.user){
+    return res.redirect('/login');
+  }else{
+    next();
+  }
+});
+app.get('/boards/:id', (req,res,next) =>{
   if(!req.session.user){
     return res.redirect('/login');
   }else{

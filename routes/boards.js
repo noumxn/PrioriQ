@@ -38,7 +38,69 @@ router.route("/:id")
       return res.render("boards", { titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority});
       } catch (e) {
         return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, addpriority:addpriority, e:e.message});
+
       }
+      else{
+        priority = null;
+      }
+      boardT = userGet.toDo;
+      boardS = userGet.inProgress;
+      boardD = userGet.Done;
+    
+    } catch (e) {
+      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority,  error: true, e:e.message});
+    }
+    //create the task
+
+    //check if identical task is already in database
+
+    /*
+    function checkTask(task){
+      if ((taskName == task.taskName) 
+        && (priority == task.priority) && (difficulty == task.difficulty) 
+        && (estimatedTime == task.estimatedTime) && (deadline == task.deadline) 
+        && (description == task.description) 
+        && (assignedTo == task.assignedTo)) 
+          { console.log("aggggg");};
+        */
+    /*
+    try {
+      
+      boardT.forEach(checkTask);
+
+    } catch (e) {
+      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
+    }
+    */
+
+    try {
+      newTask = await taskData.createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
+      console.dir(newTask, {depth:null});
+    } catch (e) {
+      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority, error: true, e:e.message});
+    }
+
+
+    //get the boards again
+    try {
+      userGet = await boardData.getBoardById(boardId);
+      //console.log(userGet);
+      console.log(userGet.priorityScheduling);
+      if(userGet.priorityScheduling){
+        addpriority = true;
+      }
+      boardT = userGet.toDo;
+      boardS = userGet.inProgress;
+      boardD = userGet.Done;
+    } catch (e) {
+      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
+    } 
+    //render the page again
+    try {
+      res.render("boards", { titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority});
+    } catch (e) {
+      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
+    }
 
   })
   .post(async (req, res) => {
@@ -154,7 +216,6 @@ router.route("/:id")
     try {
       
       boardT.forEach(checkTask);
-
     } catch (e) {
       return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
     }
@@ -192,4 +253,3 @@ router.route("/:id")
   });
 
 export default router;
-
