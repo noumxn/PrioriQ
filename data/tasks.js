@@ -56,7 +56,9 @@ const exportedMethods = {
       difficulty = helpers.checkDifficulty(difficulty);
       priority = null;
     }
-    const createdAt = new Date().toISOString();
+    let createdAt = new Date().toUTCString();
+    createdAt = new Date(createdAt).toISOString();
+    console.log("Created At: ", createdAt);
 
     //looks for task in database that matches input parameters and calls it duplicate
     //the value of duplicate is either null if nothing is found, or has a value if a task is found
