@@ -8,7 +8,7 @@ const constructorMethod = (app) => {
   app.use('/', authRoutes);
   app.use('/homepage', homepageRoutes);
   app.use('/usersettings', usersettingsRoutes);
-  app.use('/boards', boardRoutes);
+  app.use('/board', boardRoutes);
   app.use('/boardsettings', boardsettingsRoutes);
   app.use('*', (req, res) => {
     res.status(404).json({error: 'Route Not found'});;
