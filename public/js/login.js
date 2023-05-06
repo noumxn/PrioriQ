@@ -1,26 +1,5 @@
 let login = document.getElementById('login-form');
 
-//ajax for login
-(function ($) {
-  let username = $('#usernameInput');
-  let password = $('#passwordInput');
-  let errArea = $('#serverError');
-
-  let requestConfig = {
-    method: 'POST',
-    url: '/login'
-  }
-  //Make Ajax Call
-  $.ajax(requestConfig).then(function (responseMessage) {
-    responseMessage.map((error) => {
-      let element = $(`<div>${error}<div>`);
-    }
-    );
-    errArea.append(element);
-  })
-})(window.jQuery);
-
-
 if (login) {
   let username = document.getElementById('usernameInput');
   let password = document.getElementById('passwordInput');

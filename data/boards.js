@@ -13,6 +13,7 @@ const exportedMethods = {
   /*
    * @param {boardName} string
    * @param {owner} string
+   * 
    * @param {priorityScheduling} string
    * @param {boardPassword} string
    * @description This function creates a new board object and stores it in the database
@@ -26,6 +27,7 @@ const exportedMethods = {
     sortOrder,
     boardPassword
   ) {
+
     validation.parameterCheck(
       boardName,
       owner,
@@ -102,7 +104,7 @@ const exportedMethods = {
     } else if (board.priorityScheduling === false && board.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(board._id)
     }
-
+    
     return board;
   },
 
@@ -322,5 +324,4 @@ async AddUserBlockedUsers(boardId, username) {
 }
 
 };
-
 export default exportedMethods;

@@ -1,3 +1,99 @@
-
   <h1>{{titley}}</h1>
-  <p>boards yeah! This user has boards {{boardName}}</p>
+
+<div id="error" class="error" hidden>Error</div>
+  {{#if error}}
+  <div id="serverError" class="error"> {{e}}</div>
+  {{/if}}
+
+
+  <p>boards yeah! This user has boards</p>
+    
+      <div class="card">
+        <h1>Todo</h1>
+      {{#each boardTodo}}
+          <div class="container1">
+                  <p>Name: {{this.taskName}}</p>
+                   <p>description: {{this.description}}</p>
+          </div>    
+            {{/each}}
+
+      </div>
+      
+
+    <div class="card">
+        <h1>shared</h1>
+      {{#each boardProgress}}
+          <div class="container1">
+                  <p>Name: {{this.taskName}}</p>
+                   <p>description: {{this.description}}</p>
+          </div>    
+            {{/each}}
+
+      </div>
+
+    <div class="card">
+        <h1>done</h1>
+      {{#each boardDone}}
+          <div class="container1">
+                  <p>Name: {{this.taskName}}</p>
+                   <p>description: {{this.description}}</p>
+          </div>    
+            {{/each}}
+      </div>
+
+{{!-- js to make form appear --}}
+<script>
+    function showCreateTaskForm() {
+        const createTask = document.getElementById("createTaskForm");
+  if (createTask.style.display === "none") {
+    createTask.style.display = "block";
+  } else {
+    createTask.style.display = "none";
+  }
+}
+</script>
+{{!-- button to create task --}}
+<button onclick="showCreateTaskForm()">Create New Task</button>
+<br>
+
+<div id="createTaskForm" style="display:none">
+<h2>Create Task</h2>
+  <form action = "/boards/{{boardId}}" id="create-task-form" method="POST">
+    <label for="taskNameInput">Task Name</label><br>
+    <input type="taskName" id="taskNameInput" name="taskNameInput" placeholder="Type task name here"><br>
+
+  {{#if addpriority}} 
+    <label for="priorityInput">Priority</label><br>
+         <input type="number" id="priorityInput" name="priorityInput" min="1" max="10"><br>
+  {{else}} 
+
+    <label for="difficultyInput">Difficulty</label><br>
+    <select name="difficultyInput" id="difficultyInput">
+       <option value="veryEasy">Very Easy</option>
+       <option value="easy">Easy</option>
+       <option value="medium">Medium</option>
+       <option value="hard">Hard</option>
+      <option value="veryHard">Very Hard</option>
+    </select><br>
+
+  {{/if}}
+
+    <label for="estimatedTimeInput">Estimated Time</label><br>
+
+     <input type="number" id="estimatedTimeInputH" name="estimatedTimeInputH" min="0" max="100"> hrs 
+     <input type="number" id="estimatedTimeInputM" name="estimatedTimeInputM" min="0" max="59"> min <br>
+
+    <label for="deadlineInput">Deadline</label><br>
+    <input type="datetime-local" id="deadlineInput" name="deadlineInput"><br>
+
+    <label for="descriptionInput">Description</label><br>
+    <input type="description" id="descriptionInput" name="descriptionInput" placeholder="Type description here"><br>
+
+    <label for="assignedToInput">Assigned Users</label><br>
+    <p>Type in usernames separated by commas</p>
+    <input type="assignedTo" id="assignedToInput" name="assignedToInput" placeholder="Type here"><br>
+
+    <button type="submit" >Submit</button>
+</form>
+</div>
+<script src="../public/js/createTask.js"></script>

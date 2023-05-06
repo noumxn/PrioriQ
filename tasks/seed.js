@@ -24,7 +24,7 @@ import {boardData, taskData, userData} from '../data/index.js';
   }
   console.log("├─ Creating Users...");
   try {
-    tom = await userData.createUser("Tom", "Smith", "01/12/2000", "tom@gmail.com", "tom_smith", "hello123*");
+    tom = await userData.createUser("Tom", "Smith", "01/12/2000", "tom@gmail.com", "tom_smith", "Hello123*");
   } catch (e) {
     console.log(e);
   }
