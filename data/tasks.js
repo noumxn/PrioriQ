@@ -5,6 +5,7 @@ import boardData from './boards.js';
 import helpers from './helpers.js';
 import sorting from './sortingAlgorithms.js';
 import userData from './users.js';
+import checkListData from './checkList.js';
 
 const exportedMethods = {
   /*
@@ -177,6 +178,7 @@ const exportedMethods = {
 
     const boardCollection = await boards();
     const originBoard = await this.getBoardByTaskId(taskId);
+    const originalTask = await this.getTaskById(taskId);
 
     for (let i in assignedTo) {
       validation.strValidCheck(assignedTo[i]);
@@ -255,6 +257,10 @@ const exportedMethods = {
       await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
     }
 
+    if (originalTask.taskName != taskName) {
+      await checkListData.updateCheckListItem(taskId, taskName);
+    }
+
     return await this.getTaskById(taskId);
   },
   /*
@@ -265,7 +271,7 @@ const exportedMethods = {
   **/
   async deleteTask(taskId) {
     validation.parameterCheck(taskId);
-    validation.idCheck(taskId);
+    taskId = validation.idCheck(taskId);
 
     const boardCollection = await boards();
     const board = await boardCollection.findOne(
@@ -350,7 +356,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
-    taskToMove._id = taskToMove._id.toString()
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
@@ -389,7 +395,7 @@ const exportedMethods = {
     validation.idCheck(taskId);
 
     const taskToMove = await this.getTaskById(taskId);
-    taskToMove._id = taskToMove._id.toString()
+    taskToMove._id = new ObjectId(taskToMove._id);
 
     const boardCollection = await boards();
     const board = await this.getBoardByTaskId(taskId);
