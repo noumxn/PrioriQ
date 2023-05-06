@@ -34,13 +34,17 @@ const exportedMethods = {
       priorityScheduling,
       boardPassword
     );
+
     validation.strValidCheck(boardName, owner, boardPassword);
-    await userData.getUserByUsername(owner);
+    const boardOwner = await userData.getUserByUsername(owner); //
     sortOrder = helper.checkSortOrderValue(priorityScheduling, sortOrder);
+
+   
 
     // Hashing the board password
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     boardPassword = await bcrypt.hash(boardPassword, saltRounds);
+
 
 
     //create data for new board
@@ -57,24 +61,41 @@ const exportedMethods = {
       done: [],
     };
 
+
     newBoard['allowedUsers'].push(owner);
+
     //get the board data
     const boardCollection = await boards();
+
     //insert board into database
     const insertInfo = await boardCollection.insertOne(newBoard);
+
     //if that doesnt work, throw error
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
       throw validation.returnRes(
         "INTERNAL_SERVER_ERROR",
         `Could not create new board.`
       );
+    //get the user data
+    const userCollection = await users();
+    //Adds the new board to the user's boards field
+    const updatedUserWithNewBoard = await userCollection.findOneAndUpdate(
+      {_id: new ObjectId(boardOwner._id)},
+      {$push: {boards: newBoard}},
+      {returnNewDocument: true});
+    if (!updatedUserWithNewBoard) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not add board to ${owner}'s boards.`);
+
+
 
     //get the new id
     const newId = insertInfo.insertedId.toString();
 
+
     //get the new board from id
     const board = await this.getBoardById(newId);
+
     return board;
+
   },
 
   /*
@@ -85,16 +106,21 @@ const exportedMethods = {
    **/
   async getBoardById(boardId) {
     //validation
+
     validation.parameterCheck(boardId);
     validation.strValidCheck(boardId);
     validation.idCheck(boardId);
 
+
     const boardCollection = await boards();
 
     const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
+
     if (!board)
       throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
+
     board._id = board._id.toString();
+  
     board.toDo.forEach(task => {task._id = task._id.toString();});
     // Sorting the board
     if (board.priorityScheduling === true) {
@@ -104,7 +130,6 @@ const exportedMethods = {
     } else if (board.priorityScheduling === false && board.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(board._id)
     }
-    
     return board;
   },
 

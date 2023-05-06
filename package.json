@@ -1,12 +1,14 @@
 {
-  "name": "task-management-application",
+  "name": "prioriq",
   "version": "1.0.0",
   "description": "Final Project for CS-546",
   "main": "app.js",
   "type": "module",
   "contributors": [
-    "Nouman Syed 20011457",
-    "Michael Bearint 10462613"
+    "Nouman Syed",
+    "Michael Bearint",
+    "Athena Kiriakoulis",
+    "Mark Falletta"
   ],
   "scripts": {
     "start": "node app.js",
@@ -31,10 +33,10 @@
     "express-session": "^1.17.3",
     "handlebars": "^4.7.7",
     "lodash": "^4.17.21",
-    "moment": "^2.29.4",
-    "mongodb": "^5.2.0",
+    "mongodb": "^5.2.0"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.21",
-    "tota11y": "^0.1.6",
     "yarn": "^1.22.19"
   }
 }

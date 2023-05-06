@@ -25,6 +25,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 
 
 /*
+
   const currentDate = new Date();
   //const updatedDate2 = new Date(currentDate.getTime()); 
   const updatedDate2 = new Date(currentDate.getTime() + 5 * 60 * 1000);
@@ -50,6 +51,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   console.log('1*************************************');
   await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#');
   await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'cantseeme', 'hello123#');
+
   try {
     user1 = await userData.getUserByUsername('cantseeme');
     console.log('user is now here');
@@ -97,6 +99,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   } catch (e) {
     console.log(e);
   }
+
   console.log('1*************************************');
   try {
     board1 = await boardData.createBoard('ILikeBoardY', 'usery', true, 'asc', 'hahaha');
@@ -104,7 +107,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
     console.log(board1);
   } catch (e) {
     console.log(e);
-  }
+
   console.log('#############Tasks################');
   console.log('1*************************************');
   try {

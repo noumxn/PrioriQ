@@ -1,9 +1,11 @@
 import {closeConnection, dbConnection} from '../config/mongoConnection.js';
-import {boardData, taskData, userData} from '../data/index.js';
+import {boardData, taskData, userData, checkListData} from '../data/index.js';
 
 (async () => {
   let tom = undefined;
+  let john = undefined;
   let tomBoard = undefined;
+  let johnBoard = undefined;
   let task1 = undefined;
   let task2 = undefined;
   let task3 = undefined;
@@ -25,12 +27,16 @@ import {boardData, taskData, userData} from '../data/index.js';
   console.log("├─ Creating Users...");
   try {
     tom = await userData.createUser("Tom", "Smith", "01/12/2000", "tom@gmail.com", "tom_smith", "Hello123*");
+
   } catch (e) {
     console.log(e);
   }
   console.log("├─ Adding Boards...");
   try {
-    tomBoard = await boardData.createBoard("First Board", "tom_smith", false, "desc", "thepassword");
+    tomBoard = await boardData.createBoard("First Board", "tom_smith", false, "asc", "thepassword");
+    johnBoard = await boardData.createBoard("John Board 1", "john_brown", false, "desc", "thepassword");
+    await boardData.AddUserAllowedUsers(tomBoard._id.toString(), "john_brown");
+   // console.log(await userData.getUserById(tom._id.toString()));
   } catch (e) {
     console.log(e);
   }
@@ -50,7 +56,7 @@ import {boardData, taskData, userData} from '../data/index.js';
   }
   try {
     let updatedBoard = await boardData.getBoardById(tomBoard._id);
-    console.dir(updatedBoard, {depth: null});
+   // console.dir(updatedBoard, {depth: null});
   } catch (e) {
     console.log(e);
   }
@@ -62,13 +68,16 @@ import {boardData, taskData, userData} from '../data/index.js';
     await taskData.moveToInProgress(task9._id);
     await taskData.moveToInProgress(task4._id);
     await taskData.moveToDone(task6._id);
+    await checkListData.addTaskToCheckList(task2._id, "tom_smith");
+    await checkListData.addTaskToCheckList(task1._id, "tom_smith");
+    //console.log(await boardData.getBoardById(tomBoard._id));
     await taskData.moveToDone(task5._id);
   } catch (e) {
     console.log(e);
   }
   try {
     let updatedBoard = await boardData.getBoardById(tomBoard._id);
-    console.dir(updatedBoard, {depth: null});
+    //console.dir(updatedBoard, {depth: null});
   } catch (e) {
     console.log(e);
   }
