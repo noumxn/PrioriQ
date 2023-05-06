@@ -6,6 +6,7 @@ import {boardData, checkListData, taskData} from "../data/index.js";
 import helpers from "../data/helpers.js"
 import validation from '../utils/validation.js';
 import bcrypt from 'bcryptjs';
+import xss from 'xss';
 
 router.route('/')
   .get( async (req, res) => {
@@ -71,14 +72,15 @@ router.route('/')
 
     //Confirm password in auth.js not being checked
     try {
-      boardName = helpers.checkName(req.body.boardNameInput);
-      boardPassword = req.body.boardPasswordInput;
+      boardName = helpers.checkName(xss(req.body.boardNameInput));
+      boardPassword = xss(req.body.boardPasswordInput);
       helpers.checkPassword(boardPassword);
-      confirmPassword = req.body.boardConfirmPasswordInput;
+      confirmPassword = xss(req.body.boardConfirmPasswordInput);
       helpers.checkPassword(confirmPassword);
-      priorityScheduling = helpers.checkPriorityScheduling(req.body.sortingInput);
+      priorityScheduling = helpers.checkPriorityScheduling(xss(req.body.sortingInput));
+      //console.log(priorityScheduling);
       owner = helpers.checkUsername(req.session.user.username);
-      sortOrder = helpers.checkSortOrderValue(priorityScheduling, req.body.sortOrderInput);
+      sortOrder = helpers.checkSortOrderValue(priorityScheduling, xss(req.body.sortOrderInput));
 
     } catch (e) {
       return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:e.message});
@@ -137,8 +139,8 @@ router.route('/searchresult')
       return res.render("error", { titley:"Error page", err: e.message });
     }
 
-    const boardId = req.body.searchBoardIdInput;
-    const password = req.body.searchBoardPasswordInput;
+    const boardId = xss(req.body.searchBoardIdInput);
+    const password = xss(req.body.searchBoardPasswordInput);
     let board = undefined;
     try {
       board = await boardData.getBoardById(boardId);
@@ -150,9 +152,6 @@ router.route('/searchresult')
     }
     const hashedPassword = board.boardPassword;
     let match = await bcrypt.compare(password, hashedPassword);
-    console.log(password);
-    console.log(hashedPassword);
-    console.log(match);
     if (match) {
       try {
         await boardData.AddUserAllowedUsers(boardId, username);

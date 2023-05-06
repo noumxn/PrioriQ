@@ -7,7 +7,7 @@
   {{/if}}
 
 
-  <p>boards yeah! This user has boards</p>
+  {{!--<p>boards yeah! This user has boards</p> --}}
 
   {{!-- <a href="/boardSettings">Board Settings</a> --}}
     
@@ -65,7 +65,7 @@
 
 <div id="createTaskForm" style="display:none">
 <h2>Create Task</h2>
-  <form action = "/board/{{boardId}}" id="create-task-form" method="POST">
+  <form action = "/boards/{{boardId}}" id="create-task-form" method="POST">
     <label for="taskNameInput">Task Name</label><br>
     <input type="taskName" id="taskNameInput" name="taskNameInput" placeholder="Type task name here"><br>
 
@@ -103,6 +103,7 @@
     <button type="submit" >Submit</button>
 </form>
 </div>
-      
+<br>
+<a href="/homepage">Back to homepage</a>      
       
     
