@@ -1,12 +1,12 @@
 //import axios from "axios";
-import { Router } from "express";
+import { Router, application } from "express";
 const router = Router();
 import {boards} from "../config/mongoCollections.js";
 
 import {boardData, taskData} from "../data/index.js";
 import {userData} from "../data/index.js";
 import validation from "../utils/validation.js";
-
+let addpriority = undefined;
 
 router.route("/:id")
   .get( async (req, res) => {
@@ -16,7 +16,6 @@ router.route("/:id")
     let boardS;
     let boardD;
     let b1;
-    let addpriority;
     try {
       addpriority = false;
       boardId = req.params.id;
@@ -25,11 +24,13 @@ router.route("/:id")
       console.log(userGet.priorityScheduling);
       if(userGet.priorityScheduling){
         addpriority = true;
+      } else {
+        addpriority = false;
       }
-      console.log(addpriority);
+      console.log("priority: ", addpriority);
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
-      boardD = userGet.Done;
+      boardD = userGet.done;
     
     } catch (e) {
       return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:true,  error: true, e:e.message});
@@ -57,7 +58,6 @@ router.route("/:id")
     let boardT;
     let boardS;
     let boardD;
-    let addpriority;
     let userGet;
 
       boardId = req.params.id;
@@ -93,6 +93,11 @@ router.route("/:id")
       deadline = req.body.deadlineInput;
       deadline = deadline.concat(":00.000Z");
       console.log(deadline);
+      let systemOffset = new Date().getTimezoneOffset();
+      let inputDate = new Date(deadline)
+      let localDeadline = new Date(inputDate.getTime() - systemOffset * 60 * 1000);
+      let utcDeadline = new Date(localDeadline.getTime() - systemOffset * 60 * 1000);
+      deadline = utcDeadline.toISOString();
       description = req.body.descriptionInput;
       console.log(description);
       assignedTo = req.body.assignedToInput;
@@ -117,7 +122,6 @@ router.route("/:id")
     }
 
     try {
-      addpriority = false;
       //boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       //console.log(userGet);

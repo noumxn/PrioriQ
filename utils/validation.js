@@ -181,7 +181,7 @@ const validDateCheck = (date) => {
 const validDateTimeFormatCheck = (date) => {
   const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
   if (!regex.test(date)) {
-    throw returnRes('BAD_REQUEST', `Input needs to be in the the format: YYYY-MM-DDTHH:MM:SSZ`)
+    throw returnRes('BAD_REQUEST', `Input needs to be in the the format: YYYY-MM-DDTHH:MM:SS:sssZ`)
   }
 }
 
