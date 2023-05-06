@@ -52,6 +52,8 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#');
   await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'cantseeme', 'hello123#');
 
+
+
   try {
     user1 = await userData.getUserByUsername('cantseeme');
     console.log('user is now here');
@@ -77,28 +79,39 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
     console.log(board2);
   } catch (e) {
     console.log(e);
+
   }
+
   console.log('1*************************************');
+
   try {
     getBoard1 = await boardData.getBoardById('6445a06ad291c4f39bd0f68a');
     console.log(getBoard1);
   } catch (e) {
     console.log(e);
+
   }
+
   console.log('1*************************************');
+
   try {
     addUser1 = await boardData.AddUserAllowedUsers(board1._id.toString(), 'cantseeme');
     console.log(addUser1);
   } catch (e) {
     console.log(e);
+
   }
+
   console.log('1*************************************');
+
   try {
     blockUser1 = await boardData.AddUserBlockedUsers(board1._id.toString(), 'cantseeme');
     console.log(blockUser1);
   } catch (e) {
     console.log(e);
+
   }
+
 
   console.log('1*************************************');
   try {
@@ -108,14 +121,22 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   } catch (e) {
     console.log(e);
 
+  }
+
+
   console.log('#############Tasks################');
+
+
   console.log('1*************************************');
+
   try {
     getBoard2 = await boardData.getBoardsByUser('user1');
     console.log(getBoard2);
   } catch (e) {
     console.log(e);
+
   }
+
   console.log('1*************************************');
   try {
     task1 = await taskData.createTask(board1._id, "groceries", 2, "veryEasy", '02 hours 00 mins', '2023-04-09T16:56:13.357Z', 'get the bread', ["user1"]);
@@ -137,12 +158,16 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   } catch (e) {
     console.log(e);
   }
+
+
+
   // console.log('1*************************************');
   // try {
   //   delBoard1 = await boardData.deleteBoard(board1['_id'].toString());
   //   console.log(delBoard1);
   // } catch (e) {
   //   console.log(e);
+
   // }
 */
 
