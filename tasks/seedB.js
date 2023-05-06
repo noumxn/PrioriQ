@@ -24,10 +24,10 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   let task3 = undefined;
 
 
-
+/*
 
   const currentDate = new Date();
-  /* const updatedDate2 = new Date(currentDate.getTime()); */
+  //const updatedDate2 = new Date(currentDate.getTime()); 
   const updatedDate2 = new Date(currentDate.getTime() + 5 * 60 * 1000);
   const updatedDate3 = new Date(currentDate.getTime() + 20 * 60 * 1000);
   const updatedDate4 = new Date(currentDate.getTime() + 6 * 60 * 1000);
@@ -46,16 +46,13 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   console.log(formattedDate6);
   const formattedDate7 = updatedDate7.toISOString();
   console.log(formattedDate7);
-/*
-  console.log('1*************************************')
+  */
+ /*
+  console.log('1*************************************');
   await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#');
   await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'cantseeme', 'hello123#');
 
-  try{
-    
-  } catch (e){
 
-  }
 
   try {
     user1 = await userData.getUserByUsername('cantseeme');
@@ -64,16 +61,17 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   } catch (e) {
     console.log(e);
   }
-
+*/
   console.log('1*************************************');
   try {
-    board1 = await boardData.createBoard('ILikeBoards', 'user1', true, 'asc', 'hahaha');
+    board1 = await boardData.createBoard('newestBoard', 'user1', true, 'asc', 'hahaha');
     console.log('board1 is now here');
     console.log(board1);
   } catch (e) {
     console.log(e);
 
   }
+  /*
   console.log('1*************************************');
   try {
     board2 = await boardData.createBoard('ILikeBoards2', 'user1', true, null, 'hahaha');
