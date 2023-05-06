@@ -3,7 +3,6 @@
 let registration = document.getElementById('registration-form');
 let login = document.getElementById('login-form');
 let update = document.getElementById('update-form');
-let createBoard = document.getElementById('create-board-form')
 
 //Helper function
 function calcAge(dob){
@@ -12,27 +11,6 @@ function calcAge(dob){
   let date = new Date(age);
   return Math.floor(date.getUTCFullYear() - 1970);
 };
-
-//ajax for login
-// (function ($) {
-//   let username = $('#usernameInput');
-//   let password = $('#passwordInput');
-//   let errArea = $('#serverError');
-
-//   let requestConfig = {
-//     method: 'POST',
-//     url: '/login'
-//   }
-//   //Make Ajax Call
-//   $.ajax(requestConfig).then(function (responseMessage) {
-//     responseMessage.map((error) => {
-//       let element = $(`<div>${error}<div>`);
-//     }
-//     );
-//     errArea.append(element);
-//   })
-// })(window.jQuery);
-
 
 if (login) {
   let username = document.getElementById('usernameInput');
@@ -50,27 +28,15 @@ if (login) {
     if(username.value.trim().length == 0){
       event.preventDefault();
       errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Please input a valid userName';
-      username.focus();
+      errorDiv.innerHTML = 'Please input a Valid userName';
+      email.focus();
     } else
     if(username.value.trim().length < 3 || username.value.trim().length >20){
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Username must be at least 3 characters or less than 20'
-      username.focus();
-    }else if(!/^[a-zA-Z0-9_.]+$/.test(username.value.trim())){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Username can only contain letters, numbers, underscores, or periods.'
-      username.focus();
-    }else 
-    if(!/[a-zA-Z]/.test(username.value.trim())){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Username must contain at least 1 letter.'
-      username.focus();
-    }else
-    if(password.value.trim().length == 0){
+      email.focus();
+    }else if(password.value.trim().length == 0){
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a value for password'
@@ -102,8 +68,6 @@ if (login) {
     }
   });
 }
-
-
 if(registration){
   let email = document.getElementById('emailAddressInput');
   let password = document.getElementById('passwordInput');
@@ -219,10 +183,10 @@ if(registration){
       errorDiv.innerHTML = 'Username cannot be longer than 20 characters.'
       username.focus();
     }else
-    if(!/^[a-zA-Z0-9_.]+$/.test(username.value.trim())){
+    if(!/^[a-zA-Z0-9_]+$/.test(username.value.trim())){
       event.preventDefault();
       errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Username can only contain letters, numbers, underscores, or periods.'
+      errorDiv.innerHTML = 'Username can only contain letters, numbers, and underscores.'
       username.focus();
     }else if(!/[a-zA-Z]/.test(username.value.trim())){
       event.preventDefault();
@@ -434,89 +398,4 @@ if(update){
     //registration.reset();
   }
 });
-}
-
-if (createBoard) {
-  let name = document.getElementById('boardNameInput');
-  let password = document.getElementById('boardPasswordInput');
-  let confirm = document.getElementById('boardConfirmPasswordInput');
-  let sorting = document.getElementById('sortingInput');
-  let sortingOrder = document.getElementById('sortOrderInput');
-  let errorDiv = document.getElementById('error');
-  let serverErr = document.getElementById("serverError");
-  createBoard.addEventListener('submit', (event) => {
-    console.log('Form submission fired');
-    //event.preventDefault();
-    console.log('Has a form');
-    if(serverErr !== null){
-      serverErr.hidden = true;
-    }
-    
-    if(name.value.trim().length == 0){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Please input a valid board name';
-      name.focus();
-    } else 
-    if(sorting.value.trim().length == 0){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Please input a valid board name';
-      sorting.focus();
-    } else
-    if(sorting.value.trim() !== 'true' && sorting.value.trim() !== 'false'){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Please input a valid board name';
-      sorting.focus();
-    } else
-    if(sortingOrder.value.trim().length == 0){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Please input a valid board name';
-      sortingOrder.focus();
-    } else 
-    if(sortingOrder.value.trim() !== 'asc' && sortingOrder.value.trim() !== 'desc'){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Please input a valid board name';
-      sortingOrder.focus();
-    } else
-     if(password.value.trim().length == 0){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Please input a value for password'
-      password.focus();
-    }else
-    if(password.value.trim().length < 6){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Password must have at least 6 chars'
-      password.focus();
-    }else if(password.value.trim().length >20){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Password cannot have more than 20 characters'
-      password.focus();
-    }else
-    if(password.value.trim().match(/\s/)){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Password cannot contain spaces'
-      password.focus();
-    } else if(!/[A-Z]/.test(password.value.trim()) || !/[0-9]/.test(password.value.trim()) || !/\W/.test(password.value.trim())){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Password must have at least One uppercase letter, one number, and one special character'
-      password.focus();
-    }else 
-    if(confirm.value !== password.value){
-      event.preventDefault();
-      errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Password and Confirm Password must match';
-      email.focus();
-    } else{
-      errorDiv.hidden=true;
-    }
-  });
 }

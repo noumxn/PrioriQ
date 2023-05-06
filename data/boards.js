@@ -130,6 +130,8 @@ const exportedMethods = {
     } else if (board.priorityScheduling === false && board.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(board._id)
     }
+  
+
     return board;
   },
 
@@ -349,4 +351,5 @@ async AddUserBlockedUsers(boardId, username) {
 }
 
 };
+
 export default exportedMethods;
