@@ -98,19 +98,19 @@ const exportedMethods = {
    **/
   async getBoardById(boardId) {
     //validation
-    console.log('I got here1');
+
     validation.parameterCheck(boardId);
     validation.strValidCheck(boardId);
     validation.idCheck(boardId);
-    console.log('I got here2');
+
 
     const boardCollection = await boards();
 
     const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
-    console.log('I got here3');
+
     if (!board)
       throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
-    console.log('I got here4');
+
     board._id = board._id.toString();
   
     board.toDo.forEach(task => {task._id = task._id.toString();});

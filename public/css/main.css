@@ -1,5 +1,7 @@
 .card {
     display: inline-block;
+    top: 8px;
+    border-radius: 30px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     width: 20%;
     padding: 20px;
@@ -10,8 +12,24 @@
   }
 
 .container1{
+    border-radius: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     border-width: 2px;
     border-style: solid;
+    margin-bottom: 10px;
     border-color: black;
+}
+
+#createTaskForm{
+  text-align: center;
+
+}
+
+label{
+ padding-top: 10px;
+}
+
+#estimatedTimeInputH, #estimatedTimeInputM{
+  width: 40px;
+
 }

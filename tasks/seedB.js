@@ -10,7 +10,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 
   //lets drop the database each time this is run
   const db = await dbConnection();
-  await db.dropDatabase();
+  //await db.dropDatabase();
 
   let user1 = undefined;
   let board1 = undefined;
@@ -23,6 +23,30 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   let task2 = undefined;
   let task3 = undefined;
 
+
+
+
+  const currentDate = new Date();
+  /* const updatedDate2 = new Date(currentDate.getTime()); */
+  const updatedDate2 = new Date(currentDate.getTime() + 5 * 60 * 1000);
+  const updatedDate3 = new Date(currentDate.getTime() + 20 * 60 * 1000);
+  const updatedDate4 = new Date(currentDate.getTime() + 6 * 60 * 1000);
+  const updatedDate5 = new Date(currentDate.getTime() + 20 * 60 * 1000);
+  const updatedDate6 = new Date(currentDate.getTime() + 5 * 60 * 1000);
+  const updatedDate7 = new Date(currentDate.getTime() + 20 * 60 * 1000);
+  const formattedDate2 = updatedDate2.toISOString();
+  console.log(formattedDate2);
+  const formattedDate3 = updatedDate3.toISOString();
+  console.log(formattedDate3);
+  const formattedDate4 = updatedDate4.toISOString();
+  console.log(formattedDate4);
+  const formattedDate5 = updatedDate5.toISOString();
+  console.log(formattedDate5);
+  const formattedDate6 = updatedDate6.toISOString();
+  console.log(formattedDate6);
+  const formattedDate7 = updatedDate7.toISOString();
+  console.log(formattedDate7);
+/*
   console.log('1*************************************')
   await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#');
   await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'cantseeme', 'hello123#');
@@ -91,6 +115,17 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   }
 
 
+  console.log('1*************************************');
+  try {
+    board1 = await boardData.createBoard('ILikeBoardY', 'usery', true, 'asc', 'hahaha');
+    console.log('board1 is now here');
+    console.log(board1);
+  } catch (e) {
+    console.log(e);
+
+  }
+
+
   console.log('#############Tasks################');
 
 
@@ -136,7 +171,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
   //   console.log(e);
 
   // }
-
+*/
 
 
   await closeConnection();
