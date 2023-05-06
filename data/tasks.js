@@ -58,6 +58,14 @@ const exportedMethods = {
     }
     const createdAt = new Date().toISOString();
 
+    //looks for task in database that matches input parameters and calls it duplicate
+    //the value of duplicate is either null if nothing is found, or has a value if a task is found
+    let duplicate = await boardCollection.findOne({_id: new ObjectId(boardId), 'toDo': {$elemMatch: {taskName:taskName, priority: priority, difficulty: difficulty, 
+      estimatedTime: estimatedTime, deadline: deadline,description: description,assignedTo: assignedTo}}});
+    //if duplicate is not null(a duplicate task was found), throw an error
+      if(duplicate){
+       throw validation.returnRes('NO_CONTENT', `Task already exists.`);
+    }
     const newTask = {
       _id: new ObjectId(),
       taskName: taskName,
