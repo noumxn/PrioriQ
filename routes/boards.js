@@ -127,7 +127,6 @@ router.route("/:id")
 
     try {
       addpriority = false;
-      //boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
       //console.log(userGet);

@@ -42,7 +42,7 @@ router
       return res.status(400).render("../views/register", {titley: "register",error:true, e:"Confirm Password is missing a value"});
     }
     if(dob === null){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:"Confirm Password is missing a value"});
+      return res.status(400).render("../views/register", {titley: "register",error:true, e:"DOB is missing a value"});
     }
     let year = dob.substring(0,4); let month=dob.substring(5,7); let day=dob.substring(8);
     first = first.trim(); last = last.trim(); email = email.trim().toLowerCase(); password = password.trim(); confirm = confirm.trim();
@@ -76,6 +76,9 @@ router
       helpers.checkPassword(password);
     }catch(e){
       return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
+    }
+    if (password != confirm) {
+      return res.status(400).render("../views/register", {titley: "register",error:true, e:"Password and confirm password do not match."});
     }
     try{
       await helpers.checkUsernameUnique(user);
