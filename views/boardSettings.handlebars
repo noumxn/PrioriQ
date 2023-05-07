@@ -1,0 +1,47 @@
+<h1>Board Settings</h1>
+<div id="errorDiv" class="error" hidden> Hello</div>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
+<p>
+  Update Board Settings:
+</p>
+<form action="/boardsettings/{{boardId}}" method="POST" id="boardsettings-form">
+  <label for="boardNameInput">
+    Board Name:
+    <input value="{{name}}" type="text" name="boardNameInput" id="boardNameInput" class="full-width-input">
+  </label>
+  {{#if sortBool}}
+  <label for="sortOrderInput">
+    Sort Order:
+    <input value="{{sort}}" type="text" name="sortOrderInput" id="sortOrderInput" class="full-width-input">
+  </label>
+  {{/if}}
+  <label for="boardPasswordInput">
+    Board Password:
+    <input type="password" name="boardPasswordInput" id="boardPasswordInput" class="full-width-input">
+  </label>
+  <label for="confirmBoardPasswordInput">
+    Confirm Password:
+    <input type="password" name="confirmBoardPasswordInput" id="confirmBoardPasswordInput" class="full-width-input">
+  </label>
+  <button type="submit">Update</button>
+</form>
+<script>
+  function confirmDelete(n) {
+    const confirm = document.getElementById("delete-form");
+    if (n==1) {
+    confirm.style.display="block";
+  } else {
+    confirm.style.display="none";
+  }
+  }
+</script>
+
+<button onclick="confirmDelete(1)">Click Here to delete this Board</button>
+
+<form action="/boardsettings/delete/{{boardId}}" style="display: none"  method="post" id="delete-form">
+<input type="submit" value="Confirm Board Deletion"/>
+</form>
+<a href="/boards/{{boardId}}">Cancel</a>
+<script src="../public/js/boardUpdate.js"></script>

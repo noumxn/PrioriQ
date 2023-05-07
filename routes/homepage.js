@@ -150,9 +150,9 @@ router.route('/searchresult')
     }
     const hashedPassword = board.boardPassword;
     let match = await bcrypt.compare(password, hashedPassword);
-    console.log(password);
-    console.log(hashedPassword);
-    console.log(match);
+    // console.log(password);
+    // console.log(hashedPassword);
+    // console.log(match);
     if (match) {
       try {
         await boardData.AddUserAllowedUsers(boardId, username);

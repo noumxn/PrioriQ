@@ -65,7 +65,7 @@
 
 <div id="createTaskForm" style="display:none">
 <h2>Create Task</h2>
-  <form action = "/board/{{boardId}}" id="create-task-form" method="POST">
+  <form action = "/boards/{{boardId}}" id="create-task-form" method="POST">
     <label for="taskNameInput">Task Name</label><br>
     <input type="taskName" id="taskNameInput" name="taskNameInput" placeholder="Type task name here"><br>
 
@@ -103,6 +103,8 @@
     <button type="submit" >Submit</button>
 </form>
 </div>
+<a href="/boardsettings/{{boardId}}">Click here to edit the board Settings</a>
+<script src="../public/js/createTask.js"></script>
       
       
     

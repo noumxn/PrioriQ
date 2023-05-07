@@ -44,48 +44,49 @@ app.all('/', (req, res, next) => {
     next();
   }
 });
-app.get('/login', (req, res, next) => {
+app.use('/login', (req, res, next) => {
   if(req.session.user){
     return res.redirect('/homepage');
   }else{
     next();
   }
 });
-app.get('/register', (req,res,next) =>{
+app.use('/register', (req,res,next) =>{
   if(req.session.user){
     return res.redirect('/homepage');
   }else{
     next();
   }
 });
-app.get('/usersettings', (req,res,next) =>{
+app.use('/usersettings', (req,res,next) =>{
   if(!req.session.user){
     return res.redirect('/login');
   }else{
     next();
   }
 });
-app.get('/board', (req,res,next) =>{
+app.use('/boards', (req,res,next) =>{
   if(!req.session.user){
     return res.redirect('/login');
   }else{
     next();
   }
 });
-app.get('/boardsettings', (req,res,next) =>{
+app.use('/boardsettings/:id', (req,res,next) =>{
   if(!req.session.user){
     return res.redirect('/login');
   }else{
     next();
   }
 });
-app.get('/homepage', (req,res,next) =>{
+app.use('/homepage', (req,res,next) =>{
   if(!req.session.user){
     return res.redirect('/login');
   }else{
     next();
   }
 });
+
 
 
 app.use(express.urlencoded({extended: true}));
