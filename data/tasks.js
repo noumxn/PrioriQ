@@ -287,9 +287,9 @@ const exportedMethods = {
     const board = await boardCollection.findOne(
       {
         $or: [
-          {toDo: {$elemMatch: {_id: new ObjectId(taskId)}}},
-          {inProgress: {$elemMatch: {_id: new ObjectId(taskId)}}},
-          {done: {$elemMatch: {_id: new ObjectId(taskId)}}}
+          {toDo: {$elemMatch: {_id: taskId}}},
+          {inProgress: {$elemMatch: {_id: taskId}}},
+          {done: {$elemMatch: {_id: taskId}}}
         ]
       },
       {projection: {_id: 1}}
@@ -304,9 +304,9 @@ const exportedMethods = {
       {_id: board._id},
       {
         $pull: {
-          toDo: {_id: new ObjectId(taskId)},
-          inProgress: {_id: new ObjectId(taskId)},
-          done: {_id: new ObjectId(taskId)}
+          toDo: {_id: taskId},
+          inProgress: {_id: taskId},
+          done: {_id: taskId}
         }
       }
     );

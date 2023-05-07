@@ -7,7 +7,8 @@ import boardsettingsRoutes from './boardsSettings.js';
 const constructorMethod = (app) => {
   app.use('/homepage', homepageRoutes);
   app.use('/usersettings', usersettingsRoutes);
-  app.use('/board', boardRoutes);
+  app.use('/boards', boardRoutes);
+  console.log("");
   app.use('/boardsettings', boardsettingsRoutes);
   app.use('/', authRoutes);
   app.use('*', (req, res) => {

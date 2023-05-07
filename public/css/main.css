@@ -20,7 +20,7 @@
     border-color: black;
 }
 
-#createTaskForm{
+#createTaskForm, #updateTaskForm{
   text-align: center;
 
 }
@@ -29,7 +29,7 @@ label{
  padding-top: 10px;
 }
 
-#estimatedTimeInputH, #estimatedTimeInputM{
+#estimatedTimeInputH, #estimatedTimeInputM, #newEstimatedTimeInputH, #newEstimatedTimeInputM{
   width: 40px;
 
 }
