@@ -122,6 +122,7 @@ const exportedMethods = {
 
 
     const boardCollection = await boards();
+    
 
     const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
 
