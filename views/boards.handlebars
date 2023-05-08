@@ -17,8 +17,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
+    {{#if addpriority}}
     <p>difficulty: {{this.difficulty}}</p>
+    {{else}}
     <p>priority: {{this.priority}}</p>
+    {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
@@ -37,8 +40,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>description: {{this.description}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
+    {{#if addpriority}}
     <p>difficulty: {{this.difficulty}}</p>
+    {{else}}
     <p>priority: {{this.priority}}</p>
+    {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
@@ -56,8 +62,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>description: {{this.description}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
+    {{#if addpriority}}
     <p>difficulty: {{this.difficulty}}</p>
+    {{else}}
     <p>priority: {{this.priority}}</p>
+    {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
@@ -208,96 +217,7 @@
         console.log(err);
       }
     })
-    /*
-            fetch(url, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updateFormData),
-        })
-        .then(response => response.json())
-        .catch(error => {
-            console.log(error);
-        });
-        */
-
-    //let taskName = upTaskForm.newtaskNameInput.value.toString();
-
-
-    //let taskName = upTaskForm.newtaskNameInput.value.toString();
-
-    //let taskName = .get('newTaskNameInput');
-
-
-
-
   }
-/*
-                    let updateForm = document.getElementById('update-task-form');
-                  
-                        updateForm.addEventListener('submit', function(event){
-                  
-                         event.preventDefault();
-                  
-                         cos
-                        //const formData = new FormData(this);
-                  
-                  
-                  
-                      const priority = formData.get('newPriorityInput');
-                      const estimatedTimeH = formData.get('newEstimatedTimeInputH');
-                      const estimatedTimeM = formData.get('newEstimatedTimeInputM');
-                      const deadline = formData.get('newDeadlineInput');
-                      const description = formData.get('newDescriptionInput');
-                      const assignedTo = formData.get('newAssignedToInput');
-                  
-                      const data = {
-                        taskName: taskName,
-                        priority: priority,
-                        estimatedTimeH: estimatedTimeH,
-                        estimatedTimeM: estimatedTimeM,
-                        deadline: deadline,
-                        description: description,
-                        assignedTo: assignedTo
-                      }
-                      const updateForm = document.getElementById('update-task-form');
-                      updateForm.addEventListener('submit', function (event) {
-                        event.preventDefault();
-                        const url = this.action;
-                        const formData = new FormData(this);
-                  
-                        const taskName = formData.get('newTaskNameInput');
-                        const priority = formData.get('newPriorityInput');
-                        const estimatedTimeH = formData.get('newEstimatedTimeInputH');
-                        const estimatedTimeM = formData.get('newEstimatedTimeInputM');
-                        const deadline = formData.get('newDeadlineInput');
-                        const description = formData.get('newDescriptionInput');
-                        const assignedTo = formData.get('newAssignedToInput');
-                  
-                        const data = {
-                          taskName: taskName,
-                          priority: priority,
-                          estimatedTimeH: estimatedTimeH,
-                          estimatedTimeM: estimatedTimeM,
-                          deadline: deadline,
-                          description: description,
-                          assignedTo: assignedTo
-                        }
-                  
-                        fetch(url, {
-                          method: 'PATCH',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify(data),
-                        })
-                          .then(response => response.json())
-                          .catch(error => {
-                            console.log(error);
-                          });
-                      });
-                      */
 
 </script>
 

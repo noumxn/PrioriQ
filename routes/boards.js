@@ -232,43 +232,43 @@ router.route("/update/:taskId")
 
     try {
       //get the taskId and get the board by the taskid 
-      taskId = req.body.taskId;
+      taskId = xss(req.body.taskId);
       board = await taskData.getBoardByTaskId(taskId);
       boardId = board._id.toString();
 
-      taskName = req.body.taskName;
+      taskName = xss(req.body.taskName);
       console.log(taskName);
       //if the priority input is null, make the priority null, else get the priority
-      if (typeof (req.body.priority) === 'undefined') {
+      if (typeof (xss(req.body.priority)) === 'undefined') {
         priority = null;
         console.log("p", priority);
       }
       else {
-        priority = req.body.priority;
+        priority = xss(req.body.priority);
         console.log("d", priority);
       }
       //if the difficulty input is null, make the difficulty null, else get the difficulty
-      if (typeof (req.body.difficulty) === 'undefined') {
+      if (typeof (xss(req.body.difficulty)) === 'undefined') {
         difficulty = null;
       }
       else {
-        difficulty = req.body.difficulty;
+        difficulty = xss(req.body.difficulty);
         console.log(difficulty);
       }
 
 
-      estimatedTimeH = req.body.estimatedTimeH;
+      estimatedTimeH = xss(req.body.estimatedTimeH);
       if (estimatedTimeH < 10) {
         estimatedTimeH = "0".concat(estimatedTimeH);
       }
-      estimatedTimeM = req.body.estimatedTimeM;
+      estimatedTimeM = xss(req.body.estimatedTimeM);
       if (estimatedTimeM < 10) {
         estimatedTimeM = "0".concat(estimatedTimeM);
       }
       console.log(estimatedTimeH);
       estimatedTime = estimatedTimeH.concat(" hours ", estimatedTimeM, " mins");
       console.log(estimatedTime);
-      deadline = req.body.deadline;
+      deadline = xss(req.body.deadline);
 
       deadline = deadline.concat(":00.000Z");
       console.log(deadline);
@@ -277,9 +277,9 @@ router.route("/update/:taskId")
       let localDeadline = new Date(inputDate.getTime() - systemOffset * 60 * 1000);
       let utcDeadline = new Date(localDeadline.getTime() - systemOffset * 60 * 1000);
       deadline = utcDeadline.toISOString();
-      description = req.body.description;
+      description = xss(req.body.description);
       console.log(description);
-      assignedTo = req.body.assignedTo;
+      assignedTo = xss(req.body.assignedTo);
       console.log(assignedTo);
       if(assignedTo == ""){
         assignedTo = [];
