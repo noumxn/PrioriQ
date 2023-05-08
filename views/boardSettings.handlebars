@@ -3,6 +3,10 @@
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
+{{#if blocked}}
+  <p>{{blocked}} has been blocked from this board</p>
+{{/if}}
+
 <p>
   Update Board Settings:
 </p>
@@ -27,6 +31,17 @@
   </label>
   <button type="submit">Update</button>
 </form>
+
+
+<form action="/boardsettings/blockUser/{{boardId}}"  method="post" id="blockUserForm">
+<label>
+  Input the username of the user you would Like to Block from this Board:
+<input type="text" placeholder="username" id="blockUserInput" name="blockUserInput"/>
+</label>
+<button type="submit">Block</button>
+</form>
+
+
 <script>
   function confirmDelete(n) {
     const confirm = document.getElementById("delete-form");
