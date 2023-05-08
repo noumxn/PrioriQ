@@ -1,3 +1,4 @@
+import xss from "xss";
 //import axios from "axios";
 import { Router } from "express";
 const router = Router();
@@ -30,7 +31,7 @@ router.route("/:id")
       boardName = userGet.boardName;
       //console.log("Priority scheduling is now");
       //console.log(userGet.priorityScheduling);
-      if (userGet.priorityScheduling == "true") {
+      if (userGet.priorityScheduling == true) {
         addpriority = true;
       } else {
         addpriority = false;
@@ -274,7 +275,16 @@ router.route("/update/:taskId")
       console.log(description);
       assignedTo = req.body.assignedTo;
       console.log(assignedTo);
-      assignedTo = assignedTo.split(",");
+      if(assignedTo == ""){
+        assignedTo = [];
+      }
+      else{
+        assignedTo = assignedTo.split(",");
+      }
+      if(assignedTo.length < 1 ){
+        assignedTo.push(board.owner);
+      }
+      console.log(assignedTo);
 
 
       //console.log(userGet);

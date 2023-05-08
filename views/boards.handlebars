@@ -303,8 +303,6 @@
 
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none">
-  <h2>Update Task</h2>
-  <form id="update-task-form" method="PATCH">
     <h2>Update Task</h2>
     <form id="upTaskForm" method="PATCH">
       <label for="newtaskNameInput">Task Name</label><br>
@@ -342,9 +340,7 @@
       <p>Type in usernames separated by commas</p>
       <input type="assignedTo" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
 
-      <button id="update-task-btn" type="submit">Submit</button>
+      <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
     </form>
 </div>
-<button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
-</form>
-</div>
+

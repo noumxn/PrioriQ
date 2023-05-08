@@ -103,9 +103,6 @@ const arrayValidCheck = (...arr) => {
     if (!Array.isArray(arr[i])) {
       throw returnRes('BAD_REQUEST', `${arr[i]} is not of type Array.`);
     }
-    if (arr[i].length < 1) {
-      throw returnRes('BAD_REQUEST', `Array can not be empty.`);
-    }
   }
 }
 

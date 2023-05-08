@@ -222,7 +222,10 @@ const exportedMethods = {
     // First checks toDo list, then inProgress, then done.
     // FIXME: This is ugly, but I couldn't find a nicer way to do it.
     updatedInfo = await boardCollection.findOneAndUpdate(
-      { 'toDo._id': new ObjectId(taskId) },
+
+      //should be objectId
+      //only this way so it works 
+      { 'toDo._id': taskId },
       {
         $set: {
           'toDo.$.createdAt': createdAt, 'toDo.$.taskName': taskName, 'toDo.$.priority': priority, 'toDo.$.difficulty': difficulty,
@@ -231,11 +234,13 @@ const exportedMethods = {
       },
       { returnDocument: 'after' });
     if (updatedInfo.lastErrorObject.n !== 0) {
-      return await this.getTaskById(taskId);
+      return await taskId;
     };
 
     updatedInfo = await boardCollection.findOneAndUpdate(
-      { 'inProgress._id': new ObjectId(taskId) },
+      //should be objectId
+      //only this way so it works 
+      { 'inProgress._id': taskId },
       {
         $set: {
           'inProgress.$.createdAt': createdAt, 'inProgress.$.taskName': taskName, 'inProgress.$.priority': priority, 'inProgress.$.difficulty': difficulty,
@@ -248,7 +253,9 @@ const exportedMethods = {
     };
 
     updatedInfo = await boardCollection.findOneAndUpdate(
-      { 'done._id': new ObjectId(taskId) },
+      //should be objectId
+      //only this way so it works 
+      { 'done._id': new taskId },
       {
         $set: {
           'done.$.createdAt': createdAt, 'done.$.taskName': taskName, 'done.$.priority': priority, 'done.$.difficulty': difficulty,
