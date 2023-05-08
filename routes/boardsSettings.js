@@ -3,6 +3,7 @@ const router = Router();
 import boardData from '../data/boards.js'
 import helpers from '../data/helpers.js';
 import validation from '../utils/validation.js';
+import xss from 'xss';
 
 router.route("/").get(async (req,res) => {
   return res.status(400).render("../views/error", {err: 'Please input the id of the board you wish to access in the url'});
@@ -40,7 +41,7 @@ router
     }catch{
       res.status(401).render("../views/error", {err: `Board with that ID does not exist`});
     }
-    let name = req.body.boardNameInput;
+    let name = xss(req.body.boardNameInput);
     let sortOrder, flag;
     if(board.priorityScheduling == "false"){
       sortOrder = req.body.sortOrderInput;
@@ -49,8 +50,8 @@ router
       sortOrder = "null";
       flag = false;
     }
-    let password = req.body.boardPasswordInput;
-    let confirm = req.body.confirmBoardPasswordInput;
+    let password = xss(req.body.boardPasswordInput);
+    let confirm = xss(req.body.confirmBoardPasswordInput);
     try{
       //console.log(boardId, name, sortOrder, password);
       validation.parameterCheck(boardId, name, sortOrder, password);

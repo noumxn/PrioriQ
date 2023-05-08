@@ -40,7 +40,7 @@ router.route("/:id")
       //console.log(addpriority);
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
-      boardD = userGet.Done;
+      boardD = userGet.done;
     
     } catch (e) {
       return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:true,  error: true, e:e.message});
@@ -146,7 +146,7 @@ router.route("/:id")
       }
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
-      boardD = userGet.Done;
+      boardD = userGet.done;
     
     } catch (e) {
       return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority,  error: true, e:e.message});
@@ -193,7 +193,7 @@ router.route("/:id")
       }
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
-      boardD = userGet.Done;
+      boardD = userGet.done;
     } catch (e) {
       return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
     } 

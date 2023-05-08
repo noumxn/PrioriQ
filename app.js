@@ -51,6 +51,13 @@ app.use('/login', (req, res, next) => {
     next();
   }
 });
+app.use('/logout', (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/login');
+  }else{
+    next();
+  }
+});
 app.use('/register', (req,res,next) =>{
   if(req.session.user){
     return res.redirect('/homepage');
