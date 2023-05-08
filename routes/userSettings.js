@@ -5,6 +5,7 @@ import helpers from "../data/helpers.js"
 import boardData from '../data/boards.js'
 import userData from '../data/users.js'
 import {ObjectId} from 'mongodb';
+import xss from 'xss';
 
 router.route("/")
   .get(async (req,res) => {
@@ -15,13 +16,13 @@ router.route("/")
     const currentUser = req.session.user;
     
 
-    let email = req.body.emailAddressInput;
-    let password = req.body.passwordInput;
-    let first = req.body.firstNameInput;
-    let last = req.body.lastNameInput;
-    let user = req.body.usernameInput;
-    let confirm = req.body.confirmPasswordInput;
-    let dob = req.body.dobInput;
+    let email = xss(req.body.emailAddressInput);
+    let password = xss(req.body.passwordInput);
+    let first = xss(req.body.firstNameInput);
+    let last = xss(req.body.lastNameInput);
+    let user = xss(req.body.usernameInput);
+    let confirm = xss(req.body.confirmPasswordInput);
+    let dob = xss(req.body.dobInput);
     try{
       validation.parameterCheck(email, password, dob, confirm, user, first, last)
     }catch(e){

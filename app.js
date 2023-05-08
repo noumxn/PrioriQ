@@ -65,7 +65,7 @@ app.get('/usersettings', (req,res,next) =>{
     next();
   }
 });
-app.get('/boards/:id', (req,res,next) =>{
+app.get('/boards', (req,res,next) =>{
   if(!req.session.user){
     return res.redirect('/login');
   }else{

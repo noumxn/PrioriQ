@@ -42,10 +42,9 @@ const exportedMethods = {
       if (originBoard.blockedUsers.includes(assignedTo[i])) {
         throw validation.returnRes('FORBIDDEN', `${assignedTo[i]} is blocked from the board.`);
       }
-      // TODO: This can be uncommented after Athena implements adding the creator of the board to the allowed users list upon creation
-      // if (!originBoard.allowedUsers.includes(assignedTo[i])) {
-      //   throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
-      // }
+      if (!originBoard.allowedUsers.includes(assignedTo[i])) {
+        throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
+      }
     }
 
     if (originBoard.priorityScheduling) {
@@ -187,6 +186,7 @@ const exportedMethods = {
     taskId = validation.idCheck(taskId);
     validation.strValidCheck(taskName, estimatedTime, description);
     estimatedTime = estimatedTime.trim();
+    estimatedTime = helpers.convertEstimatedTimeToMs(estimatedTime);
     description = description.trim();
     taskName = helpers.checkTaskName(taskName);
     validation.validDateTimeFormatCheck(deadline);
@@ -203,10 +203,9 @@ const exportedMethods = {
       if (originBoard.blockedUsers.includes(assignedTo[i])) {
         throw validation.returnRes('FORBIDDEN', `${assignedTo[i]} is blocked from the board.`);
       }
-      // TODO: This can be uncommented after Athena implements adding the creator of the board to the allowed users list upon creation
-      // if (!originBoard.allowedUsers.includes(assignedTo[i])) {
-      //   throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
-      // }
+      if (!originBoard.allowedUsers.includes(assignedTo[i])) {
+        throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
+      }
     }
     if (originBoard.priorityScheduling) {
       priority = helpers.checkPriority(priority);

@@ -10,6 +10,7 @@ const exportedMethods = {
     validation.parameterCheck(taskId, username);
     validation.strValidCheck(taskId, username);
     taskId = validation.idCheck(taskId);
+    username = helpers.checkUsername(username);
 
     // TODO: Make sure user is in the 'assignedTo' list before letting them add task to checkList. Throw 'UNAUTHORIZED'
     const task = await taskData.getTaskById(taskId);
@@ -32,6 +33,7 @@ const exportedMethods = {
     validation.parameterCheck(taskId, username);
     validation.strValidCheck(taskId, username);
     taskId = validation.idCheck(taskId);
+    username = helpers.checkUsername(username);
 
     const user = await userData.getUserByUsername(username);
     user.checkList.forEach(checkListItem => {
@@ -50,6 +52,7 @@ const exportedMethods = {
   async deleteTasksFromCheckList(username) {
     validation.parameterCheck(username);
     validation.strValidCheck(username);
+    username = helpers.checkUsername(username);
 
     const user = await userData.getUserByUsername(username);
     const completedItems = user.checkList.filter(checkListItem => checkListItem.completed === true);
@@ -90,7 +93,7 @@ const exportedMethods = {
   async getCheckListByUsername(username) {
     validation.parameterCheck(username);
     validation.strValidCheck(username);
-    username = username.trim().toLowerCase();
+    username = helpers.checkUsername(username);
 
     const userCollection = await users();
     const user = await userData.getUserByUsername(username);

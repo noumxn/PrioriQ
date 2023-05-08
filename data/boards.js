@@ -1,12 +1,11 @@
-import {ObjectId} from "mongodb";
-import userData from "./users.js";
-import {users} from '../config/mongoCollections.js';
-import {boards} from "../config/mongoCollections.js";
-import validation from "../utils/validation.js";
-import sorting from "./sortingAlgorithms.js";
-import helper from "./helpers.js";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import { ObjectId } from "mongodb";
+import { boards, users } from '../config/mongoCollections.js';
+import validation from "../utils/validation.js";
+import helper from "./helpers.js";
+import sorting from "./sortingAlgorithms.js";
+import userData from "./users.js";
 dotenv.config();
 
 const exportedMethods = {
@@ -36,6 +35,7 @@ const exportedMethods = {
     );
 
     validation.strValidCheck(boardName, owner, boardPassword);
+    helper.checkPassword(boardPassword);
     const boardOwner = await userData.getUserByUsername(owner); //
     if (priorityScheduling == "true") {
       priorityScheduling = true;
@@ -89,9 +89,9 @@ const exportedMethods = {
     const userCollection = await users();
     //Adds the new board to the user's boards field
     const updatedUserWithNewBoard = await userCollection.findOneAndUpdate(
-      {_id: new ObjectId(boardOwner._id)},
-      {$push: {boards: newBoard}},
-      {returnNewDocument: true});
+      { _id: new ObjectId(boardOwner._id) },
+      { $push: { boards: newBoard } },
+      { returnNewDocument: true });
     if (!updatedUserWithNewBoard) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not add board to ${owner}'s boards.`);
 
 
@@ -123,14 +123,15 @@ const exportedMethods = {
 
     const boardCollection = await boards();
 
-    const board = await boardCollection.findOne({_id: new ObjectId(boardId)});
+
+    const board = await boardCollection.findOne({ _id: new ObjectId(boardId) });
 
     if (!board)
       throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
 
     board._id = board._id.toString();
 
-    board.toDo.forEach(task => {task._id = task._id.toString();});
+    board.toDo.forEach(task => { task._id = task._id.toString(); });
     // Sorting the board
     if (board.priorityScheduling === true) {
       await sorting.priorityBasedSorting(board._id);
@@ -152,10 +153,11 @@ const exportedMethods = {
   async getBoardsByUser(username) {
     validation.parameterCheck(username);
     validation.strValidCheck(username);
+    username = helper.checkUsername(username);
 
     const boardCollection = await boards();
 
-    const board = await boardCollection.find({owner: username}).toArray();
+    const board = await boardCollection.find({ owner: username }).toArray();
     if (!board)
       throw validation.returnRes("NOT_FOUND", `Could not get any boards.`);
     return board;
@@ -208,6 +210,8 @@ const exportedMethods = {
     //uses helper function to get newSortOrder
     newSortOrder = helper.checkSortOrderValue(board.priorityScheduling, newSortOrder);
 
+    helper.checkPassword(newBoardPassword);
+
     if (!passwordsMatch) {
       const saltRounds = parseInt(process.env.SALT_ROUNDS);
       newBoardPassword = await bcrypt.hash(newBoardPassword, saltRounds);
@@ -215,11 +219,12 @@ const exportedMethods = {
       newBoardPassword = board.boardPassword;
     }
 
+
     // TODO: Need to make sure sortOrder is not updated when the board is using the priority setting.
     //       The sortOrder only applies to boards that have the difficulty setting
 
     await boardCollection.updateOne(
-      {_id: new ObjectId(boardId)},
+      { _id: new ObjectId(boardId) },
       {
         $set: {
           boardName: newBoardName,
@@ -263,6 +268,7 @@ const exportedMethods = {
     validation.parameterCheck(boardId, username);
     validation.strValidCheck(boardId, username);
     boardId = validation.idCheck(boardId);
+    username = helper.checkUsername(username);
 
     const boardCollection = await boards();
     const board = await this.getBoardById(boardId);
@@ -275,7 +281,7 @@ const exportedMethods = {
     }
 
     await boardCollection.updateOne(
-      {_id: new ObjectId(boardId)},
+      { _id: new ObjectId(boardId) },
       {
         $set: {
           allowedUsers: newAllowedUsers,
@@ -290,21 +296,21 @@ const exportedMethods = {
     if (!newUser) throw validation.returnRes("NOT_FOUND", `No user with that username: ${username}.`);
 
     let newSharedBoards = newUser.sharedBoards;
-    console.log(newUser.firstName);
-
 
     newSharedBoards.push(boardId);
 
 
-    console.log(newUser._id.toString());
+    // console.log(newUser._id.toString());
     await userCollection.updateOne(
-      {_id: new ObjectId(newUser._id.toString())},
+      { _id: new ObjectId(newUser._id.toString()) },
       {
         $set: {
           sharedBoards: newSharedBoards,
         },
       }
     );
+
+    //console.log(newUser.sharedBoards);
 
     console.log(newUser.sharedBoards);
 
@@ -318,6 +324,14 @@ const exportedMethods = {
 
   },
 
+  async AddUserBlockedUsers(boardId, username) {
+    //validation
+    validation.parameterCheck(boardId, username);
+    validation.strValidCheck(boardId, username);
+    boardId = validation.idCheck(boardId);
+    username = helper.checkUsername(username);
+
+  },
 
   async AddUserBlockedUsers(boardId, username) {
     //validation
@@ -345,7 +359,7 @@ const exportedMethods = {
     }
 
     await boardCollection.updateOne(
-      {_id: new ObjectId(boardId)},
+      { _id: new ObjectId(boardId) },
       {
         $set: {
           blockedUsers: newBlockedUsers,
