@@ -1,4 +1,5 @@
 let boardUpdate = document.getElementById("boardsettings-form");
+let blockForm = document.getElementById("blockUserForm");
 
 function checkBoardName(name){
   if(name == null || name.value.trim().length == 0) {
@@ -33,6 +34,29 @@ function checkPass(password){
   }
 }
 
+function checkUserName(username){
+  let user = username.value.trim().toLowerCase()
+  if (user.length < 3){ 
+    username.focus();
+    throw `Username needs to be at least 3 characters long.`;
+  }
+  if (user.length > 20) {
+    username.focus();
+    throw `Username can not be longer than 20 characters.`
+  };
+  let regex = /^[a-zA-Z0-9_]+$/;
+  if (!regex.test(user)) {
+    username.focus();
+    throw `The username can only contain alphabets, numbers, and underscores.`;
+  }
+  let regex2 = /[a-zA-Z]/;
+  if (!regex2.test(user)) {
+    username.focus();
+    throw `Username must contain at least one alphabet.`;
+  }
+
+}
+
 if(boardUpdate){
   let bname = document.getElementById("boardNameInput");
   let sortOrder = document.getElementById("sortOrderInput");
@@ -59,5 +83,25 @@ if(boardUpdate){
       error.innerHTML = e;
     }
     
+  })
+}
+
+if(blockForm){
+  let blockedUser = document.getElementById("blockUserInput");
+  let error = document.getElementById("errorDiv");
+  blockForm.addEventListener('submit', (event) =>{
+    console.log("form submitted")
+    let serverErr = document.getElementById("serverError");
+    if(serverErr !== null){
+      serverErr.hidden = true;
+    }
+    error.hidden = true;
+    try{
+      checkUserName(blockedUser);
+    }catch(e){
+      event.preventDefault();
+      error.hidden = false;
+      error.innerHTML = e;
+    }
   })
 }
