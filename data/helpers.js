@@ -43,6 +43,7 @@ const checkEmail = (email) => {
  * @return {username} Returns validated username after running trim() and toLowerCase() on it
  **/
 const checkUsername = (username) => {
+  username = username.trim().toLowerCase()
   if (username.length < 3) throw validation.returnRes('BAD_REQUEST', `Username needs to be at least 3 characters long.`);
   if (username.length > 20) throw validation.returnRes('BAD_REQUEST', `Username can not be longer than 20 characters.`);
   let regex = /^[a-zA-Z0-9_]+$/;
@@ -50,7 +51,7 @@ const checkUsername = (username) => {
   let regex2 = /[a-zA-Z]/;
   if (!regex2.test(username)) throw validation.returnRes('BAD_REQUEST', `Username must contain at least one alphabet.`);
 
-  return username.trim().toLowerCase()
+  return username;
 }
 
 /*
@@ -70,6 +71,7 @@ const checkPassword = (password) => {
   if (!regex.test(password)) throw validation.returnRes('BAD_REQUEST', `Password must contain at least 1 number.`);
   let regex2 = /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?].*/;
   if (!regex2.test(password)) throw validation.returnRes('BAD_REQUEST', `Password must contain at least 1 special character.`);
+  if (!/[A-Z]/.test(password)) throw validation.returnRes('BAD_REQUEST', `Password must contain at least 1 Uppercase character.`);
   let regex3 = /^\S+$/;
   if (!regex3.test(password)) throw validation.returnRes('BAD_REQUEST', `Password can not contain spaces.`)
 }

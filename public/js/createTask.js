@@ -109,6 +109,10 @@ if(taskForm){
   //let taskArea = document.getElementById('ToDo');
   taskForm.addEventListener('submit', (event) => {
     console.log("form Submission fired");
+    let serverErr = document.getElementById("serverError");
+    if(serverErr.hidden == false){
+      serverErr.hidden = true;
+    }
   try{
     checkTaskName(taskName);
     if(prio){
