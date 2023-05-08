@@ -19,33 +19,40 @@ router.route("/:id")
     let boardD;
     try {
       addpriority = false;
+      username = req.session.user.username;
       boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
-      console.log("hi1");
-      console.log(userGet.priorityScheduling);
-      if(userGet.priorityScheduling){
+      boardName = userGet.boardName;
+      //console.log("Priority scheduling is now");
+      //console.log(userGet.priorityScheduling);
+      if(userGet.priorityScheduling =="true"){
         addpriority = true;
       } else {
         addpriority = false;
       }
-      console.log("priority: ", addpriority);
       boardT = userGet.toDo;
       console.log(boardT);
       boardS = userGet.inProgress;
       boardD = userGet.done;
     
     } catch (e) {
-      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:true,  error: true, e:e.message});
+      return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:true,  error: true, e:e.message});
+    }
+    if (userGet.blockedUsers.includes(username)) {
+      return res.status(401).render("error", { titley: "Error", err:"You may not join this board."});
+    }
+    if (!userGet.allowedUsers.includes(username)) {
+      return res.status(403).render("error", { titley:"Error", err:"You have not joined this board."});
     }
     try {
-      return res.render("boards", { titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority});
+      return res.render("boards", { titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority});
       } catch (e) {
-        return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, addpriority:addpriority, e:e.message});
+        return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, addpriority:addpriority, e:e.message});
       }
 
   })
   .post(async (req, res) => {
-    console.log('I got herex');
+    //console.log('I got herex');
     let boardId;
     let taskName;
     let priority;
@@ -63,36 +70,32 @@ router.route("/:id")
     let boardD;
 
       boardId = req.params.id;
-      console.log(boardId);
-      taskName = req.body.taskNameInput;
-      console.log(taskName);
-      if(typeof(req.body.priorityInput) === 'undefined'){
+      //console.log(boardId);
+      taskName = xss(req.body.taskNameInput);
+      if(typeof(xss(req.body.priorityInput)) === 'undefined'){
         priority = null;
-        console.log(priority);
       }
       else{
-        priority = req.body.priorityInput;
-        console.log(priority);
+        priority = xss(req.body.priorityInput);
       }
-      if(typeof(req.body.difficultyInput) === 'undefined'){
+      if(typeof(xss(req.body.difficultyInput)) === 'undefined'){
         difficulty = null;
       }
       else{
-        difficulty = req.body.difficultyInput;
-        console.log(difficulty);
+        difficulty = xss(req.body.difficultyInput);
       }
 
-      estimatedTimeH = req.body.estimatedTimeInputH;
+      estimatedTimeH = xss(req.body.estimatedTimeInputH);
       if(estimatedTimeH < 10){
         estimatedTimeH = "0".concat(estimatedTimeH);
       }
-      estimatedTimeM = req.body.estimatedTimeInputM;
+      estimatedTimeM = xss(req.body.estimatedTimeInputM);
       if(estimatedTimeM < 10){
         estimatedTimeM = "0".concat(estimatedTimeM);
       }
       estimatedTime = estimatedTimeH.concat(" hours ", estimatedTimeM, " mins");
-      console.log(estimatedTime);
-      deadline = req.body.deadlineInput;
+      //console.log(estimatedTime);
+      deadline = xss(req.body.deadlineInput);
       deadline = deadline.concat(":00.000Z");
       console.log(deadline);
       let systemOffset = new Date().getTimezoneOffset();
@@ -119,16 +122,17 @@ router.route("/:id")
       */
 
     } catch (e) {
-      console.log('I got herey');
-      return res.render("error", { titley:"Error page", err: e });
+      //console.log('I got herey');
+      return res.render("error", { titley:"Error", err: e });
     }
 
     try {
       //boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
+      boardName = userGet.boardName;
       //console.log(userGet);
-      console.log("hi2")
-      console.log(userGet.priorityScheduling);
+      //console.log("hi2")
+      //console.log(userGet.priorityScheduling);
       if(userGet.priorityScheduling){
         addpriority = true;
         difficulty = null;
@@ -142,7 +146,7 @@ router.route("/:id")
       boardD = userGet.done;
     
     } catch (e) {
-      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority,  error: true, e:e.message});
+      return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority,  error: true, e:e.message});
     }
     //create the task
 
@@ -163,23 +167,24 @@ router.route("/:id")
       boardT.forEach(checkTask);
 
     } catch (e) {
-      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
+      return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
     }
     */
 
     try {
       newTask = await taskData.createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
-      console.dir(newTask, {depth:null});
+     // console.dir(newTask, {depth:null});
     } catch (e) {
-      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority, error: true, e:e.message});
+      return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority, error: true, e:e.message});
     }
 
 
     //get the boards again
     try {
       userGet = await boardData.getBoardById(boardId);
+      boardName = userGet.boardName;
       //console.log(userGet);
-      console.log(userGet.priorityScheduling);
+     // console.log(userGet.priorityScheduling);
       if(userGet.priorityScheduling){
         addpriority = true;
       }
@@ -187,13 +192,13 @@ router.route("/:id")
       boardS = userGet.inProgress;
       boardD = userGet.done;
     } catch (e) {
-      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
+      return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
     } 
     //render the page again
     try {
-      res.render("boards", { titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority});
+      res.render("boards", { titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority});
     } catch (e) {
-      return res.status(400).render('../views/boards', {titley: "Board page", boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
+      return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
     }
 
   });

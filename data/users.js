@@ -36,6 +36,7 @@ const exportedMethods = {
     // Data validation
     validation.parameterCheck(username);
     validation.strValidCheck(username);
+    username = username.trim().toLowerCase();
 
     // Searching user by username
     const userCollection = await users();
