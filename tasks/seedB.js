@@ -50,7 +50,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
  /*
   console.log('1*************************************');
   await userData.createUser('Jack', 'Doe', '12/12/1998', 'jack@gmail.com', 'user1', 'hello123#');
-  await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'cantseeme', 'hello123#');
+  await userData.createUser('Jonn', 'Cena', '12/12/1998', 'johncena@gmail.com', 'cantseeme', 'Hello123#');
 
 
 

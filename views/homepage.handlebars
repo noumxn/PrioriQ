@@ -3,33 +3,33 @@
 
 <h2>Welcome, {{user}}.</h2>
 <div id="errorDiv" class="error" hidden> Hello</div>
-  {{#if error}}
-  <div id="serverError" class="error"> {{e}}</div>
-    {{/if}}
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
 <br>
 <a id="userSettings" href="/usersettings">Settings</a>
 
 <div id="userBoards">
     <h2>Boards</h2>
     <ul>
-      {{#each userBoards}}
-      <li>
-          <a href="/boards/{{_id}}">{{boardName}}</a>
-      </li>
-      {{/each}}
-</ul>
+        {{#each userBoards}}
+        <li>
+            <a href="/boards/{{_id}}">{{boardName}}</a>
+        </li>
+        {{/each}}
+    </ul>
 </div>
 <br>
 
 <div id="sharedBoards">
-<h2>Shared Boards</h2>
+    <h2>Shared Boards</h2>
     <ul>
-      {{#each sharedBoards}}
-      <li>
-          <a href="/boards/{{_id}}">{{boardName}}</a>
-      </li>
-      {{/each}}
-</ul>
+        {{#each sharedBoards}}
+        <li>
+            <a href="/boards/{{_id}}">{{boardName}}</a>
+        </li>
+        {{/each}}
+    </ul>
 </div>
 <br>
 
@@ -37,17 +37,17 @@
 <div id="userChecklist">
     <h2>Checklist</h2>
     <ul>
-      {{#each checklist}}
-      <li>
-          <div>
-            <label for={{taskId}}>{{taskName}}</label>
-            <input type="checkbox" id={{taskId}} class="checklistItem">
-            <br>
-          </div>
-      </li>
-      {{/each}}
-</ul>
-<!--<button type="submit" id="checklistButton">Mark tasks as completed</button>-->
+        {{#each checklist}}
+        <li>
+            <div>
+                <label for={{taskId}}>{{taskName}}</label>
+                <input type="checkbox" id={{taskId}} class="checklistItem">
+                <br>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+    <!--<button type="submit" id="checklistButton">Mark tasks as completed</button>-->
 
 </div>
 <br>
@@ -55,76 +55,76 @@
 <script>
     function showCreateBoard() {
         const createBoardForm = document.getElementById("createBoard");
-  if (createBoardForm.style.display === "none") {
-    createBoardForm.style.display = "block";
-  } else {
-    createBoardForm.style.display = "none";
-  }
-}
+        if (createBoardForm.style.display === "none") {
+            createBoardForm.style.display = "block";
+        } else {
+            createBoardForm.style.display = "none";
+        }
+    }
 </script>
 
 <button onclick="showCreateBoard()">Create New Board</button>
 <br>
 <div id="createBoard" style="display:none">
     <h2>Create New Board</h2>
-<form action = "/homepage" method="POST" id="create-board-form">
-    <label for="boardNameInput" id="board_name_label">
-        Enter board name:
-        <input type="text" id="boardNameInput" name="boardNameInput">
-    </label>
-    <br>
-    <label for="boardPasswordInput" id="board_password_label">
-        Enter board password:
-        <input type="password" id="boardPasswordInput" name="boardPasswordInput">
-    </label>
-    <br>
-    <label for="boardConfirmPasswordInput" id="board_confirm_password_label">
-        Confirm board password:
-        <input type="password" id="boardConfirmPasswordInput" name="boardConfirmPasswordInput">
-    </label>
-    <br>
-    <label for="sortingInput" id="sorting_label">
-        Scheduling style:
-        <select name="sortingInput" id="sortingInput">
-            <option value="true">Priority based scheduling</option>
-            <option value="false">Difficulty based scheduling</option>
-        </select>
-    </label>
-    <br>
-    <label for="sortOrderInput" id="sort_order_label" style="display:none">
-        Sort order:
-        <select name="sortOrderInput" id="sortOrderInput">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-    </label>
-    <br>
-    <button type="submit">Create</button>
-</form>
+    <form action="/homepage" method="POST" id="create-board-form">
+        <label for="boardNameInput" id="board_name_label">
+            Enter board name:
+            <input type="text" id="boardNameInput" name="boardNameInput">
+        </label>
+        <br>
+        <label for="boardPasswordInput" id="board_password_label">
+            Enter board password:
+            <input type="password" id="boardPasswordInput" name="boardPasswordInput">
+        </label>
+        <br>
+        <label for="boardConfirmPasswordInput" id="board_confirm_password_label">
+            Confirm board password:
+            <input type="password" id="boardConfirmPasswordInput" name="boardConfirmPasswordInput">
+        </label>
+        <br>
+        <label for="sortingInput" id="sorting_label">
+            Scheduling style:
+            <select name="sortingInput" id="sortingInput">
+                <option value="true">Priority based scheduling</option>
+                <option value="false">Difficulty based scheduling</option>
+            </select>
+        </label>
+        <br>
+        <label for="sortOrderInput" id="sort_order_label" style="display:none">
+            Sort order:
+            <select name="sortOrderInput" id="sortOrderInput">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </label>
+        <br>
+        <button type="submit">Create</button>
+    </form>
 </div>
 <br>
 <script src="../../public/js/checklist.js"></script>
 <script>
     let priority = document.getElementById('sortingInput');
     let sortOrder = document.getElementById('sort_order_label');
-    priority.addEventListener('change', function() {
-      if (priority.value === 'false') {
-        sortOrder.style.display = "block";
-      } else {
-        sortOrder.style.display = "none";
-      }
+    priority.addEventListener('change', function () {
+        if (priority.value === 'false') {
+            sortOrder.style.display = "block";
+        } else {
+            sortOrder.style.display = "none";
+        }
     });
-  </script>
+</script>
 
 <script>
     function showJoinBoard() {
         const joinBoardForm = document.getElementById("joinBoard");
-  if (joinBoardForm.style.display === "none") {
-    joinBoardForm.style.display = "block";
-  } else {
-    joinBoardForm.style.display = "none";
-  }
-}
+        if (joinBoardForm.style.display === "none") {
+            joinBoardForm.style.display = "block";
+        } else {
+            joinBoardForm.style.display = "none";
+        }
+    }
 </script>
 
 <button onclick="showJoinBoard()">Join Existing Board</button>
@@ -132,19 +132,19 @@
 
 <div id="joinBoard" style="display:none">
     <h2>Join Existing Board</h2>
-    <form action = "/homepage/searchresult" method="POST" id="search-board-form">
-    <label for="searchBoardIdInput" id="search_board_id_label">
-        Enter board ID:
-        <input type="text" id="searchBoardIdInput" name="searchBoardIdInput">
-    </label>
-    <br>
-     <label for="searchBoardPasswordInput" id="search_board_password_label">
-        Enter board password:
-        <input type="password" id="searchBoardPasswordInput" name="searchBoardPasswordInput">
-    </label>
-    <br>
-    <button type="submit">Search</button>
-</form>
+    <form action="/homepage/searchresult" method="POST" id="search-board-form">
+        <label for="searchBoardIdInput" id="search_board_id_label">
+            Enter board ID:
+            <input type="text" id="searchBoardIdInput" name="searchBoardIdInput">
+        </label>
+        <br>
+        <label for="searchBoardPasswordInput" id="search_board_password_label">
+            Enter board password:
+            <input type="password" id="searchBoardPasswordInput" name="searchBoardPasswordInput">
+        </label>
+        <br>
+        <button type="submit">Search</button>
+    </form>
 
 </div>
 
@@ -154,4 +154,3 @@
 <br>
 
 <a href="/logout">Logout</a>
-
