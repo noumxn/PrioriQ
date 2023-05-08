@@ -6,6 +6,7 @@ import {boardData, checkListData, taskData} from "../data/index.js";
 import helpers from "../data/helpers.js"
 import validation from '../utils/validation.js';
 import bcrypt from 'bcryptjs';
+import xss from 'xss';
 
 router.route('/')
   .get( async (req, res) => {
@@ -21,14 +22,14 @@ router.route('/')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
 
     try {
@@ -51,14 +52,14 @@ router.route('/')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
 
     let boardName = undefined;
@@ -71,14 +72,15 @@ router.route('/')
 
     //Confirm password in auth.js not being checked
     try {
-      boardName = helpers.checkName(req.body.boardNameInput);
-      boardPassword = req.body.boardPasswordInput;
+      boardName = helpers.checkName(xss(req.body.boardNameInput));
+      boardPassword = xss(req.body.boardPasswordInput);
       helpers.checkPassword(boardPassword);
-      confirmPassword = req.body.boardConfirmPasswordInput;
+      confirmPassword = xss(req.body.boardConfirmPasswordInput);
       helpers.checkPassword(confirmPassword);
-      priorityScheduling = helpers.checkPriorityScheduling(req.body.sortingInput);
+      priorityScheduling = helpers.checkPriorityScheduling(xss(req.body.sortingInput));
+      //console.log(priorityScheduling);
       owner = helpers.checkUsername(req.session.user.username);
-      sortOrder = helpers.checkSortOrderValue(priorityScheduling, req.body.sortOrderInput);
+      sortOrder = helpers.checkSortOrderValue(priorityScheduling, xss(req.body.sortOrderInput));
 
     } catch (e) {
       return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:e.message});
@@ -108,7 +110,7 @@ router.route('/checklist/:taskId')
       await taskData.moveToDone(taskId);
       await checkListData.completeCheckListItem(taskId, username);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
     return res.redirect('/');
   });
@@ -127,39 +129,39 @@ router.route('/searchresult')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.render("error", { titley:"Error page", err: e.message });
+      return res.render("error", { titley:"Error", err: e.message });
     }
 
-    const boardId = req.body.searchBoardIdInput;
-    const password = req.body.searchBoardPasswordInput;
+    const boardId = xss(req.body.searchBoardIdInput);
+    const password = xss(req.body.searchBoardPasswordInput);
     let board = undefined;
     try {
       board = await boardData.getBoardById(boardId);
     } catch (e) {
       return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:e.message});
     }
-    if (board.allowedUsers.indexOf(username) != -1) {
-      return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:"You already joined this board"});
+    if (board.blockedUsers.includes(username)) {
+      return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:"You may not join this board."});
+    }
+    if (board.allowedUsers.includes(username)) {
+      return res.status(400).render("../views/homepage", {titley: "Homepage", user: username, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards, error:true, e:"You already joined this board."});
     }
     const hashedPassword = board.boardPassword;
     let match = await bcrypt.compare(password, hashedPassword);
-    console.log(password);
-    console.log(hashedPassword);
-    console.log(match);
     if (match) {
       try {
         await boardData.AddUserAllowedUsers(boardId, username);
           req.session.user.sharedBoards.push(boardId);
           return res.redirect('/');
       } catch (e) {
-        return res.render("error", { titley:"Error page", err: e.message });
+        return res.render("error", { titley:"Error", err: e.message });
       }
     }
     else {

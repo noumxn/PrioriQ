@@ -7,12 +7,12 @@
   {{/if}}
 
 
-  <p>boards yeah! This user has boards</p>
+  {{!--<p>boards yeah! This user has boards</p> --}}
 
   {{!-- <a href="/boardSettings">Board Settings</a> --}}
     
       <div class="card">
-        <h1>Todo</h1>
+        <h1>To-Do</h1>
       {{#each boardTodo}}
           <div class="container1">
                   <p>Name: {{this.taskName}}</p>
@@ -39,7 +39,7 @@
       </div>
 
     <div class="card">
-        <h1>done</h1>
+        <h1>Done</h1>
       {{#each boardDone}}
           <div class="container1">
                   <p>Name: {{this.taskName}}</p>
@@ -65,7 +65,7 @@
 
 <div id="createTaskForm" style="display:none">
 <h2>Create Task</h2>
-  <form action = "/board/{{boardId}}" id="create-task-form" method="POST">
+  <form action = "/boards/{{boardId}}" id="create-task-form" method="POST">
     <label for="taskNameInput">Task Name</label><br>
     <input type="taskName" id="taskNameInput" name="taskNameInput" placeholder="Type task name here"><br>
 
@@ -103,6 +103,7 @@
     <button type="submit" >Submit</button>
 </form>
 </div>
-      
+<br>
+<a href="/homepage">Back to homepage</a>      
       
     

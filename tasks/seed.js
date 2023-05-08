@@ -35,7 +35,8 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
   try {
     tomBoard = await boardData.createBoard("First Board", "tom_smith", false, "asc", "thepassword");
     johnBoard = await boardData.createBoard("John Board 1", "john_brown", false, "desc", "thepassword");
-    await boardData.AddUserAllowedUsers(tomBoard._id.toString(), "john_brown");
+    //await boardData.AddUserAllowedUsers(tomBoard._id.toString(), "john_brown");
+    await boardData.AddUserBlockedUsers(tomBoard._id.toString(), "john_brown");
    // console.log(await userData.getUserById(tom._id.toString()));
   } catch (e) {
     console.log(e);
