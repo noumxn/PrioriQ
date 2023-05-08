@@ -9,6 +9,11 @@ import validation from "../utils/validation.js";
 import xss from 'xss';
 
 
+router.route("/").get(async (req,res) => {
+  return res.status(400).render("../views/error", {err: 'Please input the id of the board you wish to access in the url'});
+})
+
+
 router.route("/:id")
   .get( async (req, res) => {
     let boardId;
@@ -182,7 +187,7 @@ router.route("/:id")
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
       //console.log(userGet);
-     // console.log(userGet.priorityScheduling);
+
       if(userGet.priorityScheduling){
         addpriority = true;
       }

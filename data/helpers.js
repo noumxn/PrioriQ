@@ -71,6 +71,7 @@ const checkPassword = (password) => {
   if (!regex.test(password)) throw validation.returnRes('BAD_REQUEST', `Password must contain at least 1 number.`);
   let regex2 = /.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?].*/;
   if (!regex2.test(password)) throw validation.returnRes('BAD_REQUEST', `Password must contain at least 1 special character.`);
+  if (!/[A-Z]/.test(password)) throw validation.returnRes('BAD_REQUEST', `Password must contain at least 1 Uppercase character.`);
   let regex3 = /^\S+$/;
   if (!regex3.test(password)) throw validation.returnRes('BAD_REQUEST', `Password can not contain spaces.`)
 }
