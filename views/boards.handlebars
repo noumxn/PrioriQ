@@ -10,10 +10,10 @@
 
 {{!-- <a href="/boardSettings">Board Settings</a> --}}
 
-<div class="card">
+<div class="card" ondrop="drop(event, 'toDo')" ondragover="allowDrop(event)">
   <h1>To-Do</h1>
   {{#each boardTodo}}
-  <div id="todoContainer" class="container1">
+  <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
@@ -28,30 +28,46 @@
   {{/each}}
 
 </div>
-<script src="../public/js/taskToChecklist.js"></script>
 
 
-<div class="card">
+<div class="card" ondrop="drop(event, 'inprogress')" ondragover="allowDrop(event)">
   <h1>In Progress</h1>
   {{#each boardProgress}}
-  <div class="container1">
+  <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
     <p>Name: {{this.taskName}}</p>
     <p>description: {{this.description}}</p>
+    <p>estimated Time: {{this.estimatedTime}}</p>
+    <p>difficulty: {{this.difficulty}}</p>
+    <p>priority: {{this.priority}}</p>
+    <p>description: {{this.description}}</p>
+    <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
+    <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
+      Task</button>
+    <button onclick="addTaskToCheckList('{{this._id}}')">Add To Checklist</button>
   </div>
   {{/each}}
 
 </div>
 
-<div class="card">
+<div class="card" ondrop="drop(event, 'done')" ondragover="allowDrop(event)">
   <h1>Done</h1>
   {{#each boardDone}}
-  <div class="container1">
+  <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
     <p>Name: {{this.taskName}}</p>
     <p>description: {{this.description}}</p>
+    <p>estimated Time: {{this.estimatedTime}}</p>
+    <p>difficulty: {{this.difficulty}}</p>
+    <p>priority: {{this.priority}}</p>
+    <p>description: {{this.description}}</p>
+    <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
+    <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
+      Task</button>
+    <button onclick="addTaskToCheckList('{{this._id}}')">Add To Checklist</button>
   </div>
   {{/each}}
 </div>
-
+<script src="../public/js/taskToChecklist.js"></script>
+<script src="../public/js/dragAndDrop.js"></script>
 <script src="../public/js/deleteTask.js"></script>
 {{!-- js to make form appear --}}
 <script>
@@ -218,112 +234,117 @@
 
   }
 /*
-    let updateForm = document.getElementById('update-task-form');
-    
-        updateForm.addEventListener('submit', function(event){
-  
-         event.preventDefault();
-         
-         cos
-        //const formData = new FormData(this);
-  
-        
-  
-      const priority = formData.get('newPriorityInput');
-      const estimatedTimeH = formData.get('newEstimatedTimeInputH');
-      const estimatedTimeM = formData.get('newEstimatedTimeInputM');
-      const deadline = formData.get('newDeadlineInput');
-      const description = formData.get('newDescriptionInput');
-      const assignedTo = formData.get('newAssignedToInput');
-  
-      const data = {
-        taskName: taskName,
-        priority: priority,
-        estimatedTimeH: estimatedTimeH,
-        estimatedTimeM: estimatedTimeM,
-        deadline: deadline,
-        description: description,
-        assignedTo: assignedTo
-      }
-      const updateForm = document.getElementById('update-task-form');
-      updateForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const url = this.action;
-        const formData = new FormData(this);
-  
-        const taskName = formData.get('newTaskNameInput');
-        const priority = formData.get('newPriorityInput');
-        const estimatedTimeH = formData.get('newEstimatedTimeInputH');
-        const estimatedTimeM = formData.get('newEstimatedTimeInputM');
-        const deadline = formData.get('newDeadlineInput');
-        const description = formData.get('newDescriptionInput');
-        const assignedTo = formData.get('newAssignedToInput');
-  
-        const data = {
-          taskName: taskName,
-          priority: priority,
-          estimatedTimeH: estimatedTimeH,
-          estimatedTimeM: estimatedTimeM,
-          deadline: deadline,
-          description: description,
-          assignedTo: assignedTo
-        }
-  
-        fetch(url, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        })
-          .then(response => response.json())
-          .catch(error => {
-            console.log(error);
-          });
-      });
-  */
+                  let updateForm = document.getElementById('update-task-form');
+                
+                      updateForm.addEventListener('submit', function(event){
+                
+                       event.preventDefault();
+                
+                       cos
+                      //const formData = new FormData(this);
+                
+                
+                
+                    const priority = formData.get('newPriorityInput');
+                    const estimatedTimeH = formData.get('newEstimatedTimeInputH');
+                    const estimatedTimeM = formData.get('newEstimatedTimeInputM');
+                    const deadline = formData.get('newDeadlineInput');
+                    const description = formData.get('newDescriptionInput');
+                    const assignedTo = formData.get('newAssignedToInput');
+                
+                    const data = {
+                      taskName: taskName,
+                      priority: priority,
+                      estimatedTimeH: estimatedTimeH,
+                      estimatedTimeM: estimatedTimeM,
+                      deadline: deadline,
+                      description: description,
+                      assignedTo: assignedTo
+                    }
+                    const updateForm = document.getElementById('update-task-form');
+                    updateForm.addEventListener('submit', function (event) {
+                      event.preventDefault();
+                      const url = this.action;
+                      const formData = new FormData(this);
+                
+                      const taskName = formData.get('newTaskNameInput');
+                      const priority = formData.get('newPriorityInput');
+                      const estimatedTimeH = formData.get('newEstimatedTimeInputH');
+                      const estimatedTimeM = formData.get('newEstimatedTimeInputM');
+                      const deadline = formData.get('newDeadlineInput');
+                      const description = formData.get('newDescriptionInput');
+                      const assignedTo = formData.get('newAssignedToInput');
+                
+                      const data = {
+                        taskName: taskName,
+                        priority: priority,
+                        estimatedTimeH: estimatedTimeH,
+                        estimatedTimeM: estimatedTimeM,
+                        deadline: deadline,
+                        description: description,
+                        assignedTo: assignedTo
+                      }
+                
+                      fetch(url, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                      })
+                        .then(response => response.json())
+                        .catch(error => {
+                          console.log(error);
+                        });
+                    });
+                    */
 
 </script>
 
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none">
   <h2>Update Task</h2>
-  <form id="upTaskForm" method="PATCH">
-    <label for="newtaskNameInput">Task Name</label><br>
-    <input type="taskName" id="newtaskNameInput" name="newtaskNameInput" placeholder="New task name here"><br>
+  <form id="update-task-form" method="PATCH">
+    <h2>Update Task</h2>
+    <form id="upTaskForm" method="PATCH">
+      <label for="newtaskNameInput">Task Name</label><br>
+      <input type="taskName" id="newtaskNameInput" name="newtaskNameInput" placeholder="New task name here"><br>
 
-    {{#if addpriority}}
-    <label for="newPriorityInput">Priority</label><br>
-    <input type="number" id="newPriorityInput" name="newPriorityInput" min="1" max="10"><br>
-    {{else}}
+      {{#if addpriority}}
+      <label for="newPriorityInput">Priority</label><br>
+      <input type="number" id="newPriorityInput" name="newPriorityInput" min="1" max="10"><br>
+      {{else}}
 
-    <label for="newDifficultyInput">Difficulty</label><br>
-    <select name="newDifficultyInput" id="newDifficultyInput">
-      <option value="veryEasy">Very Easy</option>
-      <option value="easy">Easy</option>
-      <option value="medium">Medium</option>
-      <option value="hard">Hard</option>
-      <option value="veryHard">Very Hard</option>
-    </select><br>
+      <label for="newDifficultyInput">Difficulty</label><br>
+      <select name="newDifficultyInput" id="newDifficultyInput">
+        <option value="veryEasy">Very Easy</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+        <option value="veryHard">Very Hard</option>
+      </select><br>
 
-    {{/if}}
+      {{/if}}
 
-    <label for="newEstimatedTimeInput">Estimated Time</label><br>
+      <label for="newEstimatedTimeInput">Estimated Time</label><br>
 
-    <input type="number" id="newEstimatedTimeInputH" name="newEstimatedTimeInputH" min="0" max="100"> hrs
-    <input type="number" id="newEstimatedTimeInputM" name="newEstimatedTimeInputM" min="0" max="59"> min <br>
+      <input type="number" id="newEstimatedTimeInputH" name="newEstimatedTimeInputH" min="0" max="100"> hrs
+      <input type="number" id="newEstimatedTimeInputM" name="newEstimatedTimeInputM" min="0" max="59"> min <br>
 
-    <label for="newDeadlineInput">Deadline</label><br>
-    <input type="datetime-local" id="newDeadlineInput" name="newDeadlineInput"><br>
+      <label for="newDeadlineInput">Deadline</label><br>
+      <input type="datetime-local" id="newDeadlineInput" name="newDeadlineInput"><br>
 
-    <label for="newDescriptionInput">Description</label><br>
-    <input type="description" id="newDescriptionInput" name="newDescriptionInput"
-      placeholder="New description here"><br>
+      <label for="newDescriptionInput">Description</label><br>
+      <input type="description" id="newDescriptionInput" name="newDescriptionInput"
+        placeholder="New description here"><br>
 
-    <label for="newAssignedToInput">Assigned Users</label><br>
-    <p>Type in usernames separated by commas</p>
-    <input type="assignedTo" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
+      <label for="newAssignedToInput">Assigned Users</label><br>
+      <p>Type in usernames separated by commas</p>
+      <input type="assignedTo" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
 
-    <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
-  </form>
+      <button id="update-task-btn" type="submit">Submit</button>
+    </form>
+</div>
+<button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
+</form>
 </div>

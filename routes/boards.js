@@ -14,6 +14,8 @@ router.route("/:id")
     let boardT;
     let boardS;
     let boardD;
+    let boardName;
+    let username;
     boardId = req.params.id;
     console.log("Got the BoardId: ", boardId);
     try {
@@ -67,6 +69,7 @@ router.route("/:id")
     let boardT;
     let boardS;
     let boardD;
+    let boardName;
 
     boardId = req.params.id;
     //console.log(boardId);
@@ -213,6 +216,7 @@ router.route("/update/:taskId")
     let description;
     let assignedTo;
     let userGet;
+    let boardName;
     console.log(taskId);
 
     try {
@@ -386,11 +390,36 @@ router.route("/delete/:taskId")
 router.route("/checklist/:taskId")
   .post(async (req, res) => {
     const taskId = req.params.taskId;
-    console.log(req.session);
-    console.log(req.session.username);
     let username = req.session.user.username;
     try {
       await checkListData.addTaskToCheckList(taskId, username);
+    } catch (e) {
+      console.log(e);
+    }
+  });
+router.route("/todo/:taskId")
+  .post(async (req, res) => {
+    const taskId = req.params.taskId;
+    try {
+      await taskData.moveToToDo(taskId);
+    } catch (e) {
+      console.log(e);
+    }
+  });
+router.route("/inprogress/:taskId")
+  .post(async (req, res) => {
+    const taskId = req.params.taskId;
+    try {
+      await taskData.moveToInProgress(taskId);
+    } catch (e) {
+      console.log(e);
+    }
+  });
+router.route("/done/:taskId")
+  .post(async (req, res) => {
+    const taskId = req.params.taskId;
+    try {
+      await taskData.moveToDone(taskId);
     } catch (e) {
       console.log(e);
     }
