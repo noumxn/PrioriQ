@@ -1,6 +1,7 @@
 import xss from "xss";
 //import axios from "axios";
 import { Router } from "express";
+import xss from 'xss';
 const router = Router();
 
 import { boardData, checkListData, taskData } from "../data/index.js";
@@ -8,6 +9,11 @@ let addpriority = undefined;
 
 router.route("/").get(async (req,res) => {
   return res.status(400).render("../views/error", {err: 'Please input the id of the board you wish to access in the url'});
+})
+
+
+router.route("/").get(async (req, res) => {
+  return res.status(400).render("../views/error", { err: 'Please input the id of the board you wish to access in the url' });
 })
 
 
