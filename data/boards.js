@@ -36,6 +36,7 @@ const exportedMethods = {
     );
 
     validation.strValidCheck(boardName, owner, boardPassword);
+    helper.checkPassword(boardPassword);
     const boardOwner = await userData.getUserByUsername(owner); //
     sortOrder = helper.checkSortOrderValue(priorityScheduling, sortOrder);
 
@@ -144,6 +145,7 @@ const exportedMethods = {
   async getBoardsByUser(username) {
     validation.parameterCheck(username);
     validation.strValidCheck(username);
+    username = helper.checkUsername(username);
 
     const boardCollection = await boards();
 
@@ -200,12 +202,15 @@ const exportedMethods = {
     //uses helper function to get newSortOrder
     newSortOrder = helper.checkSortOrderValue(board.priorityScheduling, newSortOrder);
 
+    helper.checkPassword(newBoardPassword);
+
     if (!passwordsMatch) {
       const saltRounds = parseInt(process.env.SALT_ROUNDS);
       newBoardPassword = await bcrypt.hash(newBoardPassword, saltRounds);
     } else {
       newBoardPassword = board.boardPassword;
     }
+
 
     // TODO: Need to make sure sortOrder is not updated when the board is using the priority setting.
     //       The sortOrder only applies to boards that have the difficulty setting
@@ -255,6 +260,7 @@ async AddUserAllowedUsers(boardId, username) {
   validation.parameterCheck(boardId, username);
   validation.strValidCheck(boardId, username);
   boardId = validation.idCheck(boardId);
+  username = helper.checkUsername(username);
 
   const boardCollection = await boards();
   const board = await this.getBoardById(boardId);
@@ -282,13 +288,13 @@ async AddUserAllowedUsers(boardId, username) {
   if (!newUser) throw validation.returnRes("NOT_FOUND", `No user with that username: ${username}.`);
 
   let newSharedBoards = newUser.sharedBoards;
-  console.log(newUser.firstName);
+  //console.log(newUser.firstName);
 
   
     newSharedBoards.push(boardId);
 
   
-  console.log(newUser._id.toString());
+ // console.log(newUser._id.toString());
   await userCollection.updateOne(
     {_id: new ObjectId(newUser._id.toString())},
     {
@@ -298,7 +304,7 @@ async AddUserAllowedUsers(boardId, username) {
     }
   );
 
-  console.log(newUser.sharedBoards);
+  //console.log(newUser.sharedBoards);
 
 
 
@@ -316,6 +322,7 @@ async AddUserBlockedUsers(boardId, username) {
   validation.parameterCheck(boardId, username);
   validation.strValidCheck(boardId, username);
   boardId = validation.idCheck(boardId);
+  username = helper.checkUsername(username);
 
   const boardCollection = await boards();
   const board = await this.getBoardById(boardId);

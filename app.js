@@ -65,7 +65,9 @@ app.use('/usersettings', (req,res,next) =>{
     next();
   }
 });
+
 app.use('/boards', (req,res,next) =>{
+
   if(!req.session.user){
     return res.redirect('/login');
   }else{

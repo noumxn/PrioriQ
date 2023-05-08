@@ -3,6 +3,7 @@ const router = Router();
 import userData from '../data/users.js'
 import helpers from "../data/helpers.js"
 import validation from '../utils/validation.js';
+import xss from 'xss';
 
 router.route('/').get(async (req, res) => {
   //code here for GET THIS ROUTE SHOULD NEVER FIRE BECAUSE OF MIDDLEWARE #1 IN SPECS.
@@ -15,13 +16,13 @@ router
     res.status(200).render("../views/register", {titley: "register", error:false});
   })
   .post(async (req, res) => {
-    let email = req.body.emailAddressInput;
-    let password = req.body.passwordInput;
-    let first = req.body.firstNameInput;
-    let last = req.body.lastNameInput;
-    let user = req.body.usernameInput;
-    let confirm = req.body.confirmPasswordInput;
-    let dob = req.body.dobInput;
+    let email = xss(req.body.emailAddressInput);
+    let password = xss(req.body.passwordInput);
+    let first = xss(req.body.firstNameInput);
+    let last = xss(req.body.lastNameInput);
+    let user = xss(req.body.usernameInput);
+    let confirm = xss(req.body.confirmPasswordInput);
+    let dob = xss(req.body.dobInput);
     if(email === null){
       return res.status(400).render("../views/register", {titley: "register",error:true, e:"Email is missing a value"});
     }
@@ -41,7 +42,7 @@ router
       return res.status(400).render("../views/register", {titley: "register",error:true, e:"Confirm Password is missing a value"});
     }
     if(dob === null){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:"Confirm Password is missing a value"});
+      return res.status(400).render("../views/register", {titley: "register",error:true, e:"DOB is missing a value"});
     }
     let year = dob.substring(0,4); let month=dob.substring(5,7); let day=dob.substring(8);
     first = first.trim(); last = last.trim(); email = email.trim().toLowerCase(); password = password.trim(); confirm = confirm.trim();
@@ -76,6 +77,9 @@ router
     }catch(e){
       return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
     }
+    if (password != confirm) {
+      return res.status(400).render("../views/register", {titley: "register",error:true, e:"Password and confirm password do not match."});
+    }
     try{
       await helpers.checkUsernameUnique(user);
     }catch(e){
@@ -95,8 +99,8 @@ router
     return res.status(200).render("../views/login", {titley:"Login", error:false});
   })
   .post(async (req, res) => {
-    let user = req.body.usernameInput;
-    let password = req.body.passwordInput;
+    let user = xss(req.body.usernameInput);
+    let password = xss(req.body.passwordInput);
     if(user === null){
       return res.status(400).render("../views/login", {titley: "Login",error:true, e:"User is missing a value"});
     }

@@ -84,13 +84,15 @@
     </label>
     <br>
     <label for="sortingInput" id="sorting_label">
+        Scheduling style:
         <select name="sortingInput" id="sortingInput">
             <option value="true">Priority based scheduling</option>
             <option value="false">Difficulty based scheduling</option>
         </select>
     </label>
     <br>
-    <label for="sortOrderInput" id="sort_order_label">
+    <label for="sortOrderInput" id="sort_order_label" style="display:none">
+        Sort order:
         <select name="sortOrderInput" id="sortOrderInput">
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
@@ -102,6 +104,17 @@
 </div>
 <br>
 <script src="../../public/js/checklist.js"></script>
+<script>
+    let priority = document.getElementById('sortingInput');
+    let sortOrder = document.getElementById('sort_order_label');
+    priority.addEventListener('change', function() {
+      if (priority.value === 'false') {
+        sortOrder.style.display = "block";
+      } else {
+        sortOrder.style.display = "none";
+      }
+    });
+  </script>
 
 <script>
     function showJoinBoard() {
@@ -134,5 +147,11 @@
 </form>
 
 </div>
+
 <script src="../public/js/createBoard.js"></script>
 <script src="../public/js/searchBoard.js"></script>
+
+<br>
+
+<a href="/logout">Logout</a>
+
