@@ -8,6 +8,11 @@ import {userData} from "../data/index.js";
 import validation from "../utils/validation.js";
 let addpriority = undefined;
 
+router.route("/").get(async (req,res) => {
+  return res.status(400).render("../views/error", {err: 'Please input the id of the board you wish to access in the url'});
+})
+
+
 router.route("/:id")
   .get( async (req, res) => {
     let boardId;
@@ -141,7 +146,7 @@ router.route("/:id")
       }
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
-      boardD = userGet.Done;
+      boardD = userGet.done;
     
     } catch (e) {
       return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, addpriority:addpriority,  error: true, e:e.message});
@@ -182,13 +187,13 @@ router.route("/:id")
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
       //console.log(userGet);
-     // console.log(userGet.priorityScheduling);
+
       if(userGet.priorityScheduling){
         addpriority = true;
       }
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
-      boardD = userGet.Done;
+      boardD = userGet.done;
     } catch (e) {
       return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
     } 
