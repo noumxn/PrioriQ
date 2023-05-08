@@ -81,6 +81,10 @@ router
   })
   
 router.route("/delete/:boardId")
+  .get(async (req,res) => {
+    let boardId = req.params.boardId;
+    res.redirect("/boardsettings/"+boardId);
+  })
   .post(async (req,res) => {
     let boardId = req.params.boardId;
     let board;
@@ -105,7 +109,12 @@ router.route("/delete/:boardId")
     }
   })
 
-  router.route("/blockUser/:boardId").post(async (req,res) => {
+  router.route("/blockUser/:boardId")
+  .get(async (req,res) => {
+    let boardId = req.params.boardId;
+    res.redirect("/boardsettings/"+boardId);
+  })
+  .post(async (req,res) => {
     let board, blockedUser;
     let boardId = req.params.boardId;
     blockedUser = req.body.blockUserInput;
