@@ -5,6 +5,10 @@ const router = Router();
 import { boardData, checkListData, taskData } from "../data/index.js";
 let addpriority = undefined;
 
+router.route("/").get(async (req,res) => {
+  return res.status(400).render("../views/error", {err: 'Please input the id of the board you wish to access in the url'});
+})
+
 
 router.route("/:id")
   .get(async (req, res) => {
@@ -142,7 +146,7 @@ router.route("/:id")
       console.log(boardT);
       boardS = userGet.inProgress;
       boardD = userGet.done;
-
+    
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }

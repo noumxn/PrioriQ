@@ -67,41 +67,54 @@
 <br>
 <div id="createBoard" style="display:none">
     <h2>Create New Board</h2>
-    <form action="/homepage" method="POST" id="create-board-form">
-        <label for="boardNameInput" id="board_name_label">
-            Enter board name:
-            <input type="text" id="boardNameInput" name="boardNameInput">
-        </label>
-        <br>
-        <label for="boardPasswordInput" id="board_password_label">
-            Enter board password:
-            <input type="password" id="boardPasswordInput" name="boardPasswordInput">
-        </label>
-        <br>
-        <label for="boardConfirmPasswordInput" id="board_confirm_password_label">
-            Confirm board password:
-            <input type="password" id="boardConfirmPasswordInput" name="boardConfirmPasswordInput">
-        </label>
-        <br>
-        <label for="sortingInput" id="sorting_label">
-            <select name="sortingInput" id="sortingInput">
-                <option value="true">Priority based scheduling</option>
-                <option value="false">Difficulty based scheduling</option>
-            </select>
-        </label>
-        <br>
-        <label for="sortOrderInput" id="sort_order_label">
-            <select name="sortOrderInput" id="sortOrderInput">
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-            </select>
-        </label>
-        <br>
-        <button type="submit">Create</button>
-    </form>
+<form action = "/homepage" method="POST" id="create-board-form">
+    <label for="boardNameInput" id="board_name_label">
+        Enter board name:
+        <input type="text" id="boardNameInput" name="boardNameInput">
+    </label>
+    <br>
+    <label for="boardPasswordInput" id="board_password_label">
+        Enter board password:
+        <input type="password" id="boardPasswordInput" name="boardPasswordInput">
+    </label>
+    <br>
+    <label for="boardConfirmPasswordInput" id="board_confirm_password_label">
+        Confirm board password:
+        <input type="password" id="boardConfirmPasswordInput" name="boardConfirmPasswordInput">
+    </label>
+    <br>
+    <label for="sortingInput" id="sorting_label">
+        Scheduling style:
+        <select name="sortingInput" id="sortingInput">
+            <option value="true">Priority based scheduling</option>
+            <option value="false">Difficulty based scheduling</option>
+        </select>
+    </label>
+    <br>
+    <label for="sortOrderInput" id="sort_order_label" style="display:none">
+        Sort order:
+        <select name="sortOrderInput" id="sortOrderInput">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+    </label>
+    <br>
+    <button type="submit">Create</button>
+</form>
 </div>
 <br>
 <script src="../../public/js/checklist.js"></script>
+<script>
+    let priority = document.getElementById('sortingInput');
+    let sortOrder = document.getElementById('sort_order_label');
+    priority.addEventListener('change', function() {
+      if (priority.value === 'false') {
+        sortOrder.style.display = "block";
+      } else {
+        sortOrder.style.display = "none";
+      }
+    });
+  </script>
 
 <script>
     function showJoinBoard() {
@@ -135,6 +148,10 @@
 
 </div>
 
+<script src="../public/js/createBoard.js"></script>
+<script src="../public/js/searchBoard.js"></script>
+
 <br>
 
 <a href="/logout">Logout</a>
+
