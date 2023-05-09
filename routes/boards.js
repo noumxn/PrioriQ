@@ -13,12 +13,6 @@ router.route("/").get(async (req,res) => {
   return res.status(400).render("../views/error", {err: 'Please input the id of the board you wish to access in the url'});
 })
 
-
-router.route("/").get(async (req, res) => {
-  return res.status(400).render("../views/error", { err: 'Please input the id of the board you wish to access in the url' });
-})
-
-
 router.route("/:id")
   .get(async (req, res) => {
     let boardId;
@@ -44,7 +38,7 @@ router.route("/:id")
         addpriority = false;
       }
       boardT = userGet.toDo;
-      console.log(boardT);
+     // console.log(boardT);
       boardS = userGet.inProgress;
       boardD = userGet.done;
 
@@ -86,6 +80,18 @@ router.route("/:id")
     boardId = req.params.id;
     //console.log(boardId);
     taskName = xss(req.body.taskNameInput);
+    try {
+      userGet = await boardData.getBoardById(boardId);
+      boardName = userGet.boardName;
+      if (userGet.priorityScheduling) {
+        addpriority = true;
+      }
+      boardT = userGet.toDo;
+      boardS = userGet.inProgress;
+      boardD = userGet.done;
+    } catch (e) {
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+    }
     if (typeof (xss(req.body.priorityInput)) === 'undefined') {
       priority = null;
     }
@@ -111,16 +117,15 @@ router.route("/:id")
     //console.log(estimatedTime);
     deadline = xss(req.body.deadlineInput);
     deadline = deadline.concat(":00.000Z");
-    console.log(deadline);
+    //console.log(deadline);
     let systemOffset = new Date().getTimezoneOffset();
     let inputDate = new Date(deadline)
     let localDeadline = new Date(inputDate.getTime() - systemOffset * 60 * 1000);
     let utcDeadline = new Date(localDeadline.getTime() - systemOffset * 60 * 1000);
     deadline = utcDeadline.toISOString();
-    description = req.body.descriptionInput;
-    console.log(description);
-    assignedTo = req.body.assignedToInput;
-    console.log(assignedTo);
+    description = xss(req.body.descriptionInput);
+    //console.log(description);
+    assignedTo = xss(req.body.assignedToInput);
     if(assignedTo == ""){
       assignedTo = [];
     }
@@ -128,22 +133,19 @@ router.route("/:id")
       assignedTo = assignedTo.split(",");
     }
     if(assignedTo.length < 1 ){
-      assignedTo.push(board.owner);
+      console.log(userGet);
+      assignedTo.push(userGet.owner);
     }
-
+    //console.log(assignedTo);
     try {
-
-      
       validation.parameterCheck( taskName, estimatedTime, deadline, description, assignedTo);
       validation.strValidCheck(taskName, estimatedTime, description);
       taskName = helpers.checkTaskName(taskName);
       description = helpers.checkDescription(description);
       validation.validDateTimeFormatCheck(deadline);
       validation.arrayValidCheck(assignedTo);
-    
-
     } catch (e) {
-      return res.render("error", { titley: "Error", err: e });
+      return res.render("error", { titley: "Error", err: e.messgae });
     }
 
     try {
@@ -158,23 +160,21 @@ router.route("/:id")
         priority = null;
       }
       boardT = userGet.toDo;
-      console.log(boardT);
+      //console.log(boardT);
       boardS = userGet.inProgress;
       boardD = userGet.done;
+      
     
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
     //create the task
-
     try {
       newTask = await taskData.createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
-
-
-    //get the boards again
+    //get the board again
     try {
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
@@ -187,7 +187,6 @@ router.route("/:id")
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
-    //render the page again
     try {
       res.render("boards", { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
@@ -346,7 +345,7 @@ router.route("/delete/:taskId")
     }
     try {
 
-      console.log(boardId);
+      //console.log(boardId);
       userGet = await boardData.getBoardById(boardId);
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
@@ -358,7 +357,7 @@ router.route("/delete/:taskId")
 
     try {
       await taskData.deleteTask(taskId);
-      console.log("task deleted!")
+      //console.log("task deleted!")
 
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
@@ -368,7 +367,7 @@ router.route("/delete/:taskId")
     try {
       userGet = await boardData.getBoardById(boardId);
       //console.log(userGet);
-      console.log(userGet.priorityScheduling);
+      //console.log(userGet.priorityScheduling);
       if (userGet.priorityScheduling) {
         addpriority = true;
       }

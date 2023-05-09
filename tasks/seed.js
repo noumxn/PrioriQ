@@ -33,8 +33,8 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
   }
   console.log("├─ Adding Boards...");
   try {
-    tomBoard = await boardData.createBoard("First Board", "tom_smith", false, "asc", "Hello123*");
-    johnBoard = await boardData.createBoard("John Board 1", "john_brown", false, "desc", "Hello123*");
+    tomBoard = await boardData.createBoard("First Board", "tom_smith", "false", "asc", "Hello123*");
+    johnBoard = await boardData.createBoard("John Board 1", "john_brown", "false", "desc", "Hello123*");
     //await boardData.AddUserAllowedUsers(tomBoard._id.toString(), "john_brown");
     await boardData.AddUserBlockedUsers(tomBoard._id.toString(), "john_brown");
    // console.log(await userData.getUserById(tom._id.toString()));
