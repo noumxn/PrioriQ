@@ -14,12 +14,14 @@
     "start": "node app.js",
     "dev": "nodemon --exec yarn start",
     "seed": "node ./tasks/seed.js",
-    "seedB": "node ./tasks/seedB.js",
-    "seed3": "node ./tasks/seed3.js"
+    "seedB": "node ./tasks/seedB.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/noumxn/Task-Management-Application.git"
+  },
+  "bugs": {
+    "url": "https://github.com/noumxn/Task-Management-Application.git/issues"
   },
   "license": "MIT",
   "dependencies": {

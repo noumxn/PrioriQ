@@ -1,42 +1,42 @@
 let boardUpdate = document.getElementById("boardsettings-form");
 let blockForm = document.getElementById("blockUserForm");
 
-function checkBoardName(name){
-  if(name == null || name.value.trim().length == 0) {
+function checkBoardName(name) {
+  if (name === null || name.value.trim().length === 0) {
     name.focus();
     throw `Please input a value for Board Name`
   }
 }
-function checkSort(sort){
-  if(sort !== null){
-    if(sort.value.trim() !== 'asc' &&sort.value.trim() !== 'desc'){
+function checkSort(sort) {
+  if (sort !== null) {
+    if (sort.value.trim() !== 'asc' && sort.value.trim() !== 'desc') {
       sort.focus();
       throw `Sort order must be equal to either asc or desc`;
     }
   }
 }
-function checkPass(password){
-  if(password == null || password.value.trim().length == 0){
+function checkPass(password) {
+  if (password === null || password.value.trim().length === 0) {
     password.focus();
     throw `Please input a value for Password`;
   }
-  if(password.value.trim().length < 6 || password.value.trim().length >20){
+  if (password.value.trim().length < 6 || password.value.trim().length > 20) {
     password.focus();
     throw `Password must be between 6 and 20 characters`
   }
-  if(/\s/.test(password.value)){
+  if (/\s/.test(password.value)) {
     password.focus();
     throw `Password cannot contain spaces`;
   }
-  if(!/[A-Z]/.test(password.value) || !/[0-9]/.test(password.value) || !/\W/.test(password.value)){
+  if (!/[A-Z]/.test(password.value) || !/[0-9]/.test(password.value) || !/\W/.test(password.value)) {
     password.focus();
     throw `Password must have at least One uppercase letter, one number, and one special character`
   }
 }
 
-function checkUserName(username){
+function checkUserName(username) {
   let user = username.value.trim().toLowerCase()
-  if (user.length < 3){ 
+  if (user.length < 3) {
     username.focus();
     throw `Username needs to be at least 3 characters long.`;
   }
@@ -57,7 +57,7 @@ function checkUserName(username){
 
 }
 
-if(boardUpdate){
+if (boardUpdate) {
   let bname = document.getElementById("boardNameInput");
   let sortOrder = document.getElementById("sortOrderInput");
   let password = document.getElementById("boardPasswordInput");
@@ -65,40 +65,39 @@ if(boardUpdate){
   let error = document.getElementById("errorDiv");
   boardUpdate.addEventListener('submit', (event) => {
     let serverErr = document.getElementById("serverError");
-    if(serverErr !== null){
+    if (serverErr !== null) {
       serverErr.hidden = true;
     }
     error.hidden = true;
-    try{
+    try {
       checkBoardName(bname);
       checkSort(sortOrder);
       checkPass(password);
-      if(password.value.trim() !== confirm.value.trim()){
+      if (password.value.trim() !== confirm.value.trim()) {
         confirm.focus();
         throw `Confirm password must be the same as Password`
       }
-    }catch(e){
+    } catch (e) {
       event.preventDefault();
       error.hidden = false;
       error.innerHTML = e;
     }
-    
   })
 }
 
-if(blockForm){
+if (blockForm) {
   let blockedUser = document.getElementById("blockUserInput");
   let error = document.getElementById("errorDiv");
-  blockForm.addEventListener('submit', (event) =>{
+  blockForm.addEventListener('submit', (event) => {
     console.log("form submitted")
     let serverErr = document.getElementById("serverError");
-    if(serverErr !== null){
+    if (serverErr !== null) {
       serverErr.hidden = true;
     }
     error.hidden = true;
-    try{
+    try {
       checkUserName(blockedUser);
-    }catch(e){
+    } catch (e) {
       event.preventDefault();
       error.hidden = false;
       error.innerHTML = e;

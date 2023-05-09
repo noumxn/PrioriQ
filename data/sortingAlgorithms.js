@@ -9,7 +9,6 @@ const exportedMethods = {
    * @throws {NOT_FOUND} if boardId doesn't correspond to any board in the Database
    * @return {board} Returns board with tasks appropriately sorted
    **/
-  // NOT TESTED YET
   async difficultyBasedSortAscending(boardId) {
     // Data validation
     validation.parameterCheck(boardId);
@@ -37,7 +36,6 @@ const exportedMethods = {
    * @throws {NOT_FOUND} if boardId doesn't correspond to any board in the Database
    * @return {board} Returns board with tasks appropriately sorted
    **/
-  // NOT TESTED YET
   async difficultyBasedSortDescending(boardId) {
     // Data validation
     validation.parameterCheck(boardId);
@@ -75,16 +73,6 @@ const exportedMethods = {
     const boardCollection = await boards();
     const board = await boardCollection.findOne({ _id: new ObjectId(boardId) });
     if (!board) throw validation.returnRes('NOT_FOUND', `Could not find board with ID: '${boardId}'.`);
-    // board._id = board._id.toString();
-    // for (let i in board.toDo) {
-    //   board.toDo[i]._id = board.toDo[i]._id.toString();
-    // }
-    // for (let i in board.inProgress) {
-    //   board.inProgress[i]._id = board.inProgress[i]._id.toString();
-    // }
-    // for (let i in board.done) {
-    //   board.done[i]._id = board.done[i]._id.toString();
-    // }
 
     // sorting
     if (board.toDo.length >= 1) {

@@ -4,7 +4,7 @@
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
 {{#if blocked}}
-  <p>{{blocked}} has been blocked from this board</p>
+<p>{{blocked}} has been blocked from this board</p>
 {{/if}}
 
 <p>
@@ -21,12 +21,12 @@
     Sort Order:
     <input value="{{sort}}" type="text" name="sortOrderInput" id="sortOrderInput" class="full-width-input">
   </label> --}}
-   <label for="sortOrderInput">
-            Sort Order:
-            <select name="sortOrderInput" id="sortOrderInput" class="full-width-input">
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-            </select>
+  <label for="sortOrderInput">
+    Sort Order:
+    <select name="sortOrderInput" id="sortOrderInput" class="full-width-input">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
   </label>
   <br>
   {{/if}}
@@ -46,30 +46,30 @@
 
 {{!-- EXTRA FEATURE - Block user from board --}}
 
-<form action="/boardsettings/blockUser/{{boardId}}"  method="post" id="blockUserForm">
-<label>
-  Input the username of the user you would like to block from this board:
-<input type="text" placeholder="username" id="blockUserInput" name="blockUserInput">
-</label>
-<button type="submit">Block</button>
+<form action="/boardsettings/blockUser/{{boardId}}" method="post" id="blockUserForm">
+  <label>
+    Input the username of the user you would like to block from this board:
+    <input type="text" placeholder="username" id="blockUserInput" name="blockUserInput">
+  </label>
+  <button type="submit">Block</button>
 </form>
 
 
 <script>
   function confirmDelete(n) {
     const confirm = document.getElementById("delete-form");
-    if (n==1) {
-    confirm.style.display="block";
-  } else {
-    confirm.style.display="none";
-  }
+    if (n === 1) {
+      confirm.style.display = "block";
+    } else {
+      confirm.style.display = "none";
+    }
   }
 </script>
 
 <button onclick="confirmDelete(1)">Click Here to delete this board</button>
 
-<form action="/boardsettings/delete/{{boardId}}" style="display: none"  method="post" id="delete-form">
-<input type="submit" value="Confirm Board Deletion">
+<form action="/boardsettings/delete/{{boardId}}" style="display: none" method="post" id="delete-form">
+  <input type="submit" value="Confirm Board Deletion">
 </form>
 <br>
 <a href="/boards/{{boardId}}">Cancel</a>
