@@ -13,12 +13,12 @@ if (createBoard) {
       serverErr.hidden = true;
     }
 
-    if (name.value.trim().length == 0) {
+    if (name.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a valid board name';
       name.focus();
-    } else if (sorting.value.trim().length == 0) {
+    } else if (sorting.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a valid board name';
@@ -28,7 +28,7 @@ if (createBoard) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a valid board name';
       sorting.focus();
-    } else if (sortingOrder.value.trim().length == 0) {
+    } else if (sortingOrder.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a valid board name';
@@ -38,7 +38,7 @@ if (createBoard) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a valid board name';
       sortingOrder.focus();
-    } else if (password.value.trim().length == 0) {
+    } else if (password.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a value for password'

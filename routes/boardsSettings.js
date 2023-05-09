@@ -25,7 +25,7 @@ router
       res.status(403).render("../views/error", { err: `Only the board owner can access the board settings.` });
     }
     let flag;
-    if (boardGet.priorityScheduling == "false") {
+    if (boardGet.priorityScheduling === "false") {
       flag = true;
       res.status(200).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, sort: boardGet.sortOrder, name: boardGet.boardName, boardId: boardId });
     } else {
@@ -44,7 +44,7 @@ router
     }
     let name = xss(req.body.boardNameInput);
     let sortOrder, flag;
-    if (board.priorityScheduling == "false") {
+    if (board.priorityScheduling === "false") {
       sortOrder = xss(req.body.sortOrderInput);
       flag = true;
     } else {
@@ -124,7 +124,7 @@ router.route("/blockUser/:boardId")
       res.status(401).render("../views/error", { err: `Board with that ID does not exist` });
     }
     let flag;
-    if (board.priorityScheduling == 'false') {
+    if (board.priorityScheduling === 'false') {
       flag = true;
     } else {
       flag = false;
@@ -138,7 +138,7 @@ router.route("/blockUser/:boardId")
       return res.status(e.status).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, sort: board.sortOrder, name: board.boardName, boardId: boardId, error: true, e: e.message });
     }
     try {
-      if (blockedUser == board.owner) {
+      if (blockedUser === board.owner) {
         throw `You cannot block the owner of the board`;
       }
     } catch (e) {

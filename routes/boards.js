@@ -97,7 +97,7 @@ router.route("/:id")
       boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
-      if (userGet.priorityScheduling == "true") {
+      if (userGet.priorityScheduling === "true") {
         addpriority = true;
         difficulty = null;
       }
@@ -149,7 +149,7 @@ router.route("/:id")
       deadline = utcDateString;
       description = xss(req.body.descriptionInput);
       assignedTo = xss(req.body.assignedToInput);
-      if (assignedTo == "") {
+      if (assignedTo === "") {
         assignedTo = [];
       }
       else {
@@ -185,7 +185,7 @@ router.route("/:id")
     try {
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
-      if (userGet.priorityScheduling == "true") {
+      if (userGet.priorityScheduling === "true") {
         addpriority = true;
       }
       boardT = userGet.toDo;
@@ -288,7 +288,7 @@ router.route("/update/:taskId")
       deadline = utcDeadline.toISOString();
 
       assignedTo = xss(req.body.assignedTo);
-      if (assignedTo == "") {
+      if (assignedTo === "") {
         assignedTo = [];
       }
       else {

@@ -2,7 +2,7 @@
 let taskForm = document.getElementById('create-task-form');
 
 function checkTaskName(name) {
-  if (name.value.trim().length == 0) {
+  if (name.value.trim().length === 0) {
     name.focus();
     throw `Please input a value for name`
   }
@@ -12,7 +12,7 @@ function checkTaskName(name) {
   }
 };
 function checkDescription(thing) {
-  if (thing.value.trim().length == 0) {
+  if (thing.value.trim().length === 0) {
     thing.focus();
     throw `Please input a description for the task`;
   }
@@ -48,13 +48,13 @@ function checkTime(time, type) {
     time.focus();
     throw `Must input a number for hours and minutes`;
   }
-  if (type == 'min') {
+  if (type === 'min') {
     if (time < 0 || time > 59) {
       time.focus();
       throw `Minutes must be between 0 and 59`;
     }
   }
-  if (type == 'hour') {
+  if (type === 'hour') {
     if (time < 0 || time > 100) {
       time.focus();
       throw `Hours must be between 0 and 100`;
@@ -77,7 +77,7 @@ function checkPriority(priority) {
 // function load(obj) {
 //   let xhttp = new XMLHttpRequest();
 //   xhttp.onreadystatechange = function () {
-//     if(this.readyState == 4 && this.status == 200){
+//     if(this.readyState === 4 && this.status === 200){
 //       document.getElementById("container1").innerHTML = "hello";
 //     }
 //   };
@@ -108,7 +108,7 @@ if (taskForm) {
   taskForm.addEventListener('submit', (event) => {
     console.log("form Submission fired");
     let serverErr = document.getElementById("serverError");
-    if (serverErr.hidden == false) {
+    if (serverErr.hidden === false) {
       serverErr.hidden = true;
     }
     try {

@@ -22,7 +22,7 @@ if (login) {
       serverErr.hidden = true;
     }
 
-    if (username.value.trim().length == 0) {
+    if (username.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a Valid userName';
@@ -32,7 +32,7 @@ if (login) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Username must be at least 3 characters or less than 20'
       email.focus();
-    } else if (password.value.trim().length == 0) {
+    } else if (password.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a value for password'
@@ -71,7 +71,7 @@ if (registration) {
   let username = document.getElementById('usernameInput');
   let dob = document.getElementById('dobInput');
   let year, month, day, realDate;
-  if (dob.value.length == 10) {
+  if (dob.value.length === 10) {
     year = dob.value.substring(0, 4);
     month = dob.value.substring(5, 7);
     day = dob.value.substring(8);
@@ -87,17 +87,17 @@ if (registration) {
     }
     let format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     //Validate firstName input
-    if (firstName.value.trim().length == 0) {
+    if (firstName.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please enter a value for first name'
       firstName.focus();
-    } else if (/\d/.test(firstName.value.trim()) == true) {
+    } else if (/\d/.test(firstName.value.trim()) === true) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name cannot have numbers'
       firstName.focus();
-    } else if (/^[a-zA-Z]*$/.test(firstName.value.trim()) == false) {
+    } else if (/^[a-zA-Z]*$/.test(firstName.value.trim()) === false) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name can only contain letters'
@@ -112,12 +112,12 @@ if (registration) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a value for last name'
       lastName.focus();
-    } else if (/\d/.test(lastName.value.trim()) == true) {
+    } else if (/\d/.test(lastName.value.trim()) === true) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Last name cannot have numbers'
       lastName.focus();
-    } else if (/^[a-zA-Z]*$/.test(lastName.value.trim()) == false) {
+    } else if (/^[a-zA-Z]*$/.test(lastName.value.trim()) === false) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name can only contain letters'
@@ -126,7 +126,7 @@ if (registration) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Last name must have between 2 and 25 chars'
       lastName.focus();
-    } else if (email.value.trim().length == 0) {
+    } else if (email.value.trim().length === 0) {
       //validate Email
       event.preventDefault();
       errorDiv.hidden = false;
@@ -137,7 +137,7 @@ if (registration) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Email is not correct format'
       email.focus();
-    } else if (dob.value.length == 0) {
+    } else if (dob.value.length === 0) {
       //Validate Dob input
       event.preventDefault();
       errorDiv.hidden = false;
@@ -153,7 +153,7 @@ if (registration) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'You must be 13 years or older to create an account.'
       dob.focus();
-    } else if (username.value.trim().length == 0) {
+    } else if (username.value.trim().length === 0) {
       //validate username
       event.preventDefault();
       errorDiv.hidden = false;
@@ -179,7 +179,7 @@ if (registration) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Username must contain at least 1 letter.'
       username.focus();
-    } else if (password.value.trim().length == 0) {
+    } else if (password.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input value for password'
@@ -228,7 +228,7 @@ if (update) {
   let username = document.getElementById('usernameInput');
   let dob = document.getElementById('dobInput');
   let year, month, day, realDate;
-  if (dob.value.length == 10) {
+  if (dob.value.length === 10) {
     year = dob.value.substring(0, 4);
     month = dob.value.substring(5, 7);
     day = dob.value.substring(8);
@@ -244,17 +244,17 @@ if (update) {
     }
     let format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     //Validate firstName input
-    if (firstName.value.trim().length == 0) {
+    if (firstName.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please enter a value for first name'
       firstName.focus();
-    } else if (/\d/.test(firstName.value.trim()) == true) {
+    } else if (/\d/.test(firstName.value.trim()) === true) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name cannot have numbers'
       firstName.focus();
-    } else if (/^[a-zA-Z]*$/.test(firstName.value.trim()) == false) {
+    } else if (/^[a-zA-Z]*$/.test(firstName.value.trim()) === false) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name can only contain letters'
@@ -269,12 +269,12 @@ if (update) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a value for last name'
       lastName.focus();
-    } else if (/\d/.test(lastName.value.trim()) == true) {
+    } else if (/\d/.test(lastName.value.trim()) === true) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Last name cannot have numbers'
       lastName.focus();
-    } else if (/^[a-zA-Z]*$/.test(lastName.value.trim()) == false) {
+    } else if (/^[a-zA-Z]*$/.test(lastName.value.trim()) === false) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name can only contain letters'
@@ -283,7 +283,7 @@ if (update) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Last name must have between 2 and 25 chars'
       lastName.focus();
-    } else if (email.value.trim().length == 0) {
+    } else if (email.value.trim().length === 0) {
       //validate Email
       event.preventDefault();
       errorDiv.hidden = false;
@@ -294,7 +294,7 @@ if (update) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Email is not correct format'
       email.focus();
-    } else if (dob.value.length == 0) {
+    } else if (dob.value.length === 0) {
       //Validate Dob input
       event.preventDefault();
       errorDiv.hidden = false;
@@ -310,7 +310,7 @@ if (update) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'You must be 13 years or older to create an account.'
       dob.focus();
-    } else if (username.value.trim().length == 0) {
+    } else if (username.value.trim().length === 0) {
       //validate username
       event.preventDefault();
       errorDiv.hidden = false;
@@ -336,7 +336,7 @@ if (update) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Username must contain at least 1 letter.'
       username.focus();
-    } else if (password.value.trim().length == 0) {
+    } else if (password.value.trim().length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input value for password'

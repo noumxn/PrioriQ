@@ -2,7 +2,7 @@ let boardUpdate = document.getElementById("boardsettings-form");
 let blockForm = document.getElementById("blockUserForm");
 
 function checkBoardName(name) {
-  if (name == null || name.value.trim().length == 0) {
+  if (name === null || name.value.trim().length === 0) {
     name.focus();
     throw `Please input a value for Board Name`
   }
@@ -16,7 +16,7 @@ function checkSort(sort) {
   }
 }
 function checkPass(password) {
-  if (password == null || password.value.trim().length == 0) {
+  if (password === null || password.value.trim().length === 0) {
     password.focus();
     throw `Please input a value for Password`;
   }
