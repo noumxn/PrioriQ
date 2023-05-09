@@ -1,6 +1,6 @@
 <h1>{{titley}}</h1>
 
-<div id="error" class="error" hidden>Error</div>
+ <div id="errorDiv" class="error" hidden>Error</div>
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
@@ -97,7 +97,7 @@
   <h2>Create Task</h2>
   <form action="/boards/{{boardId}}" id="create-task-form" method="POST">
     <label for="taskNameInput">Task Name</label><br>
-    <input type="taskName" id="taskNameInput" name="taskNameInput" placeholder="Type task name here"><br>
+    <input type="text" id="taskNameInput" name="taskNameInput" placeholder="Type task name here"><br>
 
     {{#if addpriority}}
     <label for="priorityInput">Priority</label><br>
@@ -115,7 +115,7 @@
 
     {{/if}}
 
-    <label for="estimatedTimeInput">Estimated Time</label><br>
+    <label for="estimatedTimeInputH">Estimated Time</label><br>
 
     <input type="number" id="estimatedTimeInputH" name="estimatedTimeInputH" min="0" max="100"> hrs
     <input type="number" id="estimatedTimeInputM" name="estimatedTimeInputM" min="0" max="59"> min <br>
@@ -124,11 +124,11 @@
     <input type="datetime-local" id="deadlineInput" name="deadlineInput"><br>
 
     <label for="descriptionInput">Description</label><br>
-    <input type="description" id="descriptionInput" name="descriptionInput" placeholder="Type description here"><br>
+    <input type="text" id="descriptionInput" name="descriptionInput" placeholder="Type description here"><br>
 
     <label for="assignedToInput">Assigned Users</label><br>
     <p>Type in usernames separated by commas</p>
-    <input type="assignedTo" id="assignedToInput" name="assignedToInput" placeholder="Type here"><br>
+    <input type="text" id="assignedToInput" name="assignedToInput" placeholder="Type here"><br>
 
     <button type="submit">Submit</button>
   </form>
@@ -203,7 +203,7 @@
     console.log(url);
 
     $.ajax({
-      type: "PATCH",
+      type: "POST",
       url: url,
       data: updateFormData,
       success: function (data) {
@@ -220,9 +220,9 @@
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none">
     <h2>Update Task</h2>
-    <form id="upTaskForm" method="PATCH">
+    <form id="upTaskForm" method="POST">
       <label for="newtaskNameInput">Task Name</label><br>
-      <input type="taskName" id="newtaskNameInput" name="newtaskNameInput" placeholder="New task name here"><br>
+      <input type="text" id="newtaskNameInput" name="newtaskNameInput" placeholder="New task name here"><br>
 
       {{#if addpriority}}
       <label for="newPriorityInput">Priority</label><br>
@@ -240,7 +240,7 @@
 
       {{/if}}
 
-      <label for="newEstimatedTimeInput">Estimated Time</label><br>
+      <label for="newEstimatedTimeInputH">Estimated Time</label><br>
 
       <input type="number" id="newEstimatedTimeInputH" name="newEstimatedTimeInputH" min="0" max="100"> hrs
       <input type="number" id="newEstimatedTimeInputM" name="newEstimatedTimeInputM" min="0" max="59"> min <br>
@@ -249,12 +249,12 @@
       <input type="datetime-local" id="newDeadlineInput" name="newDeadlineInput"><br>
 
       <label for="newDescriptionInput">Description</label><br>
-      <input type="description" id="newDescriptionInput" name="newDescriptionInput"
+      <input type="text" id="newDescriptionInput" name="newDescriptionInput"
         placeholder="New description here"><br>
 
       <label for="newAssignedToInput">Assigned Users</label><br>
       <p>Type in usernames separated by commas</p>
-      <input type="assignedTo" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
+      <input type="text" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
 
       <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
     </form>

@@ -60,7 +60,6 @@ router.route("/:id")
 
   })
   .post(async (req, res) => {
-    //console.log('I got herex');
     let boardId;
     let taskName;
     let priority;
@@ -85,7 +84,6 @@ router.route("/:id")
     //first, we get the board by the boardId
     try {
       boardId = req.params.id;
-      //boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
       //TODO - boolean or string?
@@ -97,12 +95,12 @@ router.route("/:id")
         priority = null;
       }
       boardT = userGet.toDo;
-      console.log(boardT);
       boardS = userGet.inProgress;
       boardD = userGet.done;
     
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+     // console.log(e.status);
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e });
     }
 
 
@@ -135,16 +133,13 @@ router.route("/:id")
       //console.log(estimatedTime);
       deadline = xss(req.body.deadlineInput);
       deadline = deadline.concat(":00.000Z");
-      console.log(deadline);
       systemOffset = new Date().getTimezoneOffset();
       inputDate = new Date(deadline)
       localDeadline = new Date(inputDate.getTime() - systemOffset * 60 * 1000);
       utcDeadline = new Date(localDeadline.getTime() - systemOffset * 60 * 1000);
       deadline = utcDeadline.toISOString();
       description = xss(req.body.descriptionInput);
-      console.log(description);
       assignedTo = xss(req.body.assignedToInput);
-      console.log(assignedTo);
       if(assignedTo == ""){
         assignedTo = [];
       }
@@ -155,7 +150,7 @@ router.route("/:id")
         assignedTo.push(userGet.owner);
       }
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: "Invalid input"});
     }
 
     //we do some more validation here
@@ -200,7 +195,7 @@ router.route("/:id")
   });
 
 router.route("/update/:taskId")
-  .patch(async (req, res) => {
+  .post(async (req, res) => {
     let boardT;
     let boardS;
     let boardD;  

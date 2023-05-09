@@ -157,7 +157,7 @@ if(registration){
     } else if(!/[A-Z]/.test(password.value.trim()) || !/[0-9]/.test(password.value.trim()) || !/\W/.test(password.value.trim())){
       event.preventDefault();
       errorDiv.hidden = false;
-      errorDiv.innerHTML = 'Password must have at least One uppercase letter, one number, and one special character'
+      errorDiv.innerHTML = 'Password must have at least one uppercase letter, one number, and one special character'
       password.focus();
     } else if(password.value.trim() !== passwordConfirm.value.trim()){
       event.preventDefault();
