@@ -44,7 +44,7 @@ router.route("/:id")
       boardD = userGet.done;
 
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: true, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: true, error: true, e: e.message });
     }
     if (userGet.blockedUsers.includes(username)) {
       return res.status(401).render("error", { titley: "Error", err: "You may not join this board." });
@@ -55,7 +55,7 @@ router.route("/:id")
     try {
       return res.render("boards", { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
 
   })
@@ -102,7 +102,7 @@ router.route("/:id")
       boardD = userGet.done;
     
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
 
@@ -141,9 +141,9 @@ router.route("/:id")
       localDeadline = new Date(inputDate.getTime() - systemOffset * 60 * 1000);
       utcDeadline = new Date(localDeadline.getTime() - systemOffset * 60 * 1000);
       deadline = utcDeadline.toISOString();
-      description = req.body.descriptionInput;
+      description = xss(req.body.descriptionInput);
       console.log(description);
-      assignedTo = req.body.assignedToInput;
+      assignedTo = xss(req.body.assignedToInput);
       console.log(assignedTo);
       if(assignedTo == ""){
         assignedTo = [];
@@ -155,7 +155,7 @@ router.route("/:id")
         assignedTo.push(userGet.owner);
       }
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
     //we do some more validation here
@@ -167,7 +167,7 @@ router.route("/:id")
       validation.validDateTimeFormatCheck(deadline);
       validation.arrayValidCheck(assignedTo);
     } catch (e) {
-      return res.render("error", { titley: "Error", err: e.messgae });
+      return res.status(e.status).render("error", { titley: "Error", err: e.message });
     }
 
 
@@ -175,7 +175,7 @@ router.route("/:id")
     try {
       newTask = await taskData.createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
     //get the board again
     try {
@@ -189,12 +189,12 @@ router.route("/:id")
       boardS = userGet.inProgress;
       boardD = userGet.done;
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
     try {
       res.render("boards", { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
 
   });
@@ -239,7 +239,7 @@ router.route("/update/:taskId")
       boardS = board.inProgress;
       boardD = board.done;
     } catch (e) {
-    return res.render("error", { titley:"Error", err: e.message });
+    return res.status(e.status).render("error", { titley:"Error", err: e.message });
   }
 
 
@@ -317,11 +317,10 @@ router.route("/update/:taskId")
 
 
       //console.log(userGet);
-      console.log("hi2")
+      //console.log("hi2")
 
     } catch (e) {
-      console.log(e);
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
     try {
@@ -333,14 +332,13 @@ router.route("/update/:taskId")
       boardD = userGet.done;
 
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
     try {
       let updatedTask = await taskData.updateTask(taskId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
-      console.log(updatedTask);
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
     //get the boards again
@@ -355,13 +353,13 @@ router.route("/update/:taskId")
       boardS = userGet.inProgress;
       boardD = userGet.done;
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
     //render the page again
     try {
-      res.render("boards", { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
+      return res.render("boards", { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
 
 
@@ -379,7 +377,7 @@ router.route("/delete/:taskId")
       const board = await taskData.getBoardByTaskId(taskId);
       boardId = board._id.toString();
     } catch (e) {
-      console.log(e);
+      return res.status(e.status).render("error", { titley: "Error", err: e.message });
     }
     try {
 
@@ -390,15 +388,14 @@ router.route("/delete/:taskId")
       boardD = userGet.done;
 
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
     try {
       await taskData.deleteTask(taskId);
-      //console.log("task deleted!")
 
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
     //get the boards again
@@ -413,13 +410,14 @@ router.route("/delete/:taskId")
       boardS = userGet.inProgress;
       boardD = userGet.done;
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
     //render the page again
+    //TODO - added return here
     try {
-      res.render("boards", { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
+      return res.render("boards", { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
   });
 
@@ -441,7 +439,7 @@ router.route("/checklist/:taskId")
         await checkListData.addTaskToCheckList(taskId, username);
       }
     } catch (e) {
-      return res.render("error", { titley: "Error", err: e.messgae });
+      return res.status(e.status).render("error", { titley: "Error", err: e.message });
     }
   });
 router.route("/todo/:taskId")
@@ -471,7 +469,7 @@ router.route("/todo/:taskId")
 
       return res.redirect(`/boards/${boardIdStr}`);
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
   });
 router.route("/inprogress/:taskId")
@@ -501,7 +499,7 @@ router.route("/inprogress/:taskId")
 
       return res.redirect(`/boards/${boardIdStr}`);
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
   });
 
@@ -533,7 +531,7 @@ router.route("/done/:taskId")
 
       return res.redirect(`/boards/${boardIdStr}`);
     } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
   });
 

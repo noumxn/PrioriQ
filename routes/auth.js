@@ -50,32 +50,32 @@ router
     try{
       first = helpers.checkName(first);
     }catch(e){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
+      return res.status(e.status).render("../views/register", {titley: "register",error:true, e:e.message})
     }
     try{
       last = helpers.checkName(last);
     }catch(e){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
+      return res.status(e.status).render("../views/register", {titley: "register",error:true, e:e.message})
     }
     try{
       helpers.checkAge(dob);
     }catch(e){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
+      return res.status(e.status).render("../views/register", {titley: "register",error:true, e:e.message})
     }
     try{
       email = helpers.checkEmail(email);
     }catch(e){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
+      return res.status(e.status).render("../views/register", {titley: "register",error:true, e:e.message})
     }
     try{
       user = helpers.checkUsername(user);
     }catch(e){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
+      return res.status(e.status).render("../views/register", {titley: "register",error:true, e:e.message})
     }
     try{
       helpers.checkPassword(password);
     }catch(e){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
+      return res.status(e.status).render("../views/register", {titley: "register",error:true, e:e.message})
     }
     if (password != confirm) {
       return res.status(400).render("../views/register", {titley: "register",error:true, e:"Password and confirm password do not match."});
@@ -83,13 +83,13 @@ router
     try{
       await helpers.checkUsernameUnique(user);
     }catch(e){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message})
+      return res.status(e.status).render("../views/register", {titley: "register",error:true, e:e.message})
     }
     try{
       await userData.createUser(first, last, dob, email, user, password);
       return res.redirect("/login");
     }catch(e){
-      return res.status(400).render("../views/register", {titley: "register",error:true, e:e.message});
+      return res.status(e.status).render("../views/register", {titley: "register",error:true, e:e.message});
     }
   });
 
@@ -110,23 +110,23 @@ router
     try{
       validation.strValidCheck(user, password);
     }catch(e){
-      return res.status(400).render("../views/login", {titley: "Login", error:true, e:"Make sure user and password are valid inputs"});
+      return res.status(e.status).render("../views/login", {titley: "Login", error:true, e:"Make sure user and password are valid inputs"});
     }
     try{
       user = helpers.checkUsername(user);
     }catch{
-      return res.status(400).render("../views/login", {titley: "Login", error:true, e:e.message});
+      return res.status(e.status).render("../views/login", {titley: "Login", error:true, e:e.message});
     }
     try{
       helpers.checkPassword(password);
     }catch{
-      return res.status(400).render("../views/login", {titley: "Login", error:true, e:e.message});
+      return res.status(e.status).render("../views/login", {titley: "Login", error:true, e:e.message});
     }
     try{
       req.session.user = await userData.authenticateUser(user, password);
       return res.status(200).redirect("/homepage");
     }catch(e){
-      return res.status(400).render("../views/login", {titley: "Login",error:true, e:e.message});
+      return res.status(e.status).render("../views/login", {titley: "Login",error:true, e:e.message});
     }
   });
 
