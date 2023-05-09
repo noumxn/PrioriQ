@@ -3,66 +3,30 @@ function allowDrop(event) {
 }
 
 function drag(event) {
-  event.dataTransfer.setData("text", event.target.id);
-  event.dataTransfer.setData("taskId", event.target.dataset.taskId);
+  const taskId = event.target.dataset.taskId;
+  event.dataTransfer.setData("text/plain", taskId);
+  event.currentTarget.style.backgroundColor = "lightgray";
 }
-
 
 function drop(event, boardType) {
   event.preventDefault();
-  const taskId = event.dataTransfer.getData("taskId");
+  const taskId = event.dataTransfer.getData("text/plain");
 
   // Call the appropriate backend route based on the boardType parameter
   if (boardType === "todo") {
-    fetch(`/boards/todo /${taskId}`, { method: "POST" })
+    fetch(`/boards/todo/${taskId}`, { method: "POST", headers: { 'Content-Type': 'application/json' }, location: '/homepage' })
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Error moving task to To-Do column");
-        }
+        window.location.reload();
       })
-      .then((data) => {
-        // Refresh the board after successful move
-        location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Error moving task to To-Do column");
-      });
   } else if (boardType === "inprogress") {
     fetch(`/boards/inprogress/${taskId}`, { method: "POST" })
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Error moving task to In Progress column");
-        }
+        window.location.reload();
       })
-      .then((data) => {
-        // Refresh the board after successful move
-        location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Error moving task to In Progress column");
-      });
   } else if (boardType === "done") {
     fetch(`/boards/done/${taskId}`, { method: "POST" })
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Error moving task to Done column");
-        }
+        window.location.reload();
       })
-      .then((data) => {
-        // Refresh the board after successful move
-        location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Error moving task to Done column");
-      });
   }
 }
