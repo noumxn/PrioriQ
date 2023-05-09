@@ -1,4 +1,5 @@
 <h1>{{titley}}</h1>
+<h3>Board ID: {{boardId}}</h3>
 
 <div id="error" class="error" hidden>Error</div>
 {{#if error}}
@@ -16,13 +17,11 @@
   <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
-    <p>estimated Time: {{this.estimatedTime}}</p>
-    {{#if addpriority}}
-    <p>priority: {{this.priority}}</p>
-    {{else}}
-    <p>difficulty: {{this.difficulty}}</p>
-    {{/if}}
-    <p>description: {{this.description}}</p>
+    <p>Estimated Time: {{this.estimatedTime}}</p>
+    <p>Priority: {{this.priority}}</p>
+    <p>Difficulty: {{this.difficulty}}</p>
+    <p>Description: {{this.description}}</p>
+    <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
       Task</button>
@@ -38,14 +37,12 @@
   {{#each boardProgress}}
   <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
     <p>Name: {{this.taskName}}</p>
-    <p>description: {{this.description}}</p>
-    <p>estimated Time: {{this.estimatedTime}}</p>
-    {{#if addpriority}}
-    <p>priority: {{this.priority}}</p>
-    {{else}}
-    <p>difficulty: {{this.difficulty}}</p>
-    {{/if}}
-    <p>description: {{this.description}}</p>
+    <p>Deadline: {{this.deadline}}</p>
+    <p>Estimated Time: {{this.estimatedTime}}</p>
+    <p>Priority: {{this.priority}}</p>
+    <p>Difficulty: {{this.difficulty}}</p>
+    <p>Description: {{this.description}}</p>
+    <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
       Task</button>
@@ -60,14 +57,12 @@
   {{#each boardDone}}
   <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
     <p>Name: {{this.taskName}}</p>
-    <p>description: {{this.description}}</p>
-    <p>estimated Time: {{this.estimatedTime}}</p>
-    {{#if addpriority}}
-    <p>priority: {{this.priority}}</p>
-    {{else}}
-    <p>difficulty: {{this.difficulty}}</p>
-    {{/if}}
-    <p>description: {{this.description}}</p>
+    <p>Deadline: {{this.deadline}}</p>
+    <p>Estimated Time: {{this.estimatedTime}}</p>
+    <p>Priority: {{this.priority}}</p>
+    <p>Difficulty: {{this.difficulty}}</p>
+    <p>Description: {{this.description}}</p>
+    <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
       Task</button>
@@ -219,45 +214,45 @@
 
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none">
-    <h2>Update Task</h2>
-    <form id="upTaskForm" method="PATCH">
-      <label for="newtaskNameInput">Task Name</label><br>
-      <input type="taskName" id="newtaskNameInput" name="newtaskNameInput" placeholder="New task name here"><br>
+  <h2>Update Task</h2>
+  <form id="upTaskForm" method="PATCH">
+    <label for="newtaskNameInput">Task Name</label><br>
+    <input type="taskName" id="newtaskNameInput" name="newtaskNameInput" placeholder="New task name here"><br>
 
-      {{#if addpriority}}
-      <label for="newPriorityInput">Priority</label><br>
-      <input type="number" id="newPriorityInput" name="newPriorityInput" min="1" max="10"><br>
-      {{else}}
+    {{#if addpriority}}
+    <label for="newPriorityInput">Priority</label><br>
+    <input type="number" id="newPriorityInput" name="newPriorityInput" min="1" max="10"><br>
+    {{else}}
 
-      <label for="newDifficultyInput">Difficulty</label><br>
-      <select name="newDifficultyInput" id="newDifficultyInput">
-        <option value="veryEasy">Very Easy</option>
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-        <option value="veryHard">Very Hard</option>
-      </select><br>
+    <label for="newDifficultyInput">Difficulty</label><br>
+    <select name="newDifficultyInput" id="newDifficultyInput">
+      <option value="veryEasy">Very Easy</option>
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+      <option value="veryHard">Very Hard</option>
+    </select><br>
 
-      {{/if}}
+    {{/if}}
 
-      <label for="newEstimatedTimeInput">Estimated Time</label><br>
+    <label for="newEstimatedTimeInput">Estimated Time</label><br>
 
-      <input type="number" id="newEstimatedTimeInputH" name="newEstimatedTimeInputH" min="0" max="100"> hrs
-      <input type="number" id="newEstimatedTimeInputM" name="newEstimatedTimeInputM" min="0" max="59"> min <br>
+    <input type="number" id="newEstimatedTimeInputH" name="newEstimatedTimeInputH" min="0" max="100"> hrs
+    <input type="number" id="newEstimatedTimeInputM" name="newEstimatedTimeInputM" min="0" max="59"> min <br>
 
-      <label for="newDeadlineInput">Deadline</label><br>
-      <input type="datetime-local" id="newDeadlineInput" name="newDeadlineInput"><br>
+    <label for="newDeadlineInput">Deadline</label><br>
+    <input type="datetime-local" id="newDeadlineInput" name="newDeadlineInput"><br>
 
-      <label for="newDescriptionInput">Description</label><br>
-      <input type="description" id="newDescriptionInput" name="newDescriptionInput"
-        placeholder="New description here"><br>
+    <label for="newDescriptionInput">Description</label><br>
+    <input type="description" id="newDescriptionInput" name="newDescriptionInput"
+      placeholder="New description here"><br>
 
-      <label for="newAssignedToInput">Assigned Users</label><br>
-      <p>Type in usernames separated by commas</p>
-      <input type="assignedTo" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
+    <label for="newAssignedToInput">Assigned Users</label><br>
+    <p>Type in usernames separated by commas</p>
+    <input type="assignedTo" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
 
-      <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
-    </form>
+    <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
+  </form>
 </div>
 <a href="/boardsettings/{{boardId}}">Click here to edit the board settings</a>
 <br>

@@ -56,8 +56,9 @@ const exportedMethods = {
       priority = null;
     }
     let createdAt = new Date().toUTCString();
+    console.log("CreatedAt UTC: ", createdAt);
     createdAt = new Date(createdAt).toISOString();
-    console.log("Created At: ", createdAt);
+    console.log("CreatedAt ISO: ", createdAt);
 
     //looks for task in database that matches input parameters and calls it duplicate
     //the value of duplicate is either null if nothing is found, or has a value if a task is found
