@@ -2,6 +2,8 @@
 //import axios from "axios";
 import { Router } from "express";
 import xss from 'xss';
+import validation from "../utils/validation.js";
+import helpers from '../data/helpers.js';
 const router = Router();
 
 import { boardData, checkListData, taskData } from "../data/index.js";
@@ -120,19 +122,26 @@ router.route("/:id")
     console.log(description);
     assignedTo = req.body.assignedToInput;
     console.log(assignedTo);
-    assignedTo = assignedTo.split(",");
+    if(assignedTo == ""){
+      assignedTo = [];
+    }
+    else{
+      assignedTo = assignedTo.split(",");
+    }
+    if(assignedTo.length < 1 ){
+      assignedTo.push(board.owner);
+    }
 
     try {
 
-      /*
+      
       validation.parameterCheck( taskName, estimatedTime, deadline, description, assignedTo);
       validation.strValidCheck(taskName, estimatedTime, description);
       taskName = helpers.checkTaskName(taskName);
       description = helpers.checkDescription(description);
       validation.validDateTimeFormatCheck(deadline);
       validation.arrayValidCheck(assignedTo);
-      estimatedTime = helpers.convertEstimatedTimeToMs(estimatedTime);
-      */
+    
 
     } catch (e) {
       return res.render("error", { titley: "Error", err: e });
@@ -158,27 +167,6 @@ router.route("/:id")
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
     //create the task
-
-    //check if identical task is already in database
-
-    /*
-    function checkTask(task){
-      if ((taskName == task.taskName) 
-        && (priority == task.priority) && (difficulty == task.difficulty) 
-        && (estimatedTime == task.estimatedTime) && (deadline == task.deadline) 
-        && (description == task.description) 
-        && (assignedTo == task.assignedTo)) 
-          { console.log("aggggg");};
-        */
-    /*
-    try {
-      
-      boardT.forEach(checkTask);
-
-    } catch (e) {
-      return res.status(400).render('../views/boards', {titley: boardName, boardId:boardId, boardTodo:boardT, boardProgress:boardS, boardDone:boardD, error: true, e:e.message});
-    }
-    */
 
     try {
       newTask = await taskData.createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
@@ -213,7 +201,7 @@ router.route("/update/:taskId")
   .patch(async (req, res) => {
     let boardT;
     let boardS;
-    let boardD;
+    let boardD;  
     let taskId = req.params.taskId;
     let board;
     let boardId;
@@ -227,7 +215,6 @@ router.route("/update/:taskId")
     let description;
     let assignedTo;
     let userGet;
-    let boardName;
     console.log(taskId);
 
     try {
@@ -343,7 +330,6 @@ router.route("/update/:taskId")
 
   });
 
-console.log("0");
 router.route("/delete/:taskId")
   .delete(async (req, res) => {
     console.log("1");
@@ -354,20 +340,15 @@ router.route("/delete/:taskId")
     let boardId;
     let userGet;
     try {
-      console.log("2");
       const board = await taskData.getBoardByTaskId(taskId);
       boardId = board._id.toString();
-      console.log("board ID:", boardId);
     } catch (e) {
       console.log(e);
     }
     try {
-      console.log("3");
-      //boardId = req.params.id;
+
       console.log(boardId);
       userGet = await boardData.getBoardById(boardId);
-      //console.log(userGet);
-      console.log("hi2")
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
       boardD = userGet.done;
@@ -377,7 +358,6 @@ router.route("/delete/:taskId")
     }
 
     try {
-      console.log("4");
       await taskData.deleteTask(taskId);
       console.log("task deleted!")
 

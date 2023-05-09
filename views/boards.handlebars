@@ -8,8 +8,6 @@
 
 {{!--<p>boards yeah! This user has boards</p> --}}
 
-{{!-- <a href="/boardSettings">Board Settings</a> --}}
-
 <div class="card" ondrop="drop(event, 'toDo')" ondragover="allowDrop(event)">
   <h1>To-Do</h1>
   {{#each boardTodo}}
@@ -156,9 +154,7 @@
     const updateTaskDiv = document.getElementById('updateTaskForm');
     const updateTaskForm = document.getElementById('update-task-form');
     currentTaskId = taskId.toString();
-    // updateTaskForm.action = `/boards/update/${currentTaskId}`;
     console.log("task id is", taskId);
-    //let taskId = taskId;
     if (updateTaskDiv.style.display === "none") {
       updateTaskDiv.style.display = "block";
     } else {
@@ -168,12 +164,10 @@
 
   function updateIt() {
 
-    console.log("new", currentTaskId);
     let taskName = document.getElementById("newtaskNameInput").value;
     let priority;
     let difficulty;
 
-    console.log("addPrio is", addpriority);
     if (addpriority == true) {
       priority = document.getElementById("newPriorityInput").value;
       console.log(priority);
