@@ -10,7 +10,7 @@
 
 {{!-- <a href="/boardSettings">Board Settings</a> --}}
 
-<div class="card" ondrop="drop(event, 'toDo')" ondragover="allowDrop(event)">
+<div class="card" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
   <h1>To-Do</h1>
   {{#each boardTodo}}
   <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
@@ -234,47 +234,24 @@
 
   }
 /*
-                    let updateForm = document.getElementById('update-task-form');
-                  
-                        updateForm.addEventListener('submit', function(event){
-                  
-                         event.preventDefault();
-                  
-                         cos
-                        //const formData = new FormData(this);
-                  
-                  
-                  
-                      const priority = formData.get('newPriorityInput');
-                      const estimatedTimeH = formData.get('newEstimatedTimeInputH');
-                      const estimatedTimeM = formData.get('newEstimatedTimeInputM');
-                      const deadline = formData.get('newDeadlineInput');
-                      const description = formData.get('newDescriptionInput');
-                      const assignedTo = formData.get('newAssignedToInput');
-                  
-                      const data = {
-                        taskName: taskName,
-                        priority: priority,
-                        estimatedTimeH: estimatedTimeH,
-                        estimatedTimeM: estimatedTimeM,
-                        deadline: deadline,
-                        description: description,
-                        assignedTo: assignedTo
-                      }
-                      const updateForm = document.getElementById('update-task-form');
-                      updateForm.addEventListener('submit', function (event) {
-                        event.preventDefault();
-                        const url = this.action;
-                        const formData = new FormData(this);
-                  
-                        const taskName = formData.get('newTaskNameInput');
+                      let updateForm = document.getElementById('update-task-form');
+                    
+                          updateForm.addEventListener('submit', function(event){
+                    
+                           event.preventDefault();
+                    
+                           cos
+                          //const formData = new FormData(this);
+                    
+                    
+                    
                         const priority = formData.get('newPriorityInput');
                         const estimatedTimeH = formData.get('newEstimatedTimeInputH');
                         const estimatedTimeM = formData.get('newEstimatedTimeInputM');
                         const deadline = formData.get('newDeadlineInput');
                         const description = formData.get('newDescriptionInput');
                         const assignedTo = formData.get('newAssignedToInput');
-                  
+                    
                         const data = {
                           taskName: taskName,
                           priority: priority,
@@ -284,20 +261,43 @@
                           description: description,
                           assignedTo: assignedTo
                         }
-                  
-                        fetch(url, {
-                          method: 'PATCH',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify(data),
-                        })
-                          .then(response => response.json())
-                          .catch(error => {
-                            console.log(error);
-                          });
-                      });
-                      */
+                        const updateForm = document.getElementById('update-task-form');
+                        updateForm.addEventListener('submit', function (event) {
+                          event.preventDefault();
+                          const url = this.action;
+                          const formData = new FormData(this);
+                    
+                          const taskName = formData.get('newTaskNameInput');
+                          const priority = formData.get('newPriorityInput');
+                          const estimatedTimeH = formData.get('newEstimatedTimeInputH');
+                          const estimatedTimeM = formData.get('newEstimatedTimeInputM');
+                          const deadline = formData.get('newDeadlineInput');
+                          const description = formData.get('newDescriptionInput');
+                          const assignedTo = formData.get('newAssignedToInput');
+                    
+                          const data = {
+                            taskName: taskName,
+                            priority: priority,
+                            estimatedTimeH: estimatedTimeH,
+                            estimatedTimeM: estimatedTimeM,
+                            deadline: deadline,
+                            description: description,
+                            assignedTo: assignedTo
+                          }
+                    
+                          fetch(url, {
+                            method: 'PATCH',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                          })
+                            .then(response => response.json())
+                            .catch(error => {
+                              console.log(error);
+                            });
+                        });
+                        */
 
 </script>
 

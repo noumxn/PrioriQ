@@ -23,7 +23,6 @@ router.route("/:id")
     let boardName;
     let username;
     boardId = req.params.id;
-    console.log("Got the BoardId: ", boardId);
     try {
       addpriority = false;
       username = req.session.user.username;
@@ -340,20 +339,16 @@ router.route("/delete/:taskId")
     let boardId;
     let userGet;
     try {
-      console.log("2");
       const board = await taskData.getBoardByTaskId(taskId);
       boardId = board._id.toString();
-      console.log("board ID:", boardId);
     } catch (e) {
       console.log(e);
     }
     try {
-      console.log("3");
       //boardId = req.params.id;
       console.log(boardId);
       userGet = await boardData.getBoardById(boardId);
       //console.log(userGet);
-      console.log("hi2")
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
       boardD = userGet.done;
@@ -405,29 +400,90 @@ router.route("/checklist/:taskId")
   });
 router.route("/todo/:taskId")
   .post(async (req, res) => {
+    let boardId;
+    let boardT;
+    let boardS;
+    let boardD;
+    let boardName;
+    let addpriority = false;
     const taskId = req.params.taskId;
     try {
       await taskData.moveToToDo(taskId);
+      let board = await taskData.getBoardByTaskId(taskId);
+      const boardId = board._id;
+      boardName = board.boardName;
+      if (board.priorityScheduling == "true") {
+        addpriority = true;
+      } else {
+        addpriority = false;
+      }
+      boardT = board.toDo;
+      boardS = board.inProgress;
+      boardD = board.done;
+      const boardIdStr = boardId.toString();
+
+      return res.redirect(`/boards/${boardIdStr}`);
     } catch (e) {
-      console.log(e);
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
   });
 router.route("/inprogress/:taskId")
   .post(async (req, res) => {
+    let boardId;
+    let boardT;
+    let boardS;
+    let boardD;
+    let boardName;
+    let addpriority = false;
     const taskId = req.params.taskId;
     try {
       await taskData.moveToInProgress(taskId);
+      let board = await taskData.getBoardByTaskId(taskId);
+      const boardId = board._id;
+      boardName = board.boardName;
+      if (board.priorityScheduling == "true") {
+        addpriority = true;
+      } else {
+        addpriority = false;
+      }
+      boardT = board.toDo;
+      boardS = board.inProgress;
+      boardD = board.done;
+      const boardIdStr = boardId.toString();
+
+      return res.redirect(`/boards/${boardIdStr}`);
     } catch (e) {
-      console.log(e);
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
   });
+
 router.route("/done/:taskId")
   .post(async (req, res) => {
+    let boardId;
+    let boardT;
+    let boardS;
+    let boardD;
+    let boardName;
+    let addpriority = false;
     const taskId = req.params.taskId;
     try {
       await taskData.moveToDone(taskId);
+      let board = await taskData.getBoardByTaskId(taskId);
+      const boardId = board._id;
+      boardName = board.boardName;
+      if (board.priorityScheduling == "true") {
+        addpriority = true;
+      } else {
+        addpriority = false;
+      }
+      boardT = board.toDo;
+      boardS = board.inProgress;
+      boardD = board.done;
+      const boardIdStr = boardId.toString();
+
+      return res.redirect(`/boards/${boardIdStr}`);
     } catch (e) {
-      console.log(e);
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
   });
 
