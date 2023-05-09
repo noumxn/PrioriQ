@@ -36,20 +36,18 @@ const exportedMethods = {
 
     validation.strValidCheck(boardName, owner, boardPassword);
     helper.checkPassword(boardPassword);
-    const boardOwner = await userData.getUserByUsername(owner); 
-    //TODO: change back to boolean
-    /*
-    if (priorityScheduling == "true") {
-      priorityScheduling = true;
-    }
-    else if (priorityScheduling == "false") {
-      priorityScheduling = false;
-    }
+    const boardOwner = await userData.getUserByUsername(owner); //
+    //TODO - removed to store priortyScheduling as a string. Change it back to boolean?
 
-    else {
-      throw validation.returnRes('BAD_REQUEST', `Priority scheduling must be true or false.`);
-    }
-    */
+    // if (priorityScheduling == "true") {
+    //   priorityScheduling = true;
+    // }
+    // else if (priorityScheduling == "false") {
+    //   priorityScheduling = false;
+    // }
+    // else {
+    //   throw validation.returnRes('BAD_REQUEST', `Priority scheduling must be true or false.`);
+    // }
     sortOrder = helper.checkSortOrderValue(priorityScheduling, sortOrder);
 
 
@@ -137,11 +135,11 @@ const exportedMethods = {
 
     board.toDo.forEach(task => { task._id = task._id.toString(); });
     // Sorting the board
-    if (board.priorityScheduling === true) {
+    if (board.priorityScheduling === "true") {
       await sorting.priorityBasedSorting(board._id);
-    } else if (board.priorityScheduling === false && board.sortOrder === 'asc') {
+    } else if (board.priorityScheduling === "false" && board.sortOrder === 'asc') {
       await sorting.difficultyBasedSortAscending(board._id)
-    } else if (board.priorityScheduling === false && board.sortOrder === 'desc') {
+    } else if (board.priorityScheduling === "false" && board.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(board._id)
     }
 
@@ -318,16 +316,11 @@ const exportedMethods = {
 
     console.log(newUser.sharedBoards);
 
-
-
-
-
-
-
     return await this.getBoardById(boardId);
 
   },
 
+  //TODO - what is this?
   async AddUserBlockedUsers(boardId, username) {
     //validation
     validation.parameterCheck(boardId, username);
@@ -337,6 +330,7 @@ const exportedMethods = {
 
   },
 
+  //EXTRA FEATURE - BLOCK USER FROM BOARD
   async AddUserBlockedUsers(boardId, username) {
     //validation
     validation.parameterCheck(boardId, username);

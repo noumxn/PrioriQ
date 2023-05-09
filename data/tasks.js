@@ -56,8 +56,9 @@ const exportedMethods = {
       priority = null;
     }
     let createdAt = new Date().toUTCString();
+    console.log("CreatedAt UTC: ", createdAt);
     createdAt = new Date(createdAt).toISOString();
-    console.log("Created At: ", createdAt);
+    console.log("CreatedAt ISO: ", createdAt);
 
     //looks for task in database that matches input parameters and calls it duplicate
     //the value of duplicate is either null if nothing is found, or has a value if a task is found
@@ -100,7 +101,7 @@ const exportedMethods = {
     } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
     }
-
+    //TODO Does this matter?
     //newTask._id = newTask._id.toString();
 
     return newTask;
@@ -207,6 +208,7 @@ const exportedMethods = {
         throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
       }
     }
+    //TODO - boolean or string
     if (originBoard.priorityScheduling == "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;

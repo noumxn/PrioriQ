@@ -94,14 +94,11 @@ const exportedMethods = {
     validation.parameterCheck(username);
     validation.strValidCheck(username);
     username = helpers.checkUsername(username);
-
-    const userCollection = await users();
+    
     const user = await userData.getUserByUsername(username);
 
     return user.checkList;
   }
-
-
 };
 
 export default exportedMethods;

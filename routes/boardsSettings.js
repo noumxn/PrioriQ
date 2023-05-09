@@ -19,7 +19,7 @@ router
     try{
       boardGet = await boardData.getBoardById(boardId);
     }catch(e){
-      res.status(401).render("../views/error", {err: e.message});
+      res.status(e.status).render("../views/error", {err: e.message});
     }
     if(boardGet.owner !== currentUser.username){
       res.status(403).render("../views/error", {err: `Only the board owner can access the board settings.`});
@@ -27,10 +27,10 @@ router
     let flag;
     if(boardGet.priorityScheduling == "false"){
       flag=true;
-      res.status(200).render("../views/boardSettings", {titley: "Board Settings",  sortBool:flag, sort:boardGet.sortOrder, name:boardGet.boardName, boardId: boardId  })
+      res.status(200).render("../views/boardSettings", {titley: "Board Settings",  sortBool:flag, sort:boardGet.sortOrder, name:boardGet.boardName, boardId: boardId  });
     }else{
       flag = false;
-      res.status(200).render("../views/boardSettings", {titley: "Board Settings",  sortBool:flag, name:boardGet.boardName, boardId: boardId  })
+      res.status(200).render("../views/boardSettings", {titley: "Board Settings",  sortBool:flag, name:boardGet.boardName, boardId: boardId  });
     }
   })
   .post(async (req, res) => {
@@ -45,7 +45,7 @@ router
     let name = xss(req.body.boardNameInput);
     let sortOrder, flag;
     if(board.priorityScheduling == "false"){
-      sortOrder = req.body.sortOrderInput;
+      sortOrder = xss(req.body.sortOrderInput);
       flag = true;
     }else{
       sortOrder = "null";
@@ -67,17 +67,17 @@ router
       //board = await boardData.getBoardById(boardId);
     helpers.checkPassword(password);
     if(password !== confirm){
-      throw `Password and confirm password must match`
+      throw `Password and confirm password must match`;
     }
     
     }catch(e){
-      return res.status(400).render("../views/boardSettings", {titley: "Board Settings",sortBool:flag , sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
+      return res.status(e.status).render("../views/boardSettings", {titley: "Board Settings",sortBool:flag , sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
     }
     try{
       let updatedBoard = await boardData.updateBoard(boardId, name, sortOrder, password);
       res.redirect("/boards/"+boardId);
     }catch(e){
-      return res.status(400).render("../views/boardSettings", {titley: "Board Settings",sortBool:flag , sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
+      return res.status(e.status).render("../views/boardSettings", {titley: "Board Settings",sortBool:flag , sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
     }
   })
   
@@ -93,23 +93,24 @@ router.route("/delete/:boardId")
       boardId = validation.idCheck(boardId);
       board = await boardData.getBoardById(boardId);
     }catch(e){
-      return res.status(400).render("../views/error", {titley: "Board Settings",  err: `No board with that ID`});
+      return res.status(e.status).render("../views/error", {titley: "Board Settings",  err: `No board with that ID`});
     }
     try{
     validation.parameterCheck(boardId);
     validation.strValidCheck(boardId);
     boardId = validation.idCheck(boardId);
     }catch(e){
-      return res.status(400).render("../views/boardSettings", {titley: "Board Settings", error:true, e:e.message});
+      return res.status(e.status).render("../views/boardSettings", {titley: "Board Settings", error:true, e:e.message});
     }
     try{
       let data = await boardData.deleteBoard(boardId);
       res.redirect("/homepage");
-    }catch{
-      return res.status(400).render("../views/boardSettings", {titley: "Board Settings",  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
+    }catch(e){
+      return res.status(e.status).render("../views/boardSettings", {titley: "Board Settings",  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
     }
   })
 
+  //EXTRA FEATURE - BLOCK USER FROM BOARD
   router.route("/blockUser/:boardId")
   .get(async (req,res) => {
     let boardId = req.params.boardId;
@@ -118,7 +119,7 @@ router.route("/delete/:boardId")
   .post(async (req,res) => {
     let board, blockedUser;
     let boardId = req.params.boardId;
-    blockedUser = req.body.blockUserInput;
+    blockedUser = xss(req.body.blockUserInput);
     try{
       boardId = validation.idCheck(boardId);
       board = await boardData.getBoardById(boardId);
@@ -137,20 +138,21 @@ router.route("/delete/:boardId")
       validation.strValidCheck(blockedUser);
       blockedUser = helpers.checkUsername(blockedUser);
     }catch(e){
-      return res.status(400).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
+      return res.status(e.status).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
     }
     try{
       if(blockedUser == board.owner){
         throw `You cannot block the owner of the board`;
       }
     }catch(e){
-      return res.status(400).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e});
+      return res.status(e.status).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e});
     }
     try{
       let newBoard = boardData.AddUserBlockedUsers(boardId, blockedUser);
-      return res.status(400).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, blocked:blockedUser});
+      
+      return res.status(200).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, blocked:blockedUser});
     }catch(e){
-      return res.status(400).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
+      return res.status(e.status).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});
     }
   })
 
