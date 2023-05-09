@@ -51,7 +51,7 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
     task4 = await taskData.createTask(tomBoard._id.toString(), "task4", null, "easy", "00 hour 02 mins", "2023-05-02T18:04:40.576Z", "This is a test task4", ["tom_smith"]);
     task5 = await taskData.createTask(tomBoard._id.toString(), "task5", null, "hard", "00 hour 02 mins", "2023-05-02T17:49:40.576Z", "This is a test task5", ["tom_smith"]);
     task6 = await taskData.createTask(tomBoard._id.toString(), "task6", null, "veryEasy", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task6", ["tom_smith"]);
-    task7 = await taskData.createTask(tomBoard._id.toString(), "task7", null, "medium", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task7", ["tom_smith"]);
+    task7 = await taskData.createTask(tomBoard._id.toString(), "task7", null, "medium", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "https://localhost:3000/login", ["tom_smith"]);
     task8 = await taskData.createTask(tomBoard._id.toString(), "task8", null, "easy", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task8", ["tom_smith"]);
     task9 = await taskData.createTask(tomBoard._id.toString(), "task9", null, "hard", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task9", ["tom_smith"]);
   } catch (e) {

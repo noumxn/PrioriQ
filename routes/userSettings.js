@@ -10,10 +10,14 @@ router.route("/")
     let currentUser = req.session.user;
 
     let month = new Date(currentUser.dob).getMonth() + 1;
+    let day = new Date(currentUser.dob).getDate();
     if (month < 10) {
       month = "0".concat(month);
     }
-    let day = new Date(currentUser.dob).getDate();
+    if (day < 10) {
+      day = "0".concat(day);
+    }
+
     let year = new Date(currentUser.dob).getFullYear();
     let yyMMdd = `${year}-${month}-${day}`;
     return res.status(200).render("../views/userSettings", { titley: "User Settings", error: false, first: currentUser.firstName, last: currentUser.lastName, email: currentUser.email, dob: yyMMdd, user: currentUser.username });

@@ -49,12 +49,23 @@ router.route("/:id")
         userGet.done[task].deadline = new Date(userGet.done[task].deadline).toUTCString()
         userGet.done[task].estimatedTime = formatTime(userGet.done[task].estimatedTime);
       }
+
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
       boardD = userGet.done;
+     // console.log(boardT);
+
+     // for (let i = 0; i < boardT.length; i++) {
+      //  boardT[i].description = helpers.anchorLinks(boardT[i]);
+    //  }
+//
+      //boardT.forEach(helpers.anchorLinks);
+    //  console.log(boardT);
+      //boardS.forEach(helpers.anchorLinks);
+     // boardD.forEach(helpers.anchorLinks);
 
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: true, error: true, e: e.message });
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: true, error: true, e: e });
     }
     if (userGet.blockedUsers.includes(username)) {
       return res.status(401).render("error", { titley: "Error", e: "You may not join this board." });
@@ -159,6 +170,7 @@ router.route("/:id")
       if (assignedTo.length < 1) {
         assignedTo.push(userGet.owner);
       }
+      
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: "Invalid input" });
     }

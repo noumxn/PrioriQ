@@ -11,7 +11,7 @@
 
 {{!-- <a href="/boardSettings">Board Settings</a> --}}
 
-<div class="card" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
+<div id="todo-container" class="card" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
   <h1>To-Do</h1>
   {{#each boardTodo}}
   <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
@@ -23,7 +23,7 @@
     {{else}}
     <p>Difficulty: {{this.difficulty}}</p>
     {{/if}}
-    <p>Description: {{this.description}}</p>
+    <p class="taskDescription">Description: {{this.description}}</p>
     <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
@@ -129,13 +129,13 @@
     <input type="datetime-local" id="deadlineInput" name="deadlineInput"><br>
 
     <label for="descriptionInput">Description</label><br>
-    <input type="text" id="descriptionInput" name="descriptionInput" placeholder="Type description here"><br>
+    <textarea type="text" id="descriptionInput" name="descriptionInput" placeholder="Type description here"></textarea><br>
 
     <label for="assignedToInput">Assigned Users</label><br>
     <p>Type in usernames separated by commas</p>
     <input type="text" id="assignedToInput" name="assignedToInput" placeholder="Type here"><br>
 
-    <button type="submit">Submit</button>
+    <button type="submit" id="add-task">Submit</button>
   </form>
 </div>
 
@@ -147,7 +147,6 @@
   let difficulty;
   let taskId;
   function showUpdateTaskForm(taskId, prior, diffic) {
-    console.log("hi");
     if (diffic === "" && prior !== "") {
       addpriority = true;
       difficulty = null;
@@ -156,12 +155,10 @@
       addpriority = false;
       priority = null;
     }
-    console.log(addpriority);
 
     const updateTaskDiv = document.getElementById('updateTaskForm');
     const updateTaskForm = document.getElementById('update-task-form');
     currentTaskId = taskId.toString();
-    console.log("task id is", taskId);
     if (updateTaskDiv.style.display === "none") {
       updateTaskDiv.style.display = "block";
     } else {
@@ -177,7 +174,6 @@
 
     if (addpriority === true) {
       priority = document.getElementById("newPriorityInput").value;
-      console.log(priority);
     }
     else {
       difficulty = document.getElementById("newDifficultyInput").value;
@@ -221,6 +217,22 @@
   }
 
 </script>
+
+{{!-- <script>
+  function anchorLinks() {
+    //console.log("hu");
+    //let descriptions = document.querySelectorAll('p.taskDescription');
+    for (let i = 0; i < descriptions.length; i++) {
+      //console.log(descriptions[i]);
+    }
+    //description = htmlStr.replace(/&lt;/g , "<");	 
+    //htmlStr = htmlStr.replace(/&gt;/g , ">");     
+    //htmlStr = htmlStr.replace(/&quot;/g , "\"");  
+    //htmlStr = htmlStr.replace(/&#39;/g , "\'");   
+    //htmlStr = htmlStr.replace(/&amp;/g , "&");
+    //return htmlStr;
+}
+</script> --}}
 
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none">
@@ -267,3 +279,4 @@
 <br>
 <a href="/homepage">Back to homepage</a>
 <script src="../public/js/createTask.js"></script>
+{{!-- <script src="../public/js/hyperlink.js"></script> --}}

@@ -323,7 +323,22 @@ const convertEstimatedTimeToMs = (inputTime) => {
   return totalMilliseconds;
 }
 
+const anchorLinks = (task) => {
+  const pattern = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+  let anchoredLinks;
+  let match = task.description.match(pattern);
+  if (match) {
+      anchoredLinks = [];
+      for (let i = 0; i < match.length; i++) {
+        anchoredLinks[i] = String.raw`<a href="${match[i]}">${match[i]}</a>`;
+        task.description = task.description.replace(match[i], anchoredLinks[i]);
+      }
+  }
+  return task;
+}
+
 export default {
+  anchorLinks,
   checkAge,
   checkEmail,
   checkUsername,
