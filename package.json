@@ -23,6 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "ajax": "^0.0.4",
     "ajv": "^8.12.0",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",

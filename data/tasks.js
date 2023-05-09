@@ -47,7 +47,7 @@ const exportedMethods = {
       }
     }
 
-    if (originBoard.priorityScheduling) {
+    if (originBoard.priorityScheduling == "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;
     }
@@ -100,8 +100,8 @@ const exportedMethods = {
     } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
     }
-
-    newTask._id = newTask._id.toString();
+    //TODO Does this matter?
+    //newTask._id = newTask._id.toString();
 
     return newTask;
   },
@@ -207,7 +207,8 @@ const exportedMethods = {
         throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
       }
     }
-    if (originBoard.priorityScheduling) {
+    //TODO - boolean or string
+    if (originBoard.priorityScheduling == "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;
     }
@@ -222,6 +223,9 @@ const exportedMethods = {
     // First checks toDo list, then inProgress, then done.
     // FIXME: This is ugly, but I couldn't find a nicer way to do it.
     updatedInfo = await boardCollection.findOneAndUpdate(
+
+      //should be objectId
+      //only this way so it works 
       { 'toDo._id': new ObjectId(taskId) },
       {
         $set: {
@@ -231,10 +235,12 @@ const exportedMethods = {
       },
       { returnDocument: 'after' });
     if (updatedInfo.lastErrorObject.n !== 0) {
-      return await this.getTaskById(taskId);
+      return await taskId;
     };
 
     updatedInfo = await boardCollection.findOneAndUpdate(
+      //should be objectId
+      //only this way so it works 
       { 'inProgress._id': new ObjectId(taskId) },
       {
         $set: {
@@ -248,6 +254,8 @@ const exportedMethods = {
     };
 
     updatedInfo = await boardCollection.findOneAndUpdate(
+      //should be objectId
+      //only this way so it works 
       { 'done._id': new ObjectId(taskId) },
       {
         $set: {

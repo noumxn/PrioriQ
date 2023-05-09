@@ -17,8 +17,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
-    <p>difficulty: {{this.difficulty}}</p>
+    {{#if addpriority}}
     <p>priority: {{this.priority}}</p>
+    {{else}}
+    <p>difficulty: {{this.difficulty}}</p>
+    {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
@@ -37,8 +40,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>description: {{this.description}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
-    <p>difficulty: {{this.difficulty}}</p>
+    {{#if addpriority}}
     <p>priority: {{this.priority}}</p>
+    {{else}}
+    <p>difficulty: {{this.difficulty}}</p>
+    {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
@@ -56,8 +62,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>description: {{this.description}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
-    <p>difficulty: {{this.difficulty}}</p>
+    {{#if addpriority}}
     <p>priority: {{this.priority}}</p>
+    {{else}}
+    <p>difficulty: {{this.difficulty}}</p>
+    {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
     <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
@@ -147,9 +156,7 @@
     const updateTaskDiv = document.getElementById('updateTaskForm');
     const updateTaskForm = document.getElementById('update-task-form');
     currentTaskId = taskId.toString();
-    // updateTaskForm.action = `/boards/update/${currentTaskId}`;
     console.log("task id is", taskId);
-    //let taskId = taskId;
     if (updateTaskDiv.style.display === "none") {
       updateTaskDiv.style.display = "block";
     } else {
@@ -159,18 +166,16 @@
 
   function updateIt() {
 
-    console.log("new", currentTaskId);
     let taskName = document.getElementById("newtaskNameInput").value;
     let priority;
     let difficulty;
 
-    console.log("addPrio is", addpriority);
     if (addpriority == true) {
       priority = document.getElementById("newPriorityInput").value;
       console.log(priority);
     }
     else {
-      difficulty = document.getElementById("newdifficultyInput").value;
+      difficulty = document.getElementById("newDifficultyInput").value;
     }
 
 
@@ -208,103 +213,12 @@
         console.log(err);
       }
     })
-    /*
-            fetch(url, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updateFormData),
-        })
-        .then(response => response.json())
-        .catch(error => {
-            console.log(error);
-        });
-        */
-
-    //let taskName = upTaskForm.newtaskNameInput.value.toString();
-
-
-    //let taskName = upTaskForm.newtaskNameInput.value.toString();
-
-    //let taskName = .get('newTaskNameInput');
-
-
-
-
   }
-/*
-                      let updateForm = document.getElementById('update-task-form');
-                    
-                          updateForm.addEventListener('submit', function(event){
-                    
-                           event.preventDefault();
-                    
-                           cos
-                          //const formData = new FormData(this);
-                    
-                    
-                    
-                        const priority = formData.get('newPriorityInput');
-                        const estimatedTimeH = formData.get('newEstimatedTimeInputH');
-                        const estimatedTimeM = formData.get('newEstimatedTimeInputM');
-                        const deadline = formData.get('newDeadlineInput');
-                        const description = formData.get('newDescriptionInput');
-                        const assignedTo = formData.get('newAssignedToInput');
-                    
-                        const data = {
-                          taskName: taskName,
-                          priority: priority,
-                          estimatedTimeH: estimatedTimeH,
-                          estimatedTimeM: estimatedTimeM,
-                          deadline: deadline,
-                          description: description,
-                          assignedTo: assignedTo
-                        }
-                        const updateForm = document.getElementById('update-task-form');
-                        updateForm.addEventListener('submit', function (event) {
-                          event.preventDefault();
-                          const url = this.action;
-                          const formData = new FormData(this);
-                    
-                          const taskName = formData.get('newTaskNameInput');
-                          const priority = formData.get('newPriorityInput');
-                          const estimatedTimeH = formData.get('newEstimatedTimeInputH');
-                          const estimatedTimeM = formData.get('newEstimatedTimeInputM');
-                          const deadline = formData.get('newDeadlineInput');
-                          const description = formData.get('newDescriptionInput');
-                          const assignedTo = formData.get('newAssignedToInput');
-                    
-                          const data = {
-                            taskName: taskName,
-                            priority: priority,
-                            estimatedTimeH: estimatedTimeH,
-                            estimatedTimeM: estimatedTimeM,
-                            deadline: deadline,
-                            description: description,
-                            assignedTo: assignedTo
-                          }
-                    
-                          fetch(url, {
-                            method: 'PATCH',
-                            headers: {
-                              'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data),
-                          })
-                            .then(response => response.json())
-                            .catch(error => {
-                              console.log(error);
-                            });
-                        });
-                        */
 
 </script>
 
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none">
-  <h2>Update Task</h2>
-  <form id="update-task-form" method="PATCH">
     <h2>Update Task</h2>
     <form id="upTaskForm" method="PATCH">
       <label for="newtaskNameInput">Task Name</label><br>
@@ -342,11 +256,8 @@
       <p>Type in usernames separated by commas</p>
       <input type="assignedTo" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
 
-      <button id="update-task-btn" type="submit">Submit</button>
+      <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
     </form>
-</div>
-<button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
-</form>
 </div>
 <a href="/boardsettings/{{boardId}}">Click here to edit the board settings</a>
 <br>
