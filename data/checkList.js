@@ -100,8 +100,6 @@ const exportedMethods = {
 
     return user.checkList;
   }
-
-
 };
 
 export default exportedMethods;

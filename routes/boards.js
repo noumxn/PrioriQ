@@ -369,7 +369,6 @@ router.route("/update/:taskId")
 
 router.route("/delete/:taskId")
   .delete(async (req, res) => {
-    console.log("1");
     let boardT;
     let boardS;
     let boardD;
@@ -428,10 +427,21 @@ router.route("/checklist/:taskId")
   .post(async (req, res) => {
     const taskId = req.params.taskId;
     let username = req.session.user.username;
+    let duplicate = false;
+    let checkList = undefined;
     try {
-      await checkListData.addTaskToCheckList(taskId, username);
+      checkList = await checkListData.getCheckListByUsername(username);
+      for (let i = 0; i < checkList.length; i++) {
+        if (checkList[i].taskId == taskId) {
+          duplicate = true;
+          break;
+        }
+      }
+      if (!duplicate) {
+        await checkListData.addTaskToCheckList(taskId, username);
+      }
     } catch (e) {
-      console.log(e);
+      return res.render("error", { titley: "Error", err: e.messgae });
     }
   });
 router.route("/todo/:taskId")
