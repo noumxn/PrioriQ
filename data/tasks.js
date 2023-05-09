@@ -47,7 +47,7 @@ const exportedMethods = {
       }
     }
 
-    if (originBoard.priorityScheduling == "true") {
+    if (originBoard.priorityScheduling === "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;
     }
@@ -61,7 +61,6 @@ const exportedMethods = {
     console.log("CreatedAt ISO: ", createdAt);
 
     //looks for task in database that matches input parameters and calls it duplicate
-    //the value of duplicate is either null if nothing is found, or has a value if a task is found
     let duplicate = await boardCollection.findOne({
       _id: new ObjectId(boardId), 'toDo': {
         $elemMatch: {
@@ -70,7 +69,6 @@ const exportedMethods = {
         }
       }
     });
-    //if duplicate is not null(a duplicate task was found), throw an error
     if (duplicate) {
       throw validation.returnRes('NO_CONTENT', `Task already exists.`);
     }
@@ -101,8 +99,6 @@ const exportedMethods = {
     } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
     }
-    //TODO Does this matter?
-    //newTask._id = newTask._id.toString();
 
     return newTask;
   },
@@ -208,8 +204,7 @@ const exportedMethods = {
         throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
       }
     }
-    //TODO - boolean or string
-    if (originBoard.priorityScheduling == "true") {
+    if (originBoard.priorityScheduling === "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;
     }
@@ -221,12 +216,7 @@ const exportedMethods = {
 
     let updatedInfo = undefined;
 
-    // First checks toDo list, then inProgress, then done.
-    // FIXME: This is ugly, but I couldn't find a nicer way to do it.
     updatedInfo = await boardCollection.findOneAndUpdate(
-
-      //should be objectId
-      //only this way so it works 
       { 'toDo._id': new ObjectId(taskId) },
       {
         $set: {
@@ -240,8 +230,6 @@ const exportedMethods = {
     };
 
     updatedInfo = await boardCollection.findOneAndUpdate(
-      //should be objectId
-      //only this way so it works 
       { 'inProgress._id': new ObjectId(taskId) },
       {
         $set: {
@@ -255,8 +243,6 @@ const exportedMethods = {
     };
 
     updatedInfo = await boardCollection.findOneAndUpdate(
-      //should be objectId
-      //only this way so it works 
       { 'done._id': new ObjectId(taskId) },
       {
         $set: {
@@ -272,14 +258,6 @@ const exportedMethods = {
     if (updatedInfo.lastErrorObject.n === 0) {
       throw validation.returnRes('NOT_FOUND', `No task with given id found.`);
     };
-    // Sorting board to accomodate new task
-    if (boardWithNewTask.value.priorityScheduling === true) {
-      await sorting.priorityBasedSorting(boardWithNewTask.value._id);
-    } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'asc') {
-      await sorting.difficultyBasedSortAscending(boardWithNewTask.value._id)
-    } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'desc') {
-      await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
-    }
 
     if (originalTask.taskName != taskName) {
       await checkListData.updateCheckListItem(taskId, taskName);
@@ -354,16 +332,6 @@ const exportedMethods = {
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'To Do' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
 
-    // Sorting board
-    // NOTE: Probably don't actually need to sort board here. I think sorting a board only when you get a board is enough.
-    if (boardWithMovedTask.value.priorityScheduling === true) {
-      await sorting.priorityBasedSorting(boardWithMovedTask.value._id);
-    } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'asc') {
-      await sorting.difficultyBasedSortAscending(boardWithMovedTask.value._id)
-    } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'desc') {
-      await sorting.difficultyBasedSortDescending(boardWithMovedTask.value._id)
-    }
-
     return await boardData.getBoardById(boardWithMovedTask.value._id);
 
 
@@ -395,16 +363,6 @@ const exportedMethods = {
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'In Progress' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
 
-    // Sorting board
-    // NOTE: Probably don't actually need to sort board here. I think sorting a board only when you get a board is enough.
-    // if (boardWithMovedTask.value.priorityScheduling === true) {
-    //   await sorting.priorityBasedSorting(boardWithMovedTask.value._id);
-    // } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'asc') {
-    //   await sorting.difficultyBasedSortAscending(boardWithMovedTask.value._id)
-    // } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'desc') {
-    //   await sorting.difficultyBasedSortDescending(boardWithMovedTask.value._id)
-    // }
-
     return await boardData.getBoardById(boardWithMovedTask.value._id);
   },
 
@@ -433,16 +391,6 @@ const exportedMethods = {
 
     if (!boardWithMovedTask) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not move task to 'Done' column on board.`)
     boardWithMovedTask.value._id = boardWithMovedTask.value._id.toString();
-
-    // Sorting board
-    // NOTE: Probably don't actually need to sort board here. I think sorting a board only when you get a board is enough.
-    // if (boardWithMovedTask.value.priorityScheduling === true) {
-    //   await sorting.priorityBasedSorting(boardWithMovedTask.value._id);
-    // } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'asc') {
-    //   await sorting.difficultyBasedSortAscending(boardWithMovedTask.value._id)
-    // } else if (boardWithMovedTask.value.priorityScheduling === false && boardWithMovedTask.value.sortOrder === 'desc') {
-    //   await sorting.difficultyBasedSortDescending(boardWithMovedTask.value._id)
-    // }
 
     return await boardData.getBoardById(boardWithMovedTask.value._id);
   }

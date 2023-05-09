@@ -1,7 +1,7 @@
 <h1>{{titley}}</h1>
 <h3>Board ID: {{boardId}}</h3>
 
- <div id="errorDiv" class="error" hidden>Error</div>
+<div id="errorDiv" class="error" hidden>Error</div>
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
@@ -18,8 +18,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>Estimated Time: {{this.estimatedTime}}</p>
+    {{#if ../addpriority}}
     <p>Priority: {{this.priority}}</p>
+    {{else}}
     <p>Difficulty: {{this.difficulty}}</p>
+    {{/if}}
     <p>Description: {{this.description}}</p>
     <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
@@ -39,8 +42,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>Estimated Time: {{this.estimatedTime}}</p>
+    {{#if ../addpriority}}
     <p>Priority: {{this.priority}}</p>
+    {{else}}
     <p>Difficulty: {{this.difficulty}}</p>
+    {{/if}}
     <p>Description: {{this.description}}</p>
     <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
@@ -59,8 +65,11 @@
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>Estimated Time: {{this.estimatedTime}}</p>
+    {{#if ../addpriority}}
     <p>Priority: {{this.priority}}</p>
+    {{else}}
     <p>Difficulty: {{this.difficulty}}</p>
+    {{/if}}
     <p>Description: {{this.description}}</p>
     <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
@@ -73,6 +82,7 @@
 <script src="../public/js/taskToChecklist.js"></script>
 <script src="../public/js/dragAndDrop.js"></script>
 <script src="../public/js/deleteTask.js"></script>
+
 {{!-- js to make form appear --}}
 <script>
   function showCreateTaskForm() {
@@ -270,7 +280,7 @@
     let priority;
     let difficulty;
 
-    if (addpriority == true) {
+    if (addpriority === true) {
       priority = document.getElementById("newPriorityInput").value;
       console.log(priority);
     }
@@ -320,10 +330,10 @@
 
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none">
-    <h2>Update Task</h2>
-    <form id="upTaskForm" method="POST">
-      <label for="newtaskNameInput">Task Name</label><br>
-      <input type="text" id="newtaskNameInput" name="newtaskNameInput" placeholder="New task name here"><br>
+  <h2>Update Task</h2>
+  <form id="upTaskForm" method="POST">
+    <label for="newtaskNameInput">Task Name</label><br>
+    <input type="text" id="newtaskNameInput" name="newtaskNameInput" placeholder="New task name here"><br>
 
     {{#if addpriority}}
     <label for="newPriorityInput">Priority</label><br>
@@ -349,13 +359,12 @@
     <label for="newDeadlineInput">Deadline</label><br>
     <input type="datetime-local" id="newDeadlineInput" name="newDeadlineInput"><br>
 
-      <label for="newDescriptionInput">Description</label><br>
-      <input type="text" id="newDescriptionInput" name="newDescriptionInput"
-        placeholder="New description here"><br>
+    <label for="newDescriptionInput">Description</label><br>
+    <input type="text" id="newDescriptionInput" name="newDescriptionInput" placeholder="New description here"><br>
 
-      <label for="newAssignedToInput">Assigned Users</label><br>
-      <p>Type in usernames separated by commas</p>
-      <input type="text" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
+    <label for="newAssignedToInput">Assigned Users</label><br>
+    <p>Type in usernames separated by commas</p>
+    <input type="text" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
 
     <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
   </form>

@@ -12,7 +12,6 @@ function drop(event, boardType) {
   event.preventDefault();
   const taskId = event.dataTransfer.getData("text/plain");
 
-  // Call the appropriate backend route based on the boardType parameter
   if (boardType === "todo") {
     fetch(`/boards/todo/${taskId}`, { method: "POST", headers: { 'Content-Type': 'application/json' }, location: '/homepage' })
       .then((response) => {
