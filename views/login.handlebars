@@ -1,5 +1,5 @@
 <h1>Login</h1>
-<div id="error" class="error" hidden>Error</div>
+<div id="errorDiv" class="error" hidden>Error</div>
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
@@ -9,7 +9,7 @@
 <form action="/login" method="POST" id="login-form">
   <label for="usernameInput">
     Username:
-    <input type="username" name="usernameInput" id="usernameInput" class="full-width-input">
+    <input type="text" name="usernameInput" id="usernameInput" class="full-width-input">
   </label>
   <br>
   <label for="passwordInput">

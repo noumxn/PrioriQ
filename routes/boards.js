@@ -9,7 +9,7 @@ import { boardData, checkListData, taskData } from "../data/index.js";
 let addpriority = undefined;
 
 router.route("/").get(async (req, res) => {
-  return res.status(400).render("../views/error", { err: 'Please input the id of the board you wish to access in the url' });
+  return res.status(400).render("../views/error", { e: 'Please input the id of the board you wish to access in the url' });
 })
 
 router.route("/:id")
@@ -57,10 +57,10 @@ router.route("/:id")
       return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: true, error: true, e: e.message });
     }
     if (userGet.blockedUsers.includes(username)) {
-      return res.status(401).render("error", { titley: "Error", err: "You may not join this board." });
+      return res.status(401).render("error", { titley: "Error", e: "You may not join this board." });
     }
     if (!userGet.allowedUsers.includes(username)) {
-      return res.status(403).render("error", { titley: "Error", err: "You have not joined this board." });
+      return res.status(403).render("error", { titley: "Error", e: "You have not joined this board." });
     }
     try {
       return res.render("boards", { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
@@ -109,7 +109,8 @@ router.route("/:id")
       boardD = userGet.done;
 
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      // console.log(e.status);
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e });
     }
 
 
@@ -159,7 +160,7 @@ router.route("/:id")
         assignedTo.push(userGet.owner);
       }
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: "Invalid input" });
     }
 
     //we do some more validation here
@@ -171,7 +172,7 @@ router.route("/:id")
       validation.validDateTimeFormatCheck(deadline);
       validation.arrayValidCheck(assignedTo);
     } catch (e) {
-      return res.status(e.status).render("error", { titley: "Error", err: e.message });
+      return res.status(e.status).render("error", { titley: "Error", e: e.message });
     }
 
     //create the task
@@ -203,7 +204,7 @@ router.route("/:id")
   });
 
 router.route("/update/:taskId")
-  .patch(async (req, res) => {
+  .post(async (req, res) => {
     let boardT;
     let boardS;
     let boardD;
@@ -240,7 +241,7 @@ router.route("/update/:taskId")
       boardS = board.inProgress;
       boardD = board.done;
     } catch (e) {
-      return res.status(e.status).render("error", { titley: "Error", err: e.message });
+      return res.status(e.status).render("error", { titley: "Error", e: e.message });
     }
 
 
@@ -320,7 +321,7 @@ router.route("/update/:taskId")
     //get the boards again
     try {
       userGet = await boardData.getBoardById(boardId);
-      if (userGet.priorityScheduling) {
+      if (userGet.priorityScheduling === "true") {
         addpriority = true;
       }
       boardT = userGet.toDo;
@@ -369,7 +370,7 @@ router.route("/delete/:taskId")
     //get the boards again
     try {
       userGet = await boardData.getBoardById(boardId);
-      if (userGet.priorityScheduling) {
+      if (userGet.priorityScheduling === "true") {
         addpriority = true;
       }
       boardT = userGet.toDo;

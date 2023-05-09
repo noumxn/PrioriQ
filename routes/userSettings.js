@@ -8,7 +8,15 @@ const router = Router();
 router.route("/")
   .get(async (req, res) => {
     let currentUser = req.session.user;
-    return res.status(200).render("../views/userSettings", { titley: "User Settings", error: false, first: currentUser.firstName, last: currentUser.lastName, email: currentUser.email, dob: new Date(currentUser.dob), user: currentUser.username });
+
+    let month = new Date(currentUser.dob).getMonth() + 1;
+    if (month < 10) {
+      month = "0".concat(month);
+    }
+    let day = new Date(currentUser.dob).getDate();
+    let year = new Date(currentUser.dob).getFullYear();
+    let yyMMdd = `${year}-${month}-${day}`;
+    return res.status(200).render("../views/userSettings", { titley: "User Settings", error: false, first: currentUser.firstName, last: currentUser.lastName, email: currentUser.email, dob: yyMMdd, user: currentUser.username });
   })
   .post(async (req, res) => {
     const currentUser = req.session.user;

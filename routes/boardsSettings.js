@@ -6,7 +6,7 @@ import validation from '../utils/validation.js';
 const router = Router();
 
 router.route("/").get(async (req, res) => {
-  return res.status(400).render("../views/error", { err: 'Please input the id of the board you wish to access in the url' });
+  return res.status(400).render("../views/error", { e: 'Please input the id of the board you wish to access in the url' });
 });
 
 router
@@ -19,10 +19,10 @@ router
     try {
       boardGet = await boardData.getBoardById(boardId);
     } catch (e) {
-      res.status(e.status).render("../views/error", { err: e.message });
+      res.status(e.status).render("../views/error", { e: e.message });
     }
     if (boardGet.owner !== currentUser.username) {
-      res.status(403).render("../views/error", { err: `Only the board owner can access the board settings.` });
+      res.status(403).render("../views/error", { e: `Only the board owner can access the board settings.` });
     }
     let flag;
     if (boardGet.priorityScheduling === "false") {
@@ -40,7 +40,7 @@ router
       boardId = validation.idCheck(boardId);
       board = await boardData.getBoardById(boardId);
     } catch {
-      res.status(401).render("../views/error", { err: `Board with that ID does not exist` });
+      res.status(401).render("../views/error", { e: `Board with that ID does not exist` });
     }
     let name = xss(req.body.boardNameInput);
     let sortOrder, flag;
@@ -91,7 +91,7 @@ router.route("/delete/:boardId")
       boardId = validation.idCheck(boardId);
       board = await boardData.getBoardById(boardId);
     } catch (e) {
-      return res.status(e.status).render("../views/error", { titley: "Board Settings", err: `No board with that ID` });
+      return res.status(e.status).render("../views/error", { titley: "Board Settings", e: `No board with that ID` });
     }
     try {
       validation.parameterCheck(boardId);
@@ -108,6 +108,7 @@ router.route("/delete/:boardId")
     }
   })
 
+//EXTRA FEATURE - BLOCK USER FROM BOARD
 router.route("/blockUser/:boardId")
   .get(async (req, res) => {
     let boardId = req.params.boardId;
@@ -121,7 +122,7 @@ router.route("/blockUser/:boardId")
       boardId = validation.idCheck(boardId);
       board = await boardData.getBoardById(boardId);
     } catch {
-      res.status(401).render("../views/error", { err: `Board with that ID does not exist` });
+      res.status(401).render("../views/error", { e: `Board with that ID does not exist` });
     }
     let flag;
     if (board.priorityScheduling === 'false') {

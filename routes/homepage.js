@@ -21,14 +21,14 @@ router.route('/')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.render("error", { titley: "Error", err: e.message });
+      return res.render("error", { titley: "Error", e: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.render("error", { titley: "Error", err: e.message });
+      return res.render("error", { titley: "Error", e: e.message });
     }
 
     try {
@@ -51,14 +51,14 @@ router.route('/')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.render("error", { titley: "Error", err: e.message });
+      return res.render("error", { titley: "Error", e: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.render("error", { titley: "Error", err: e.message });
+      return res.render("error", { titley: "Error", e: e.message });
     }
 
     let boardName = undefined;
@@ -108,7 +108,7 @@ router.route('/checklist/:taskId')
       await taskData.moveToDone(taskId);
       await checkListData.completeCheckListItem(taskId, username);
     } catch (e) {
-      return res.status(e.status).render("error", { titley: "Error", err: e.message });
+      return res.status(e.status).render("error", { titley: "Error", e: e.message });
     }
     return res.redirect('/');
   });
@@ -127,14 +127,14 @@ router.route('/searchresult')
       await checkListData.deleteTasksFromCheckList(username);
       userChecklist = await checkListData.getCheckListByUsername(username);
     } catch (e) {
-      return res.status(e.status).render("error", { titley: "Error", err: e.message });
+      return res.status(e.status).render("error", { titley: "Error", e: e.message });
     }
     try {
       for (let i = 0; i < sharedBoardIDs.length; i++) {
         sharedBoards.push(await boardData.getBoardById(sharedBoardIDs[i]));
       }
     } catch (e) {
-      return res.status(e.status).render("error", { titley: "Error", err: e.message });
+      return res.status(e.status).render("error", { titley: "Error", e: e.message });
     }
 
     const boardId = xss(req.body.searchBoardIdInput);
@@ -160,7 +160,7 @@ router.route('/searchresult')
         req.session.user.sharedBoards.push(boardId);
         return res.redirect('/');
       } catch (e) {
-        return res.status(e.status).render("error", { titley: "Error", err: e.message });
+        return res.status(e.status).render("error", { titley: "Error", e: e.message });
       }
     }
     else {
