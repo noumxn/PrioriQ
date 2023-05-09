@@ -56,9 +56,7 @@ const exportedMethods = {
       priority = null;
     }
     let createdAt = new Date().toUTCString();
-    console.log("CreatedAt UTC: ", createdAt);
     createdAt = new Date(createdAt).toISOString();
-    console.log("CreatedAt ISO: ", createdAt);
 
     //looks for task in database that matches input parameters and calls it duplicate
     let duplicate = await boardCollection.findOne({
