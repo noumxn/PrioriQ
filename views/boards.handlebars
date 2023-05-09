@@ -1,5 +1,24 @@
-<h1>{{titley}}</h1>
-<h3>Board ID: {{boardId}}</h3>
+<div id="navBar">
+<div id="leftSide">
+  <h1>{{titley}}</h1>
+  <span>Board ID: {{boardId}}</span>
+</div>
+
+  <div id="RightSide">
+    <a href="/boardsettings/{{boardId}}">
+      <button>Edit board settings</button>
+    </a>
+    <br>
+    <a href="/homepage">
+      <button>Back to homepage</button>
+    </a>
+    <button onclick="showCreateTaskForm()">Create New Task</button>
+  </div>
+</div>
+
+
+
+
 
  <div id="errorDiv" class="error" style="display:none">Error</div>
  <div id="ajaxError" class="error"style="display:none"></div>
@@ -96,7 +115,7 @@
   }
 </script>
 {{!-- button to create task --}}
-<button onclick="showCreateTaskForm()">Create New Task</button>
+
 <br>
 
 <div id="createTaskForm" style="display:none">
@@ -184,7 +203,5 @@
     <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
   </form>
 </div>
-<a href="/boardsettings/{{boardId}}">Click here to edit the board settings</a>
-<br>
-<a href="/homepage">Back to homepage</a>
+
 <script src="../public/js/createTask.js"></script>

@@ -1,56 +1,72 @@
-<h1>{{titley}}</h1>
+<div id="navBar">
+    <div id="leftSide">
+        <h1>{{titley}}</h1>
+        <h2>Welcome, {{user}}.</h2>
+    </div>
+    <div id="RightSide">
+        <a id="userSettings" href="/usersettings">
+            <button class="navButton">User Settings</button>
+        </a>
+            <a href="/logout">
+                <button class="navButton">Logout</button>
+            </a>
+    </div>
+</div>
 
 
-<h2>Welcome, {{user}}.</h2>
+
+
 <div id="errorDiv" class="error" hidden> Hello</div>
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
 <br>
-<a id="userSettings" href="/usersettings">User Settings</a>
-<br>
-<a href="/logout">Logout</a>
 
-<div id="userBoards">
+
+<div id="userBoards" class="card">
     <h2>Boards</h2>
-    <ul>
         {{#each userBoards}}
-        <li>
-            <a href="/boards/{{_id}}">{{boardName}}</a>
-        </li>
-        {{/each}}
-    </ul>
-</div>
-<br>
 
-<div id="sharedBoards">
+        <div id="{{this._id}}" class="container">
+            {{boardName}}
+            <br>
+            <a href="/boards/{{_id}}">
+                <button class="boardButton">Open</button>
+            </a>
+        </div>
+        {{/each}}
+
+</div>
+
+
+<div id="sharedBoards" class="card">
     <h2>Shared Boards</h2>
-    <ul>
         {{#each sharedBoards}}
-        <li>
-            <a href="/boards/{{_id}}">{{boardName}}</a>
-        </li>
+            {{boardName}}
+            <a href="/boards/{{_id}}">
+                <button class="boardButton">Open</button>
+            </a>
         {{/each}}
-    </ul>
+
 </div>
-<br>
 
 
-<div id="userChecklist">
-    <h2>Checklist</h2>
-    <ul>
-        {{#each checklist}}
-        <li>
-            <div>
-                <label for={{taskId}}>{{taskName}}</label>
-                <input type="checkbox" id={{taskId}} class="checklistItem">
-                <br>
+<div class="card">
+    <div id="userChecklist">
+        <h2>Checklist</h2>
+        <ul>
+            {{#each checklist}}
+            <div id="{{this._id}}" class="container">
+                <div>
+                    <label for={{taskId}}>{{taskName}}</label>
+                    <input type="checkbox" id={{taskId}} class="checklistItem">
+                    <br>
+                </div>
             </div>
-        </li>
-        {{/each}}
-    </ul>
+            {{/each}}
+        </ul>
     <!--<button type="submit" id="checklistButton">Mark tasks as completed</button>-->
-
+    </div>
 </div>
 <br>
 

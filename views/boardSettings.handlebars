@@ -7,9 +7,9 @@
 <p>{{blocked}} has been blocked from this board</p>
 {{/if}}
 
-<p>
-  Update Board Settings:
-</p>
+
+<div id="boardSettingsOptions" class="settingsCard">
+  <span>Update Board:</span>
 <form action="/boardsettings/{{boardId}}" method="POST" id="boardsettings-form">
   <label for="boardNameInput">
     Board Name:
@@ -43,9 +43,10 @@
   <button type="submit">Update</button>
   <br>
 </form>
-
+</div>
 {{!-- EXTRA FEATURE - Block user from board --}}
-
+<div id="boardSettingsOptions" class="settingsCard">
+  <span>Block User:</span>
 <form action="/boardsettings/blockUser/{{boardId}}" method="post" id="blockUserForm">
   <label>
     Input the username of the user you would like to block from this board:
@@ -53,7 +54,7 @@
   </label>
   <button type="submit">Block</button>
 </form>
-
+</div>
 
 <script>
   function confirmDelete(n) {

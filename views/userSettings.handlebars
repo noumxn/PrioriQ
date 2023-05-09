@@ -3,9 +3,9 @@
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
-<p>
-  Please enter the following information:
-</p>
+
+<div id="userSettingsOptions" class="settingsCard">
+<span>Please enter the following information:</span>
 <form action="/usersettings" method="POST" id="update-form">
   <label for="firstNameInput">
     First Name:
@@ -44,6 +44,8 @@
   <br>
   <button type="submit">Update</button>
 </form>
+</div>
+
 <br>
 <a href="/homepage">Cancel</a>
 <script src="../public/js/update.js"></script>

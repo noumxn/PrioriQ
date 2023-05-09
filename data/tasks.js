@@ -62,7 +62,7 @@ const exportedMethods = {
     let duplicate = await boardCollection.findOne({
       _id: new ObjectId(boardId), 'toDo': {
         $elemMatch: {
-          taskName: taskName, priority: priority, difficulty: difficulty,
+          taskName: taskName,
           estimatedTime: estimatedTime, deadline: deadline, description: description, assignedTo: assignedTo
         }
       }
