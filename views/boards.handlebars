@@ -2,6 +2,7 @@
 
 <div id="error" class="error" hidden>Error</div>
 {{#if error}}
+hi
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
 
@@ -210,7 +211,8 @@
         location.reload();
       },
       error: function (err) {
-        console.log(err);
+        console.log("yow");
+        location.reload();
       }
     })
   }

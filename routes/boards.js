@@ -38,7 +38,7 @@ router.route("/:id")
       boardName = userGet.boardName;
       //console.log("Priority scheduling is now");
       //console.log(userGet.priorityScheduling);
-      if (userGet.priorityScheduling == true) {
+      if (userGet.priorityScheduling == "true") {
         addpriority = true;
       } else {
         addpriority = false;
@@ -103,8 +103,7 @@ router.route("/:id")
       boardT = userGet.toDo;
       console.log(boardT);
       boardS = userGet.inProgress;
-      boardD = userGet.done;
-    
+      boardD = userGet.done;   
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
@@ -159,6 +158,7 @@ router.route("/:id")
         assignedTo.push(userGet.owner);
       }
     } catch (e) {
+      console.log(e);
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
@@ -172,9 +172,11 @@ router.route("/:id")
       description = helpers.checkDescription(description);
       validation.validDateTimeFormatCheck(deadline);
       validation.arrayValidCheck(assignedTo);
+     
     
 
     } catch (e) {
+      console.log('you get here');
       return res.render("error", { titley: "Error", err: e });
     }
 
@@ -183,7 +185,9 @@ router.route("/:id")
 
     try {
       newTask = await taskData.createTask(boardId, taskName, priority, difficulty, estimatedTime, deadline, description, assignedTo);
+      
     } catch (e) {
+      console.log('in here!')
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
@@ -228,7 +232,8 @@ router.route("/update/:taskId")
     let description;
     let assignedTo;
     let userGet;
-    let addpriority
+    let addpriority;
+    let boardName;
     console.log(taskId);
 
     try {
@@ -237,6 +242,7 @@ router.route("/update/:taskId")
       taskId = xss(req.body.taskId);
       board = await taskData.getBoardByTaskId(taskId);
       boardId = board._id.toString();
+      boardName = board.boardName;
 
 
       if (board.priorityScheduling) {
@@ -331,7 +337,13 @@ router.route("/update/:taskId")
       console.log("hi2")
 
     } catch (e) {
-      console.log(e);
+      console.log(e.message);
+      console.log(boardName);
+      console.log(boardId);
+      console.log(boardT);
+      console.log(boardS);
+      console.log(boardD);
+      console.log(addpriority);
       return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
