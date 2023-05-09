@@ -47,7 +47,7 @@ const exportedMethods = {
       }
     }
 
-    if (originBoard.priorityScheduling) {
+    if (originBoard.priorityScheduling == "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;
     }
@@ -101,7 +101,7 @@ const exportedMethods = {
       await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
     }
 
-    newTask._id = newTask._id.toString();
+    //newTask._id = newTask._id.toString();
 
     return newTask;
   },
@@ -207,7 +207,7 @@ const exportedMethods = {
         throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
       }
     }
-    if (originBoard.priorityScheduling) {
+    if (originBoard.priorityScheduling == "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;
     }
@@ -225,7 +225,7 @@ const exportedMethods = {
 
       //should be objectId
       //only this way so it works 
-      { 'toDo._id': taskId },
+      { 'toDo._id': new ObjectId(taskId) },
       {
         $set: {
           'toDo.$.createdAt': createdAt, 'toDo.$.taskName': taskName, 'toDo.$.priority': priority, 'toDo.$.difficulty': difficulty,
@@ -240,7 +240,7 @@ const exportedMethods = {
     updatedInfo = await boardCollection.findOneAndUpdate(
       //should be objectId
       //only this way so it works 
-      { 'inProgress._id': taskId },
+      { 'inProgress._id': new ObjectId(taskId) },
       {
         $set: {
           'inProgress.$.createdAt': createdAt, 'inProgress.$.taskName': taskName, 'inProgress.$.priority': priority, 'inProgress.$.difficulty': difficulty,
@@ -255,7 +255,7 @@ const exportedMethods = {
     updatedInfo = await boardCollection.findOneAndUpdate(
       //should be objectId
       //only this way so it works 
-      { 'done._id': new taskId },
+      { 'done._id': new ObjectId(taskId) },
       {
         $set: {
           'done.$.createdAt': createdAt, 'done.$.taskName': taskName, 'done.$.priority': priority, 'done.$.difficulty': difficulty,

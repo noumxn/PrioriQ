@@ -32,7 +32,7 @@ router.route("/:id")
       boardName = userGet.boardName;
       //console.log("Priority scheduling is now");
       //console.log(userGet.priorityScheduling);
-      if (userGet.priorityScheduling == true) {
+      if (userGet.priorityScheduling == "true") {
         addpriority = true;
       } else {
         addpriority = false;
@@ -87,7 +87,7 @@ router.route("/:id")
       //boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
-      if (userGet.priorityScheduling) {
+      if (userGet.priorityScheduling == "true") {
         addpriority = true;
         difficulty = null;
       }
@@ -179,7 +179,7 @@ router.route("/:id")
     try {
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
-      if (userGet.priorityScheduling) {
+      if (userGet.priorityScheduling == "true") {
         addpriority = true;
       }
       boardT = userGet.toDo;

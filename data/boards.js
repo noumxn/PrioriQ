@@ -37,15 +37,15 @@ const exportedMethods = {
     validation.strValidCheck(boardName, owner, boardPassword);
     helper.checkPassword(boardPassword);
     const boardOwner = await userData.getUserByUsername(owner); //
-    if (priorityScheduling == "true") {
-      priorityScheduling = true;
-    }
-    else if (priorityScheduling == "false") {
-      priorityScheduling = false;
-    }
-    else {
-      throw validation.returnRes('BAD_REQUEST', `Priority scheduling must be true or false.`);
-    }
+    // if (priorityScheduling == "true") {
+    //   priorityScheduling = true;
+    // }
+    // else if (priorityScheduling == "false") {
+    //   priorityScheduling = false;
+    // }
+    // else {
+    //   throw validation.returnRes('BAD_REQUEST', `Priority scheduling must be true or false.`);
+    // }
     sortOrder = helper.checkSortOrderValue(priorityScheduling, sortOrder);
 
 

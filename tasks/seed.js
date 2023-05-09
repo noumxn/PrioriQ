@@ -43,17 +43,17 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
   }
   console.log("└─ Adding Tasks...");
   try {
-    task1 = await taskData.createTask(tomBoard._id, "task1", null, "veryEasy", "00 hour 01 mins", "2023-05-02T17:49:40.576Z", "This is a test task1", ["tom_smith"]);
+    task1 = await taskData.createTask(tomBoard._id.toString(), "task1", null, "veryEasy", "00 hour 01 mins", "2023-05-02T17:49:40.576Z", "This is a test task1", ["tom_smith"]);
     //await taskData.updateTask(task1._id.toString(), "updatedtask1", null, "veryEasy", "00 hour 01 mins", "2023-05-02T17:49:40.576Z", "This is a test update", ["tom_smith"]);
    // console.log(await boardData.getBoardById(tomBoard._id.toString()));
-    task2 = await taskData.createTask(tomBoard._id, "task2", null, "veryHard", "00 hour 00 mins", "2023-05-02T18:04:40.576Z", "This is a test task2", ["tom_smith"]);
-    task3 = await taskData.createTask(tomBoard._id, "task3", null, "medium", "00 hour 01 mins", "2023-05-02T17:50:40.576Z", "This is a test task3", ["tom_smith"]);
-    task4 = await taskData.createTask(tomBoard._id, "task4", null, "easy", "00 hour 02 mins", "2023-05-02T18:04:40.576Z", "This is a test task4", ["tom_smith"]);
-    task5 = await taskData.createTask(tomBoard._id, "task5", null, "hard", "00 hour 02 mins", "2023-05-02T17:49:40.576Z", "This is a test task5", ["tom_smith"]);
-    task6 = await taskData.createTask(tomBoard._id, "task6", null, "veryEasy", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task6", ["tom_smith"]);
-    task7 = await taskData.createTask(tomBoard._id, "task7", null, "medium", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task7", ["tom_smith"]);
-    task8 = await taskData.createTask(tomBoard._id, "task8", null, "easy", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task8", ["tom_smith"]);
-    task9 = await taskData.createTask(tomBoard._id, "task9", null, "hard", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task9", ["tom_smith"]);
+    task2 = await taskData.createTask(tomBoard._id.toString(), "task2", null, "veryHard", "00 hour 00 mins", "2023-05-02T18:04:40.576Z", "This is a test task2", ["tom_smith"]);
+    task3 = await taskData.createTask(tomBoard._id.toString(), "task3", null, "medium", "00 hour 01 mins", "2023-05-02T17:50:40.576Z", "This is a test task3", ["tom_smith"]);
+    task4 = await taskData.createTask(tomBoard._id.toString(), "task4", null, "easy", "00 hour 02 mins", "2023-05-02T18:04:40.576Z", "This is a test task4", ["tom_smith"]);
+    task5 = await taskData.createTask(tomBoard._id.toString(), "task5", null, "hard", "00 hour 02 mins", "2023-05-02T17:49:40.576Z", "This is a test task5", ["tom_smith"]);
+    task6 = await taskData.createTask(tomBoard._id.toString(), "task6", null, "veryEasy", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task6", ["tom_smith"]);
+    task7 = await taskData.createTask(tomBoard._id.toString(), "task7", null, "medium", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task7", ["tom_smith"]);
+    task8 = await taskData.createTask(tomBoard._id.toString(), "task8", null, "easy", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task8", ["tom_smith"]);
+    task9 = await taskData.createTask(tomBoard._id.toString(), "task9", null, "hard", "00 hour 10 mins", "2023-05-02T18:04:40.576Z", "This is a test task9", ["tom_smith"]);
   } catch (e) {
     console.log(e);
   }
@@ -65,18 +65,18 @@ import {boardData, taskData, userData, checkListData} from '../data/index.js';
   }
   try {
     console.log("Rearranging Tasks")
-    await taskData.moveToInProgress(task1._id);
+    await taskData.moveToInProgress(task1._id.toString());
    // await taskData.updateTask(task1._id.toString(), "updatedtask1", null, "veryEasy", "00 hour 01 mins", "2023-05-02T17:49:40.576Z", "This is a test update", ["tom_smith"]);
    // console.log(await boardData.getBoardById(tomBoard._id.toString()));
-    await taskData.moveToInProgress(task2._id);
-    await taskData.moveToInProgress(task8._id);
-    await taskData.moveToInProgress(task9._id);
-    await taskData.moveToInProgress(task4._id);
-    await taskData.moveToDone(task6._id);
-    await checkListData.addTaskToCheckList(task2._id, "tom_smith");
-    await checkListData.addTaskToCheckList(task1._id, "tom_smith");
+    await taskData.moveToInProgress(task2._id.toString());
+    await taskData.moveToInProgress(task8._id.toString());
+    await taskData.moveToInProgress(task9._id.toString());
+    await taskData.moveToInProgress(task4._id.toString());
+    await taskData.moveToDone(task6._id.toString());
+    await checkListData.addTaskToCheckList(task2._id.toString(), "tom_smith");
+    await checkListData.addTaskToCheckList(task1._id.toString(), "tom_smith");
     //console.log(await boardData.getBoardById(tomBoard._id));
-    await taskData.moveToDone(task5._id);
+    await taskData.moveToDone(task5._id.toString());
   } catch (e) {
     console.log(e);
   }

@@ -18,9 +18,9 @@
     <p>Deadline: {{this.deadline}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
     {{#if addpriority}}
-    <p>difficulty: {{this.difficulty}}</p>
-    {{else}}
     <p>priority: {{this.priority}}</p>
+    {{else}}
+    <p>difficulty: {{this.difficulty}}</p>
     {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
@@ -41,9 +41,9 @@
     <p>description: {{this.description}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
     {{#if addpriority}}
-    <p>difficulty: {{this.difficulty}}</p>
-    {{else}}
     <p>priority: {{this.priority}}</p>
+    {{else}}
+    <p>difficulty: {{this.difficulty}}</p>
     {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
@@ -63,9 +63,9 @@
     <p>description: {{this.description}}</p>
     <p>estimated Time: {{this.estimatedTime}}</p>
     {{#if addpriority}}
-    <p>difficulty: {{this.difficulty}}</p>
-    {{else}}
     <p>priority: {{this.priority}}</p>
+    {{else}}
+    <p>difficulty: {{this.difficulty}}</p>
     {{/if}}
     <p>description: {{this.description}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
@@ -175,7 +175,7 @@
       console.log(priority);
     }
     else {
-      difficulty = document.getElementById("newdifficultyInput").value;
+      difficulty = document.getElementById("newDifficultyInput").value;
     }
 
 
