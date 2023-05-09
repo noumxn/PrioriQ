@@ -82,7 +82,7 @@ router
 router.route("/delete/:boardId")
   .get(async (req, res) => {
     let boardId = req.params.boardId;
-    res.redirect("/boardsettings/" + boardId);
+    return res.redirect("/boardsettings/" + boardId);
   })
   .post(async (req, res) => {
     let boardId = req.params.boardId;
@@ -112,7 +112,7 @@ router.route("/delete/:boardId")
 router.route("/blockUser/:boardId")
   .get(async (req, res) => {
     let boardId = req.params.boardId;
-    res.redirect("/boardsettings/" + boardId);
+    return res.redirect("/boardsettings/" + boardId);
   })
   .post(async (req, res) => {
     let board, blockedUser;
@@ -130,7 +130,6 @@ router.route("/blockUser/:boardId")
     } else {
       flag = false;
     }
-    console.log(blockedUser);
     try {
       validation.parameterCheck(blockedUser);
       validation.strValidCheck(blockedUser);

@@ -11,10 +11,9 @@
     "Mark Falletta"
   ],
   "scripts": {
-    "start": "node app.js",
     "dev": "nodemon --exec yarn start",
-    "seed": "node ./tasks/seed.js",
-    "seedB": "node ./tasks/seedB.js"
+    "start": "node app.js",
+    "seed": "node ./tasks/seed.js"
   },
   "repository": {
     "type": "git",
