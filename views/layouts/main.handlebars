@@ -4,32 +4,32 @@
 <head>
   <meta charset="utf-8">
   <title>{{titley}}</title>
-  <label for="darkModeToggleInput" class="switch">
-      <input id="darkModeToggleInput" name="darkModeToggleInput" type="checkbox">
-      <span class="slider round"></span>
-    </label>
-  <link rel="stylesheet" href="../../public/css/main.css">
+  <link rel="stylesheet" type="text/css" href="../../public/css/lightmain.css" id="theme">
 </head>
 
 <body>
   <main>
-    <div id="error"></div>
-    {{{body}}}
+    <div id="error"></div>  
+    {{{body}}} 
   </main>
-  <script>
-  function showCreateTaskForm() {
-    const createTask = document.getElementById("createTaskForm");
-    if (createTask.style.display === "none") {
-      createTask.style.display = "block";
-    } else {
-      createTask.style.display = "none";
-    }
-  }
-</script>
 
   <script src="../../public/js/check.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
     crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('#toggle-btn').click(function(){
+        $('link#theme').attr('href', $('link#theme').attr('href').includes('light') ? "../../public/css/darkmain.css" : "../../public/css/lightmain.css");
+        $(this).text($(this).text() == 'Dark Mode' ? 'Light Mode' : 'Dark Mode');
+      });
+    });
+  </script>
 </body>
+<footer>
+<button id="toggle-btn">Dark Mode</button>
+</footer>
+
 
 </html>
