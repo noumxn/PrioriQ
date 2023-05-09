@@ -1,49 +1,49 @@
 <h1>Registration</h1>
 <div id="errorDiv" class="error" hidden> Hello</div>
-  {{#if error}}
-  <div id="serverError" class="error"> {{e}}</div>
-  {{/if}}
-    <p>
-         Please enter following information:
-    </p>
-    <form action="/register" method = "POST" id="registration-form"> 
-    <label for="firstNameInput">
-      First Name:
-      <input type="text" name="firstNameInput" id="firstNameInput"  class="full-width-input" >
-    </label>
-    <br>
-    <label for="lastNameInput">
-      Last Name:
-      <input type="text" name="lastNameInput" id="lastNameInput"  class="full-width-input" >
-    </label>
-     <br>
-    <label for="emailAddressInput">
-      Email:
-      <input type="email" name="emailAddressInput" id="emailAddressInput"  class="full-width-input" >
-    </label>
-     <br>
-    <label for="dobInput">
-      Date of Birth:
-      <input type="date" name="dobInput" id="dobInput">
-    </label>
-     <br>
-    <label for="usernameInput">
-      Username:
-      <input type="username" name="usernameInput" id="usernameInput"  class="full-width-input" >
-    </label>
-     <br>
-    <label for="passwordInput">
-      Password:
-      <input type="password" name="passwordInput" id="passwordInput"  class="full-width-input" >
-    </label>
-     <br>
-    <label for="confirmPasswordInput">
-      Confirm Password:
-      <input type="password" name="confirmPasswordInput" id="confirmPasswordInput"  class="full-width-input" >
-    </label>
-     <br>
-    <button type="submit">Register</button>
-    </form> 
-    <a href="/login">Already have an account? Click here to log-in</a>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
+<p>
+  Please enter following information:
+</p>
+<form action="/register" method="POST" id="registration-form">
+  <label for="firstNameInput">
+    First Name:
+    <input type="text" name="firstNameInput" id="firstNameInput" class="full-width-input">
+  </label>
+  <br>
+  <label for="lastNameInput">
+    Last Name:
+    <input type="text" name="lastNameInput" id="lastNameInput" class="full-width-input">
+  </label>
+  <br>
+  <label for="emailAddressInput">
+    Email:
+    <input type="email" name="emailAddressInput" id="emailAddressInput" class="full-width-input">
+  </label>
+  <br>
+  <label for="dobInput">
+    Date of Birth:
+    <input type="date" name="dobInput" id="dobInput">
+  </label>
+  <br>
+  <label for="usernameInput">
+    Username:
+    <input type="username" name="usernameInput" id="usernameInput" class="full-width-input">
+  </label>
+  <br>
+  <label for="passwordInput">
+    Password:
+    <input type="password" name="passwordInput" id="passwordInput" class="full-width-input">
+  </label>
+  <br>
+  <label for="confirmPasswordInput">
+    Confirm Password:
+    <input type="password" name="confirmPasswordInput" id="confirmPasswordInput" class="full-width-input">
+  </label>
+  <br>
+  <button type="submit">Register</button>
+</form>
+<a href="/login">Already have an account? Click here to log-in</a>
 </main>
 <script src="../public/js/register.js"></script>

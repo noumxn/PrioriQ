@@ -5,7 +5,6 @@ async function addTaskToCheckList(taskId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ taskId })
     });
-
     if (!response.ok) {
       throw new Error('Failed to add task to checklist.');
     }

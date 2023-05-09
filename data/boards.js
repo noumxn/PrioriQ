@@ -26,19 +26,17 @@ const exportedMethods = {
     sortOrder,
     boardPassword
   ) {
-
     validation.parameterCheck(
       boardName,
       owner,
       priorityScheduling,
       boardPassword
     );
-
     validation.strValidCheck(boardName, owner, boardPassword);
     helper.checkPassword(boardPassword);
     const boardOwner = await userData.getUserByUsername(owner); //
-    //TODO - removed to store priortyScheduling as a string. Change it back to boolean?
 
+    //TODO - removed to store priortyScheduling as a string. Change it back to boolean?
     // if (priorityScheduling == "true") {
     //   priorityScheduling = true;
     // }
@@ -48,15 +46,11 @@ const exportedMethods = {
     // else {
     //   throw validation.returnRes('BAD_REQUEST', `Priority scheduling must be true or false.`);
     // }
+
     sortOrder = helper.checkSortOrderValue(priorityScheduling, sortOrder);
-
-
-
     // Hashing the board password
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     boardPassword = await bcrypt.hash(boardPassword, saltRounds);
-
-
 
     //create data for new board
     const newBoard = {
@@ -71,7 +65,6 @@ const exportedMethods = {
       inProgress: [],
       done: [],
     };
-
 
     newBoard['allowedUsers'].push(owner);
 
@@ -96,17 +89,12 @@ const exportedMethods = {
       { returnNewDocument: true });
     if (!updatedUserWithNewBoard) throw validation.returnRes('INTERNAL_SERVER_ERROR', `Could not add board to ${owner}'s boards.`);
 
-
-
     //get the new id
     const newId = insertInfo.insertedId.toString();
-
-
     //get the new board from id
     const board = await this.getBoardById(newId);
 
     return board;
-
   },
 
   /*
@@ -121,18 +109,11 @@ const exportedMethods = {
     validation.parameterCheck(boardId);
     validation.strValidCheck(boardId);
     validation.idCheck(boardId);
-
-
     const boardCollection = await boards();
-
-
     const board = await boardCollection.findOne({ _id: new ObjectId(boardId) });
-
     if (!board)
       throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
-
     board._id = board._id.toString();
-
     board.toDo.forEach(task => { task._id = task._id.toString(); });
     // Sorting the board
     if (board.priorityScheduling === "true") {
@@ -142,7 +123,6 @@ const exportedMethods = {
     } else if (board.priorityScheduling === "false" && board.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(board._id)
     }
-
     return board;
   },
 
@@ -190,15 +170,10 @@ const exportedMethods = {
     );
 
     boardId = validation.idCheck(boardId);
-
     const boardCollection = await boards();
-
     //if the passwords don't match, rehash it
-
     const board = await this.getBoardById(boardId);
     if (!board) throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
-
-
     const passwordsMatch = await bcrypt.compare(
       newBoardPassword,
       board.boardPassword
@@ -211,7 +186,6 @@ const exportedMethods = {
 
     //uses helper function to get newSortOrder
     newSortOrder = helper.checkSortOrderValue(board.priorityScheduling, newSortOrder);
-
     helper.checkPassword(newBoardPassword);
 
     if (!passwordsMatch) {
@@ -220,10 +194,6 @@ const exportedMethods = {
     } else {
       newBoardPassword = board.boardPassword;
     }
-
-
-    // TODO: Need to make sure sortOrder is not updated when the board is using the priority setting.
-    //       The sortOrder only applies to boards that have the difficulty setting
 
     await boardCollection.updateOne(
       { _id: new ObjectId(boardId) },
@@ -275,9 +245,7 @@ const exportedMethods = {
     const boardCollection = await boards();
     const board = await this.getBoardById(boardId);
     if (!board) throw validation.returnRes("NOT_FOUND", `No board with ID: ${boardId}.`);
-
     let newAllowedUsers = board.allowedUsers;
-
     if (!(board.allowedUsers.includes(username))) {
       newAllowedUsers.push(username);
     }
@@ -301,8 +269,6 @@ const exportedMethods = {
 
     newSharedBoards.push(boardId);
 
-
-    // console.log(newUser._id.toString());
     await userCollection.updateOne(
       { _id: new ObjectId(newUser._id.toString()) },
       {
@@ -312,23 +278,18 @@ const exportedMethods = {
       }
     );
 
-    //console.log(newUser.sharedBoards);
-
-    console.log(newUser.sharedBoards);
-
     return await this.getBoardById(boardId);
 
   },
 
   //TODO - what is this?
-  async AddUserBlockedUsers(boardId, username) {
-    //validation
-    validation.parameterCheck(boardId, username);
-    validation.strValidCheck(boardId, username);
-    boardId = validation.idCheck(boardId);
-    username = helper.checkUsername(username);
-
-  },
+  // async AddUserBlockedUsers(boardId, username) {
+  //   //validation
+  //   validation.parameterCheck(boardId, username);
+  //   validation.strValidCheck(boardId, username);
+  //   boardId = validation.idCheck(boardId);
+  //   username = helper.checkUsername(username);
+  // },
 
   //EXTRA FEATURE - BLOCK USER FROM BOARD
   async AddUserBlockedUsers(boardId, username) {
@@ -340,18 +301,15 @@ const exportedMethods = {
     const boardCollection = await boards();
     const board = await this.getBoardById(boardId);
 
-
     let newAllowedUsers = board.allowedUsers;
     let newBlockedUsers = board.blockedUsers;
 
     if (username == board.owner) {
       throw validation.returnRes('FORBIDDEN', `Owner of board cannot be blocked from board`)
     }
-
     if (!(board.blockedUsers.includes(username))) {
       newBlockedUsers.push(username);
     }
-
     if (board.allowedUsers.includes(username)) {
       newAllowedUsers = newAllowedUsers.filter(name => name != username);
     }
@@ -367,9 +325,7 @@ const exportedMethods = {
     );
 
     return await this.getBoardById(boardId);
-
   }
-
 };
 
 export default exportedMethods;

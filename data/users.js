@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import {ObjectId} from 'mongodb';
-import {users} from '../config/mongoCollections.js';
+import { ObjectId } from 'mongodb';
+import { users } from '../config/mongoCollections.js';
 import validation from '../utils/validation.js';
 import helpers from './helpers.js';
 dotenv.config();
@@ -40,7 +40,7 @@ const exportedMethods = {
 
     // Searching user by username
     const userCollection = await users();
-    const searchedUser = await userCollection.findOne({username: username});
+    const searchedUser = await userCollection.findOne({ username: username });
     if (!searchedUser) throw validation.returnRes('NOT_FOUND', `No user with the username: ${username}.`)
 
     return searchedUser;
@@ -60,7 +60,7 @@ const exportedMethods = {
 
     // Searching user by ID
     const userCollection = await users();
-    const searchedUser = await userCollection.findOne({_id: new ObjectId(userId)});
+    const searchedUser = await userCollection.findOne({ _id: new ObjectId(userId) });
     if (!searchedUser) throw validation.returnRes('NOT_FOUND', `No user with the id: ${userId}.`);
     searchedUser._id = searchedUser._id.toString();
 
@@ -111,7 +111,7 @@ const exportedMethods = {
     //check if email is already in use
     let inUse = await helpers.checkEmailInUse(email);
     if (inUse) {
-      throw  validation.returnRes('CONFLICT',`The email ${email} is already in use. Please try another`);
+      throw validation.returnRes('CONFLICT', `The email ${email} is already in use. Please try another`);
     }
     const userCollection = await users();
     const insertInfo = await userCollection.insertOne(newUser);
@@ -175,18 +175,16 @@ const exportedMethods = {
       }
     }
 
-
     // update user from given userId with new info
     const userCollection = await users();
     const updateInfo = await userCollection.findOneAndUpdate(
-      {_id: new ObjectId(userId)},
-      {$set: updatedUser},
-      {returnDocument: 'after'}
+      { _id: new ObjectId(userId) },
+      { $set: updatedUser },
+      { returnDocument: 'after' }
     );
     if (updateInfo.lastErrorObject.n == 0) {
       throw validation.returnRes('NOT_FOUND', `Could not find and update user`);
     }
-    // const newId = up
     return await this.getUserById(userId);
   },
 
@@ -204,7 +202,7 @@ const exportedMethods = {
     // remove user based off userId
     const userCollection = await users();
     const deleteInfo = await userCollection.findOneAndDelete(
-      {_id: new ObjectId(userId)}
+      { _id: new ObjectId(userId) }
     );
     if (deleteInfo.lastErrorObject.n == 0) throw validation.returnRes(`NOT_FOUND`, `Could not find and delete user with ID: '${userId}'`)
     // return username of deleted user saying they have been deleted
