@@ -109,7 +109,8 @@ router.route("/:id")
       boardD = userGet.done;
 
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+     // console.log(e.status);
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e });
     }
 
 
@@ -166,7 +167,7 @@ router.route("/:id")
         assignedTo.push(userGet.owner);
       }
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: "Invalid input"});
     }
 
     //we do some more validation here
@@ -211,7 +212,7 @@ router.route("/:id")
   });
 
 router.route("/update/:taskId")
-  .patch(async (req, res) => {
+  .post(async (req, res) => {
     let boardT;
     let boardS;
     let boardD;

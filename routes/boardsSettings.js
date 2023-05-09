@@ -110,6 +110,7 @@ router.route("/delete/:boardId")
     }
   })
 
+  //EXTRA FEATURE - BLOCK USER FROM BOARD
   router.route("/blockUser/:boardId")
   .get(async (req,res) => {
     let boardId = req.params.boardId;
@@ -148,6 +149,7 @@ router.route("/delete/:boardId")
     }
     try{
       let newBoard = boardData.AddUserBlockedUsers(boardId, blockedUser);
+      
       return res.status(200).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, blocked:blockedUser});
     }catch(e){
       return res.status(e.status).render("../views/boardSettings", {titley: "Board Settings", sortBool:flag,  sort:board.sortOrder, name:board.boardName, boardId: boardId, error:true, e:e.message});

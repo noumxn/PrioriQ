@@ -1,3 +1,5 @@
+//import { error } from "ajv/dist/vocabularies/applicator/dependencies";
+
 //DOM for checking inputs
 let taskForm = document.getElementById('create-task-form');
   
@@ -8,7 +10,7 @@ let taskForm = document.getElementById('create-task-form');
     }
     if(name.value.trim().length > 30){
       name.focus();
-      throw `Name of tast cannot exceed 30 chars`;
+      throw `Name of task cannot exceed 30 chars`;
     }
   };
   function checkDescription(thing){
@@ -40,9 +42,7 @@ let taskForm = document.getElementById('create-task-form');
   };
   function checkTime(time, type){
     let numTime = parseInt(time.value);
-    //console.log(typeof(time));
     if(isNaN(numTime)){
-      //console.log("hello");
       time.focus();
       throw `Please input a value for Hours and Minutes`;
     }

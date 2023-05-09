@@ -44,11 +44,12 @@
   <br>
 </form>
 
+{{!-- EXTRA FEATURE - Block user from board --}}
 
 <form action="/boardsettings/blockUser/{{boardId}}"  method="post" id="blockUserForm">
 <label>
   Input the username of the user you would like to block from this board:
-<input type="text" placeholder="username" id="blockUserInput" name="blockUserInput"/>
+<input type="text" placeholder="username" id="blockUserInput" name="blockUserInput">
 </label>
 <button type="submit">Block</button>
 </form>
@@ -68,7 +69,7 @@
 <button onclick="confirmDelete(1)">Click Here to delete this board</button>
 
 <form action="/boardsettings/delete/{{boardId}}" style="display: none"  method="post" id="delete-form">
-<input type="submit" value="Confirm Board Deletion"/>
+<input type="submit" value="Confirm Board Deletion">
 </form>
 <br>
 <a href="/boards/{{boardId}}">Cancel</a>
