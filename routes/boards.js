@@ -482,13 +482,9 @@ router.route("/done/:taskId")
       boardD = board.done;
       boardIdStr = boardId.toString();
 
-    } catch (e) {
-      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
-    }
-    try {
       return res.redirect(`/boards/${boardIdStr}`);
     } catch (e) {
-      return res.status(e.message).render('error', { titley: "Error", error: true, e: e.message })
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
   });
 
