@@ -8,7 +8,9 @@
 
 {{!--<p>boards yeah! This user has boards</p> --}}
 
-<div class="card" ondrop="drop(event, 'toDo')" ondragover="allowDrop(event)">
+{{!-- <a href="/boardSettings">Board Settings</a> --}}
+
+<div class="card" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
   <h1>To-Do</h1>
   {{#each boardTodo}}
   <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">

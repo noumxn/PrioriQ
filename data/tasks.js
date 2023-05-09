@@ -316,9 +316,9 @@ const exportedMethods = {
       { _id: board._id },
       {
         $pull: {
-          toDo: { _id: taskId },
-          inProgress: { _id: taskId },
-          done: { _id: taskId }
+          toDo: { _id: new ObjectId(taskId) },
+          inProgress: { _id: new ObjectId(taskId) },
+          done: { _id: new ObjectId(taskId) }
         }
       }
     );
