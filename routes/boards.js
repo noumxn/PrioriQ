@@ -82,71 +82,14 @@ router.route("/:id")
     let boardS;
     let boardD;
     let boardName;
+    let systemOffset;
+    let inputDate;
+    let localDeadline;
+    let utcDeadline;
 
-    boardId = req.params.id;
-    //console.log(boardId);
-    taskName = xss(req.body.taskNameInput);
-    if (typeof (xss(req.body.priorityInput)) === 'undefined') {
-      priority = null;
-    }
-    else {
-      priority = xss(req.body.priorityInput);
-    }
-    if (typeof (xss(req.body.difficultyInput)) === 'undefined') {
-      difficulty = null;
-    }
-    else {
-      difficulty = xss(req.body.difficultyInput);
-    }
-
-    estimatedTimeH = xss(req.body.estimatedTimeInputH);
-    if (estimatedTimeH < 10) {
-      estimatedTimeH = "0".concat(estimatedTimeH);
-    }
-    estimatedTimeM = xss(req.body.estimatedTimeInputM);
-    if (estimatedTimeM < 10) {
-      estimatedTimeM = "0".concat(estimatedTimeM);
-    }
-    estimatedTime = estimatedTimeH.concat(" hours ", estimatedTimeM, " mins");
-    //console.log(estimatedTime);
-    deadline = xss(req.body.deadlineInput);
-    deadline = deadline.concat(":00.000Z");
-    console.log(deadline);
-    let systemOffset = new Date().getTimezoneOffset();
-    let inputDate = new Date(deadline)
-    let localDeadline = new Date(inputDate.getTime() - systemOffset * 60 * 1000);
-    let utcDeadline = new Date(localDeadline.getTime() - systemOffset * 60 * 1000);
-    deadline = utcDeadline.toISOString();
-    description = req.body.descriptionInput;
-    console.log(description);
-    assignedTo = req.body.assignedToInput;
-    console.log(assignedTo);
-    if(assignedTo == ""){
-      assignedTo = [];
-    }
-    else{
-      assignedTo = assignedTo.split(",");
-    }
-    if(assignedTo.length < 1 ){
-      assignedTo.push(board.owner);
-    }
-
+    //first, we get the board by the boardId
     try {
-
-      
-      validation.parameterCheck( taskName, estimatedTime, deadline, description, assignedTo);
-      validation.strValidCheck(taskName, estimatedTime, description);
-      taskName = helpers.checkTaskName(taskName);
-      description = helpers.checkDescription(description);
-      validation.validDateTimeFormatCheck(deadline);
-      validation.arrayValidCheck(assignedTo);
-    
-
-    } catch (e) {
-      return res.render("error", { titley: "Error", err: e });
-    }
-
-    try {
+      boardId = req.params.id;
       //boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
@@ -165,6 +108,77 @@ router.route("/:id")
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
+
+
+    //here, we get all the form data
+    try{
+      taskName = xss(req.body.taskNameInput);
+      
+      if (typeof (xss(req.body.priorityInput)) === 'undefined') {
+        priority = null;
+      }
+      else {
+        priority = xss(req.body.priorityInput);
+      }
+      if (typeof (xss(req.body.difficultyInput)) === 'undefined') {
+        difficulty = null;
+      }
+      else {
+        difficulty = xss(req.body.difficultyInput);
+      }
+
+      estimatedTimeH = xss(req.body.estimatedTimeInputH);
+      if (estimatedTimeH < 10) {
+        estimatedTimeH = "0".concat(estimatedTimeH);
+      }
+      estimatedTimeM = xss(req.body.estimatedTimeInputM);
+      if (estimatedTimeM < 10) {
+        estimatedTimeM = "0".concat(estimatedTimeM);
+      }
+      estimatedTime = estimatedTimeH.concat(" hours ", estimatedTimeM, " mins");
+      //console.log(estimatedTime);
+      deadline = xss(req.body.deadlineInput);
+      deadline = deadline.concat(":00.000Z");
+      console.log(deadline);
+      systemOffset = new Date().getTimezoneOffset();
+      inputDate = new Date(deadline)
+      localDeadline = new Date(inputDate.getTime() - systemOffset * 60 * 1000);
+      utcDeadline = new Date(localDeadline.getTime() - systemOffset * 60 * 1000);
+      deadline = utcDeadline.toISOString();
+      description = req.body.descriptionInput;
+      console.log(description);
+      assignedTo = req.body.assignedToInput;
+      console.log(assignedTo);
+      if(assignedTo == ""){
+        assignedTo = [];
+      }
+      else{
+        assignedTo = assignedTo.split(",");
+      }
+      if(assignedTo.length < 1 ){
+        assignedTo.push(userGet.owner);
+      }
+    } catch (e) {
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
+    }
+
+    //we do some more validation here
+    try {
+
+      
+      validation.parameterCheck( taskName, estimatedTime, deadline, description, assignedTo);
+      validation.strValidCheck(taskName, estimatedTime, description);
+      taskName = helpers.checkTaskName(taskName);
+      description = helpers.checkDescription(description);
+      validation.validDateTimeFormatCheck(deadline);
+      validation.arrayValidCheck(assignedTo);
+    
+
+    } catch (e) {
+      return res.render("error", { titley: "Error", err: e });
+    }
+
+
     //create the task
 
     try {
@@ -217,12 +231,34 @@ router.route("/update/:taskId")
     console.log(taskId);
 
     try {
+      console.log("heheh");
       //get the taskId and get the board by the taskid 
       taskId = xss(req.body.taskId);
       board = await taskData.getBoardByTaskId(taskId);
       boardId = board._id.toString();
 
+      boardT = board.toDo;
+      boardS = board.inProgress;
+      boardD = board.done;
+    } catch (e) {
+    return res.render("error", { titley:"Error", err: e.message });
+  }
+
+
+    try{
+      console.log("heheh2");
+
       taskName = xss(req.body.taskName);
+      estimatedTimeH = xss(req.body.estimatedTimeH);
+      estimatedTimeM = xss(req.body.estimatedTimeM);
+      deadline = xss(req.body.deadline);
+      description = xss(req.body.description);
+
+    
+      validation.parameterCheck(taskName, estimatedTimeH, estimatedTimeM, deadline, description);
+      //validation.strValidCheck(taskName, );
+      
+
       console.log(taskName);
       //if the priority input is null, make the priority null, else get the priority
       if (typeof (xss(req.body.priority)) === 'undefined') {
@@ -243,18 +279,19 @@ router.route("/update/:taskId")
       }
 
 
-      estimatedTimeH = xss(req.body.estimatedTimeH);
+      
+      validation.parameterCheck(estimatedTimeH);
       if (estimatedTimeH < 10) {
         estimatedTimeH = "0".concat(estimatedTimeH);
       }
-      estimatedTimeM = xss(req.body.estimatedTimeM);
+      
       if (estimatedTimeM < 10) {
         estimatedTimeM = "0".concat(estimatedTimeM);
       }
       console.log(estimatedTimeH);
       estimatedTime = estimatedTimeH.concat(" hours ", estimatedTimeM, " mins");
       console.log(estimatedTime);
-      deadline = xss(req.body.deadline);
+      
 
       deadline = deadline.concat(":00.000Z");
       console.log(deadline);
@@ -263,8 +300,10 @@ router.route("/update/:taskId")
       let localDeadline = new Date(inputDate.getTime() - systemOffset * 60 * 1000);
       let utcDeadline = new Date(localDeadline.getTime() - systemOffset * 60 * 1000);
       deadline = utcDeadline.toISOString();
-      description = xss(req.body.description);
+      
       console.log(description);
+      
+
       assignedTo = xss(req.body.assignedTo);
       console.log(assignedTo);
       if(assignedTo == ""){
