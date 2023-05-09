@@ -51,13 +51,13 @@ let taskForm = document.getElementById('create-task-form');
       throw `Must input a number for hours and minutes`;
     }
     if(type == 'min'){
-      if(time < 0 || time > 59){
+      if(numTime < 0 || numTime > 59){
         time.focus();
         throw `Minutes must be between 0 and 59`;
       }
     }
     if(type == 'hour'){
-      if(time < 0 || time > 100){
+      if(numTime < 0 || numTime > 100){
         time.focus();
         throw `Hours must be between 0 and 100`;
       }
@@ -110,7 +110,7 @@ if(taskForm){
   taskForm.addEventListener('submit', (event) => {
     console.log("form Submission fired");
     let serverErr = document.getElementById("serverError");
-    if(serverErr.hidden == false){
+    if(serverErr){
       serverErr.hidden = true;
     }
   try{
