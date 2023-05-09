@@ -12,12 +12,12 @@ if (searchBoard) {
     }
     let searchedTrim = searched.value.trim();
     let passTrim = password.value.trim();
-    if (searchedTrim.length == 0) {
+    if (searchedTrim.length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a valid non-Empty ID BoardId';
       searched.focus();
-    } else if (passTrim.length == 0) {
+    } else if (passTrim.length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a valid non-Empty password';

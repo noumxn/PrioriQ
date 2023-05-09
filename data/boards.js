@@ -37,10 +37,10 @@ const exportedMethods = {
     const boardOwner = await userData.getUserByUsername(owner); //
 
     //TODO - removed to store priortyScheduling as a string. Change it back to boolean?
-    // if (priorityScheduling == "true") {
+    // if (priorityScheduling === "true") {
     //   priorityScheduling = true;
     // }
-    // else if (priorityScheduling == "false") {
+    // else if (priorityScheduling === "false") {
     //   priorityScheduling = false;
     // }
     // else {
@@ -180,7 +180,7 @@ const exportedMethods = {
     );
 
     //throw if data wasnt changed
-    if (newBoardName == board.boardName && newSortOrder == board.sortOrder && passwordsMatch) {
+    if (newBoardName === board.boardName && newSortOrder === board.sortOrder && passwordsMatch) {
       throw validation.returnRes("NO_CONTENT", `all new parameters of board is same as before`);
     }
 
@@ -304,7 +304,7 @@ const exportedMethods = {
     let newAllowedUsers = board.allowedUsers;
     let newBlockedUsers = board.blockedUsers;
 
-    if (username == board.owner) {
+    if (username === board.owner) {
       throw validation.returnRes('FORBIDDEN', `Owner of board cannot be blocked from board`)
     }
     if (!(board.blockedUsers.includes(username))) {

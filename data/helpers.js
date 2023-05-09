@@ -5,7 +5,7 @@
 import Ajv from 'ajv';
 import EmailValidator from 'email-validator';
 import moment from 'moment';
-import {users} from '../config/mongoCollections.js';
+import { users } from '../config/mongoCollections.js';
 import validation from '../utils/validation.js';
 
 /*
@@ -100,7 +100,7 @@ const checkName = (name) => {
  **/
 const checkUsernameUnique = async (username) => {
   const userCollection = await users();
-  const searchedUser = await userCollection.findOne({username: username});
+  const searchedUser = await userCollection.findOne({ username: username });
   if (searchedUser) throw validation.returnRes('CONFLICT', `The username '${username}' is already taken.`);
 }
 
@@ -184,12 +184,12 @@ const checkUserJson = (userJson) => {
   const schema = {
     type: 'object',
     properties: {
-      firstName: {type: 'string'},
-      lastName: {type: 'string'},
-      dob: {type: 'string'},
-      email: {type: 'string'},
-      username: {type: 'string'},
-      password: {type: 'string'}
+      firstName: { type: 'string' },
+      lastName: { type: 'string' },
+      dob: { type: 'string' },
+      email: { type: 'string' },
+      username: { type: 'string' },
+      password: { type: 'string' }
     },
     required: ['firstName', 'lastName', 'dob', 'username', 'email', 'password'],
     additionalProperties: false
@@ -213,10 +213,10 @@ const checkBoardJson = (boardJson) => {
   const schema = {
     type: 'object',
     properties: {
-      boardName: {type: 'string'},
-      owner: {type: 'string'},
-      priorityScheduling: {type: 'boolean'},
-      sortOrder: {type: ['string', 'null'], enum: ['asc', 'desc', null]},
+      boardName: { type: 'string' },
+      owner: { type: 'string' },
+      priorityScheduling: { type: 'boolean' },
+      sortOrder: { type: ['string', 'null'], enum: ['asc', 'desc', null] },
       boardPassword: 'string'
     },
     required: ['boardName', 'owner', 'priorityScheduling', 'sortOrder', 'boardPassword'],
@@ -241,12 +241,12 @@ const checkTaskJson = (taskJson) => {
   const schema = {
     type: 'object',
     properties: {
-      taskName: {type: 'string'},
-      priority: {type: 'number'},
-      difficulty: {type: ['string', 'null'], enum: ['veryEasy', 'easy', 'medium', 'hard', 'veryHard', null]},
-      estimatedTime: {type: 'string'},
-      deadline: {type: 'string'},
-      description: {type: 'string'}
+      taskName: { type: 'string' },
+      priority: { type: 'number' },
+      difficulty: { type: ['string', 'null'], enum: ['veryEasy', 'easy', 'medium', 'hard', 'veryHard', null] },
+      estimatedTime: { type: 'string' },
+      deadline: { type: 'string' },
+      description: { type: 'string' }
     },
     required: ['taskName', 'priority', 'difficulty', 'estimatedTime', 'deadline', 'description'],
     additionalProperties: false
@@ -293,7 +293,7 @@ const checkEmailInUse = async (email) => {
   const userList = await userCollection.find({}, {}).toArray();
   if (userList.length != 0) {
     for (let i = 0; i < userList.length; i++) {
-      if (email == userList[i].email) {
+      if (email === userList[i].email) {
         return true;
       }
     }

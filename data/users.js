@@ -182,7 +182,7 @@ const exportedMethods = {
       { $set: updatedUser },
       { returnDocument: 'after' }
     );
-    if (updateInfo.lastErrorObject.n == 0) {
+    if (updateInfo.lastErrorObject.n === 0) {
       throw validation.returnRes('NOT_FOUND', `Could not find and update user`);
     }
     return await this.getUserById(userId);
@@ -204,7 +204,7 @@ const exportedMethods = {
     const deleteInfo = await userCollection.findOneAndDelete(
       { _id: new ObjectId(userId) }
     );
-    if (deleteInfo.lastErrorObject.n == 0) throw validation.returnRes(`NOT_FOUND`, `Could not find and delete user with ID: '${userId}'`)
+    if (deleteInfo.lastErrorObject.n === 0) throw validation.returnRes(`NOT_FOUND`, `Could not find and delete user with ID: '${userId}'`)
     // return username of deleted user saying they have been deleted
     return `User ${deleteInfo.value.username} has been deleted.`
   },

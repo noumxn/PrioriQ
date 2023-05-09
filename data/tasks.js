@@ -47,7 +47,7 @@ const exportedMethods = {
       }
     }
 
-    if (originBoard.priorityScheduling == "true") {
+    if (originBoard.priorityScheduling === "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;
     }
@@ -204,7 +204,7 @@ const exportedMethods = {
         throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
       }
     }
-    if (originBoard.priorityScheduling == "true") {
+    if (originBoard.priorityScheduling === "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;
     }

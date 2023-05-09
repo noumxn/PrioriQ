@@ -12,7 +12,7 @@ if (login) {
     let name = username.value.trim();
     let pass = password.value.trim();
 
-    if (name.length == 0) {
+    if (name.length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a valid userName';
@@ -32,7 +32,7 @@ if (login) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Username must contain at least 1 letter.'
       username.focus();
-    } else if (pass.length == 0) {
+    } else if (pass.length === 0) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Please input a value for password'
