@@ -465,6 +465,7 @@ router.route("/done/:taskId")
     let boardD;
     let boardName;
     let addpriority = false;
+    let boardIdStr;
     const taskId = req.params.taskId;
     try {
       await taskData.moveToDone(taskId);
@@ -479,11 +480,15 @@ router.route("/done/:taskId")
       boardT = board.toDo;
       boardS = board.inProgress;
       boardD = board.done;
-      const boardIdStr = boardId.toString();
+      boardIdStr = boardId.toString();
 
-      return res.redirect(`/boards/${boardIdStr}`);
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
+    }
+    try {
+      return res.redirect(`/boards/${boardIdStr}`);
+    } catch (e) {
+      return res.status(e.message).render('error', { titley: "Error", error: true, e: e.message })
     }
   });
 

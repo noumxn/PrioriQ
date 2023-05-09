@@ -16,17 +16,17 @@ function drop(event, boardType) {
   if (boardType === "todo") {
     fetch(`/boards/todo/${taskId}`, { method: "POST", headers: { 'Content-Type': 'application/json' }, location: '/homepage' })
       .then((response) => {
-        window.location.reload();
+        window.location = window.location
       })
   } else if (boardType === "inprogress") {
     fetch(`/boards/inprogress/${taskId}`, { method: "POST" })
       .then((response) => {
-        window.location.reload();
+        window.location = window.location
       })
   } else if (boardType === "done") {
     fetch(`/boards/done/${taskId}`, { method: "POST" })
       .then((response) => {
-        window.location.reload();
+        window.location = window.location
       })
   }
 }
