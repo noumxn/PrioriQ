@@ -37,6 +37,8 @@ const exportedMethods = {
     validation.strValidCheck(boardName, owner, boardPassword);
     helper.checkPassword(boardPassword);
     const boardOwner = await userData.getUserByUsername(owner); //
+      //TODO - removed to store priortyScheduling as a string. Change it back to boolean?
+
     // if (priorityScheduling == "true") {
     //   priorityScheduling = true;
     // }

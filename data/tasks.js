@@ -100,7 +100,7 @@ const exportedMethods = {
     } else if (boardWithNewTask.value.priorityScheduling === false && boardWithNewTask.value.sortOrder === 'desc') {
       await sorting.difficultyBasedSortDescending(boardWithNewTask.value._id)
     }
-
+    //TODO Does this matter?
     //newTask._id = newTask._id.toString();
 
     return newTask;
@@ -207,6 +207,7 @@ const exportedMethods = {
         throw validation.returnRes('UNAUTHORIZED', `${assignedTo[i]} has not been added to the board.`)
       }
     }
+    //TODO - boolean or string
     if (originBoard.priorityScheduling == "true") {
       priority = helpers.checkPriority(priority);
       difficulty = null;

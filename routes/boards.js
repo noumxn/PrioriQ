@@ -32,6 +32,7 @@ router.route("/:id")
       boardName = userGet.boardName;
       //console.log("Priority scheduling is now");
       //console.log(userGet.priorityScheduling);
+      //TODO - boolean or string?
       if (userGet.priorityScheduling == "true") {
         addpriority = true;
       } else {
@@ -87,6 +88,7 @@ router.route("/:id")
       //boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
+      //TODO - boolean or string?
       if (userGet.priorityScheduling == "true") {
         addpriority = true;
         difficulty = null;
@@ -179,6 +181,7 @@ router.route("/:id")
     try {
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
+      //TODO - boolean or string?
       if (userGet.priorityScheduling == "true") {
         addpriority = true;
       }
@@ -445,6 +448,7 @@ router.route("/todo/:taskId")
       let board = await taskData.getBoardByTaskId(taskId);
       const boardId = board._id;
       boardName = board.boardName;
+      //TODO - boolean or string?
       if (board.priorityScheduling == "true") {
         addpriority = true;
       } else {
@@ -474,6 +478,7 @@ router.route("/inprogress/:taskId")
       let board = await taskData.getBoardByTaskId(taskId);
       const boardId = board._id;
       boardName = board.boardName;
+      //TODO - boolean or string?
       if (board.priorityScheduling == "true") {
         addpriority = true;
       } else {
@@ -504,6 +509,7 @@ router.route("/done/:taskId")
       let board = await taskData.getBoardByTaskId(taskId);
       const boardId = board._id;
       boardName = board.boardName;
+      //TODO - boolean or string?
       if (board.priorityScheduling == "true") {
         addpriority = true;
       } else {
