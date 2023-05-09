@@ -116,6 +116,10 @@ const exportedMethods = {
 
     // Calculate time remaining until deadline
     const timeRemainingMs = deadline.getTime() - createdAt.getTime() - estimatedTime;
+    if (timeRemainingMs < 0) {
+      priority = 10
+      return priority;
+    }
 
     // Calculate number of priority increments required
     const numIncrements = Math.max(10 - priority, 0);
