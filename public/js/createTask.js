@@ -110,7 +110,7 @@ if(taskForm){
   taskForm.addEventListener('submit', (event) => {
     console.log("form Submission fired");
     let serverErr = document.getElementById("serverError");
-    if(serverErr.hidden == false){
+    if(serverErr == false){
       serverErr.hidden = true;
     }
   try{

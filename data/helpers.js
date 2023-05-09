@@ -323,6 +323,23 @@ const convertEstimatedTimeToMs = (inputTime) => {
   return totalMilliseconds;
 }
 
+/*
+ * @param {allowedUsers} array
+ * @param {assignedToUsers} array
+ * @description This function takes the the given assignedToUsers and sees if they are in the allowed users array
+ * @throws {BAD_REQUEST} if a user in assignedToUser is not in the allowedUsers array
+ * @return {assignedToUsers} Returns the assignedToUsers
+ **/
+const assignedToCheck = (assignedToUsers, allowedUsers) => {
+  
+  for(let user of assignedToUsers){
+    if(!(allowedUsers.includes(user))){
+      throw validation.returnRes("BAD_REQUEST", `Assigned to User must be in allowed users`);
+    }
+  }
+  return assignedToUsers;
+}
+
 export default {
   checkAge,
   checkEmail,
@@ -341,4 +358,5 @@ export default {
   checkTaskJson,
   checkSortOrderValue,
   checkEmailInUse,
+  assignedToCheck,
 }
