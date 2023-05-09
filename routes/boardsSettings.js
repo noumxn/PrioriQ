@@ -19,18 +19,18 @@ router
     try {
       boardGet = await boardData.getBoardById(boardId);
     } catch (e) {
-      res.status(e.status).render("../views/error", { e: e.message });
+      return res.status(e.status).render("../views/error", { e: e.message });
     }
     if (boardGet.owner !== currentUser.username) {
-      res.status(403).render("../views/error", { e: `Only the board owner can access the board settings.` });
+      return res.status(403).render("../views/error", { e: `Only the board owner can access the board settings.` });
     }
     let flag;
     if (boardGet.priorityScheduling === "false") {
       flag = true;
-      res.status(200).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, sort: boardGet.sortOrder, name: boardGet.boardName, boardId: boardId });
+      return res.status(200).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, sort: boardGet.sortOrder, name: boardGet.boardName, boardId: boardId });
     } else {
       flag = false;
-      res.status(200).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, name: boardGet.boardName, boardId: boardId });
+      return res.status(200).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, name: boardGet.boardName, boardId: boardId });
     }
   })
   .post(async (req, res) => {
@@ -40,7 +40,7 @@ router
       boardId = validation.idCheck(boardId);
       board = await boardData.getBoardById(boardId);
     } catch {
-      res.status(401).render("../views/error", { e: `Board with that ID does not exist` });
+      return res.status(401).render("../views/error", { e: `Board with that ID does not exist` });
     }
     let name = xss(req.body.boardNameInput);
     let sortOrder, flag;
