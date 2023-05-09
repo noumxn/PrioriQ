@@ -214,6 +214,7 @@ router.route("/update/:taskId")
     let description;
     let assignedTo;
     let userGet;
+    let addpriority
     console.log(taskId);
 
     try {
@@ -222,6 +223,14 @@ router.route("/update/:taskId")
       taskId = xss(req.body.taskId);
       board = await taskData.getBoardByTaskId(taskId);
       boardId = board._id.toString();
+
+
+      if (board.priorityScheduling) {
+        addpriority = true;
+      }
+      else{
+        addpriority = false;
+      }
 
       boardT = board.toDo;
       boardS = board.inProgress;
@@ -242,7 +251,7 @@ router.route("/update/:taskId")
 
     
       validation.parameterCheck(taskName, estimatedTimeH, estimatedTimeM, deadline, description);
-      //validation.strValidCheck(taskName, );
+      validation.strValidCheck(taskName, description);
       
 
       console.log(taskName);
@@ -309,6 +318,7 @@ router.route("/update/:taskId")
 
     } catch (e) {
       console.log(e);
+      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
     try {
