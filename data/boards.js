@@ -316,16 +316,11 @@ const exportedMethods = {
 
     console.log(newUser.sharedBoards);
 
-
-
-
-
-
-
     return await this.getBoardById(boardId);
 
   },
 
+  //TODO - what is this?
   async AddUserBlockedUsers(boardId, username) {
     //validation
     validation.parameterCheck(boardId, username);
@@ -335,6 +330,7 @@ const exportedMethods = {
 
   },
 
+  //EXTRA FEATURE - BLOCK USER FROM BOARD
   async AddUserBlockedUsers(boardId, username) {
     //validation
     validation.parameterCheck(boardId, username);

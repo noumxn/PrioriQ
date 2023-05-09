@@ -15,27 +15,39 @@
     Board Name:
     <input value="{{name}}" type="text" name="boardNameInput" id="boardNameInput" class="full-width-input">
   </label>
+  <br>
   {{#if sortBool}}
-  <label for="sortOrderInput">
+  {{!-- <label for="sortOrderInput">
     Sort Order:
     <input value="{{sort}}" type="text" name="sortOrderInput" id="sortOrderInput" class="full-width-input">
+  </label> --}}
+   <label for="sortOrderInput">
+            Sort Order:
+            <select name="sortOrderInput" id="sortOrderInput" class="full-width-input">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
   </label>
+  <br>
   {{/if}}
   <label for="boardPasswordInput">
     Board Password:
     <input type="password" name="boardPasswordInput" id="boardPasswordInput" class="full-width-input">
   </label>
+  <br>
   <label for="confirmBoardPasswordInput">
     Confirm Password:
     <input type="password" name="confirmBoardPasswordInput" id="confirmBoardPasswordInput" class="full-width-input">
   </label>
+  <br>
   <button type="submit">Update</button>
+  <br>
 </form>
 
 
 <form action="/boardsettings/blockUser/{{boardId}}"  method="post" id="blockUserForm">
 <label>
-  Input the username of the user you would Like to Block from this Board:
+  Input the username of the user you would like to block from this board:
 <input type="text" placeholder="username" id="blockUserInput" name="blockUserInput"/>
 </label>
 <button type="submit">Block</button>
@@ -53,10 +65,11 @@
   }
 </script>
 
-<button onclick="confirmDelete(1)">Click Here to delete this Board</button>
+<button onclick="confirmDelete(1)">Click Here to delete this board</button>
 
 <form action="/boardsettings/delete/{{boardId}}" style="display: none"  method="post" id="delete-form">
 <input type="submit" value="Confirm Board Deletion"/>
 </form>
+<br>
 <a href="/boards/{{boardId}}">Cancel</a>
 <script src="/public/js/boardUpdate.js"></script>
