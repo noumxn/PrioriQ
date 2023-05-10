@@ -22,6 +22,10 @@ function checkDescription(thing) {
     thing.focus();
     throw `Description of task cannot exceed 100 chars`;
   }
+  if(thing.value.indexOf('\'') >= 0){
+    thing.focus();
+    throw `Description of task cannot include a ' character`
+  }
 };
 function checkDifficulty(diff) {
   if (diff.value !== "veryEasy" &&

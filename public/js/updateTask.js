@@ -140,6 +140,10 @@
       err.innerHTML = `Description cannot be longer than 100 characters`;
       return false;
     }
+    if(description.value.indexOf('\'')){
+        description.focus();
+        err.innerHTML = `Description cannot include ' character.`;
+    }
     err.hidden = true;
     return true;
 

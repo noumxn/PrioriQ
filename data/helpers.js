@@ -149,9 +149,12 @@ const checkTaskName = (taskName) => {
  * @return {description} after trimming leading and trailing spaces
  **/
 const checkDescription = (description) => {
-  if (description.length > 100)
+  if(description.indexOf('\'')){
+    throw validation.returnRes('BAD_REQUEST', `Description cannot have the ' character.`);
+  }
+  if (description.trim().length > 100)
     throw validation.returnRes('BAD_REQUEST', `Description of the task can not exceed 100 characters.`);
-  return description;
+  return description.trim();
 }
 
 /*

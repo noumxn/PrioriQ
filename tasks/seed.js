@@ -142,25 +142,25 @@ import { boardData, checkListData, taskData, userData } from '../data/index.js';
   try {
     console.log("├─ Adding Tasks to Boards...");
     // Tasks for Tom's Personal Board
-    tomTask1 = await taskData.createTask(tomBoard1._id.toString(), "task1", 2, null, "00 hour 01 mins", time1UTC, "This is a test task1 on Tom's Board", ["tom_smith"]);
-    tomTask2 = await taskData.createTask(tomBoard1._id.toString(), "task2", 8, null, "00 hour 00 mins", time3UTC, "This is a test task2 on Tom's Board", ["tom_smith"]);
-    tomTask3 = await taskData.createTask(tomBoard1._id.toString(), "task3", 4, null, "00 hour 10 mins", time4UTC, "This is a test task3 on Tom's Board", ["tom_smith"]);
-    tomTask4 = await taskData.createTask(tomBoard1._id.toString(), "task4", 3, null, "00 hour 25 mins", time4UTC, "This is a test task4 on Tom's Board", ["tom_smith"]);
-    tomTask5 = await taskData.createTask(tomBoard1._id.toString(), "task5", 9, null, "00 hour 50 mins", time6UTC, "This is a test task5 on Tom's Board", ["tom_smith"]);
-    tomTask6 = await taskData.createTask(tomBoard1._id.toString(), "task6", 5, null, "02 hour 10 mins", time8UTC, "This is a test task6 on Tom's Board", ["tom_smith"]);
-    tomTask7 = await taskData.createTask(tomBoard1._id.toString(), "task7", 2, null, "03 hour 15 mins", time9UTC, "This is a test task7 on Tom's Board", ["tom_smith"]);
-    tomTask8 = await taskData.createTask(tomBoard1._id.toString(), "task8", 10, null, "00 hour 30 mins", time7UTC, "This is a test task8 on Tom's Board", ["tom_smith"]);
-    tomTask9 = await taskData.createTask(tomBoard1._id.toString(), "task9", 1, null, "00 hour 45 mins", time10UTC, "This is a test task9 on Tom's Board", ["tom_smith"]);
+    tomTask1 = await taskData.createTask(tomBoard1._id.toString(), "task1", 2, null, "00 hour 01 mins", time1UTC, "This is a test task1 on Toms Board", ["tom_smith"]);
+    tomTask2 = await taskData.createTask(tomBoard1._id.toString(), "task2", 8, null, "00 hour 00 mins", time3UTC, "This is a test task2 on Toms Board", ["tom_smith"]);
+    tomTask3 = await taskData.createTask(tomBoard1._id.toString(), "task3", 4, null, "00 hour 10 mins", time4UTC, "This is a test task3 on Toms Board", ["tom_smith"]);
+    tomTask4 = await taskData.createTask(tomBoard1._id.toString(), "task4", 3, null, "00 hour 25 mins", time4UTC, "This is a test task4 on Toms Board", ["tom_smith"]);
+    tomTask5 = await taskData.createTask(tomBoard1._id.toString(), "task5", 9, null, "00 hour 50 mins", time6UTC, "This is a test task5 on Toms Board", ["tom_smith"]);
+    tomTask6 = await taskData.createTask(tomBoard1._id.toString(), "task6", 5, null, "02 hour 10 mins", time8UTC, "This is a test task6 on Toms Board", ["tom_smith"]);
+    tomTask7 = await taskData.createTask(tomBoard1._id.toString(), "task7", 2, null, "03 hour 15 mins", time9UTC, "This is a test task7 on Toms Board", ["tom_smith"]);
+    tomTask8 = await taskData.createTask(tomBoard1._id.toString(), "task8", 10, null, "00 hour 30 mins", time7UTC, "This is a test task8 on Toms Board", ["tom_smith"]);
+    tomTask9 = await taskData.createTask(tomBoard1._id.toString(), "task9", 1, null, "00 hour 45 mins", time10UTC, "This is a test task9 on Toms Board", ["tom_smith"]);
     // Tasks for John's Personal Board
-    johnTask1 = await taskData.createTask(johnBoard1._id.toString(), "task1", null, "veryEasy", "00 hour 01 mins", time1UTC, "This is a test task1 on John's board", ["johnb"]);
-    johnTask2 = await taskData.createTask(johnBoard1._id.toString(), "task2", null, "veryHard", "00 hour 00 mins", time2UTC, "This is a test task2 on John's board", ["johnb"]);
-    johnTask3 = await taskData.createTask(johnBoard1._id.toString(), "task3", null, "medium", "00 hour 01 mins", time1UTC, "This is a test task3 on John's board", ["johnb"]);
-    johnTask4 = await taskData.createTask(johnBoard1._id.toString(), "task4", null, "easy", "00 hour 02 mins", time9UTC, "This is a test task4 on John's board", ["johnb"]);
-    johnTask5 = await taskData.createTask(johnBoard1._id.toString(), "task5", null, "hard", "00 hour 02 mins", time4UTC, "This is a test task5 on John's board", ["johnb"]);
-    johnTask6 = await taskData.createTask(johnBoard1._id.toString(), "task6", null, "veryEasy", "00 hour 10 mins", time1UTC, "This is a test task6 on John's board", ["johnb"]);
-    johnTask7 = await taskData.createTask(johnBoard1._id.toString(), "task7", null, "medium", "00 hour 10 mins", time8UTC, "This is a test task7 on John's board", ["johnb"]);
-    johnTask8 = await taskData.createTask(johnBoard1._id.toString(), "task8", null, "easy", "00 hour 10 mins", time3UTC, "This is a test task8 on John's board", ["johnb"]);
-    johnTask9 = await taskData.createTask(johnBoard1._id.toString(), "task9", null, "hard", "00 hour 10 mins", time10UTC, "This is a test task9 on John's board", ["johnb"]);
+    johnTask1 = await taskData.createTask(johnBoard1._id.toString(), "task1", null, "veryEasy", "00 hour 01 mins", time1UTC, "This is a test task1 on Johns board", ["johnb"]);
+    johnTask2 = await taskData.createTask(johnBoard1._id.toString(), "task2", null, "veryHard", "00 hour 00 mins", time2UTC, "This is a test task2 on Johns board", ["johnb"]);
+    johnTask3 = await taskData.createTask(johnBoard1._id.toString(), "task3", null, "medium", "00 hour 01 mins", time1UTC, "This is a test task3 on Johns board", ["johnb"]);
+    johnTask4 = await taskData.createTask(johnBoard1._id.toString(), "task4", null, "easy", "00 hour 02 mins", time9UTC, "This is a test task4 on Johns board", ["johnb"]);
+    johnTask5 = await taskData.createTask(johnBoard1._id.toString(), "task5", null, "hard", "00 hour 02 mins", time4UTC, "This is a test task5 on Johns board", ["johnb"]);
+    johnTask6 = await taskData.createTask(johnBoard1._id.toString(), "task6", null, "veryEasy", "00 hour 10 mins", time1UTC, "This is a test task6 on Johns board", ["johnb"]);
+    johnTask7 = await taskData.createTask(johnBoard1._id.toString(), "task7", null, "medium", "00 hour 10 mins", time8UTC, "This is a test task7 on Johns board", ["johnb"]);
+    johnTask8 = await taskData.createTask(johnBoard1._id.toString(), "task8", null, "easy", "00 hour 10 mins", time3UTC, "This is a test task8 on Johns board", ["johnb"]);
+    johnTask9 = await taskData.createTask(johnBoard1._id.toString(), "task9", null, "hard", "00 hour 10 mins", time10UTC, "This is a test task9 on Johns board", ["johnb"]);
 
     console.log("├─ Adding Tasks To Shared Boards...");
     // Tasks for Tom's Project Board

@@ -263,7 +263,7 @@ router.route("/update/:taskId")
       boardName = board.boardName;
 
 
-      if (board.priorityScheduling) {
+      if (board.priorityScheduling == "true") {
         addpriority = true;
       }
       else {

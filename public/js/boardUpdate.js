@@ -44,7 +44,7 @@ function checkUserName(username) {
     username.focus();
     throw `Username can not be longer than 20 characters.`
   };
-  let regex = /^[a-zA-Z0-9_]+$/;
+  let regex = /^[a-zA-Z0-9_.]+$/;
   if (!regex.test(user)) {
     username.focus();
     throw `The username can only contain alphabets, numbers, and underscores.`;
