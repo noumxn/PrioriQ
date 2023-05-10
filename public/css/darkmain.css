@@ -43,16 +43,17 @@ main{
   }
   
   .card {
+
+    background-color:  #E4DCCF;
     display: inline-block;
     margin-top: 6%;
-    margin-left: 6%;
-    margin-bottom: 0%;
+    margin-left: 7%;
+    margin-bottom: 2%;
     border-radius: 30px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     width: 20%;
     padding: 20px;
     vertical-align: top;
-    background-color: #E4DCCF;
     color: black;
 
     
@@ -110,10 +111,12 @@ main{
   #prioriQLogo {
     display: inline;
     background-color: #001124;
-    margin-top: -20px;
-    padding-top: 8%;
-    padding-bottom: 50%;
+    margin-right: -3%;
+    margin-top: -5%;
+    padding-top: 10%;
+    padding-bottom: 16%;
     width:60%;
+    height: 100vh;
     float:right;
   }
   #prioriQLogo h1{
@@ -131,6 +134,15 @@ main{
     font-weight: bold;
   }
 
+  h1{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  #loginFormDiv{
+    margin-top: 15%;
+    text-align: center;
+  }
+
   footer{
     background-color: #001124;
     margin-left: -2%;
@@ -141,4 +153,13 @@ main{
     padding-left: 5%;
     padding-top: 1%;
     padding-bottom: 1%;
+  }
+
+  button{
+    border:solid;
+    border-width: 1px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    border-radius: 7px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
