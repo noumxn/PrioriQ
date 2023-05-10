@@ -87,7 +87,7 @@ const checkPassword = (password) => {
 const checkName = (name) => {
   if (name.length < 1) throw validation.returnRes('BAD_REQUEST', `Name must be longer than 1 character.`);
   if (name.length > 20) throw validation.returnRes('BAD_REQUEST', `Name can not be longer than 20 characters.`);
-  let regex = /^[A-Za-z ]+$/;
+  let regex = /^[a-zA-Z.\-'\s]+$/;
   if (!regex.test(name)) throw validation.returnRes('BAD_REQUEST', `Name can not contain special characters or numbers.`)
 
   return name.trim()
@@ -323,22 +323,24 @@ const convertEstimatedTimeToMs = (inputTime) => {
   return totalMilliseconds;
 }
 
-const anchorLinks = (task) => {
-  const pattern = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
-  let anchoredLinks;
-  let match = task.description.match(pattern);
-  if (match) {
-      anchoredLinks = [];
-      for (let i = 0; i < match.length; i++) {
-        anchoredLinks[i] = String.raw`<a href="${match[i]}">${match[i]}</a>`;
-        task.description = task.description.replace(match[i], anchoredLinks[i]);
-      }
+/*
+ * @param {allowedUsers} array
+ * @param {assignedToUsers} array
+ * @description This function takes the the given assignedToUsers and sees if they are in the allowed users array
+ * @throws {BAD_REQUEST} if a user in assignedToUser is not in the allowedUsers array
+ * @return {assignedToUsers} Returns the assignedToUsers
+ **/
+const assignedToCheck = (assignedToUsers, allowedUsers) => {
+  
+  for(let user of assignedToUsers){
+    if(!(allowedUsers.includes(user))){
+      throw validation.returnRes("BAD_REQUEST", `Assigned to User must be in allowed users`);
+    }
   }
-  return task;
+  return assignedToUsers;
 }
 
 export default {
-  anchorLinks,
   checkAge,
   checkEmail,
   checkUsername,
@@ -356,4 +358,5 @@ export default {
   checkTaskJson,
   checkSortOrderValue,
   checkEmailInUse,
+  assignedToCheck,
 }

@@ -1,5 +1,24 @@
-<h1>{{titley}}</h1>
-<span>Board ID: {{boardId}}</span>
+<div id="navBar">
+<div id="leftSide">
+  <h1>{{titley}}</h1>
+  <span>Board ID: {{boardId}}</span>
+</div>
+
+  <div id="RightSide">
+    <a href="/boardsettings/{{boardId}}">
+      <button>Edit board settings</button>
+    </a>
+    <br>
+    <a href="/homepage">
+      <button>Back to homepage</button>
+    </a>
+    <button onclick="showCreateTaskForm()">Create New Task</button>
+  </div>
+</div>
+
+
+
+
 
  <div id="errorDiv" class="error" style="display:none">Error</div>
  <div id="ajaxError" class="error"style="display:none"></div>
@@ -96,10 +115,10 @@
   }
 </script>
 {{!-- button to create task --}}
-<button onclick="showCreateTaskForm()">Create New Task</button>
+
 <br>
 
-<div id="createTaskForm" style="display:none">
+<div id="createTaskForm" style="display:none" class="settingsCard">
   <h2>Create Task</h2>
   <form action="/boards/{{boardId}}" id="create-task-form" method="POST">
     <label for="taskNameInput">Task Name</label><br>
@@ -141,11 +160,10 @@
 </div>
 
 {{!-- show task form when click button --}}
-
 <script src="../public/js/updateTask.js"></script>
 
 {{!-- form for updating task --}}
-<div id="updateTaskForm" style="display:none">
+<div id="updateTaskForm" style="display:none" class="card">
   <h2>Update Task</h2>
   <form id="upTaskForm" method="POST">
     <label for="newtaskNameInput">Task Name</label><br>
@@ -185,7 +203,5 @@
     <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
   </form>
 </div>
-<a href="/boardsettings/{{boardId}}">Click here to edit the board settings</a>
-<br>
-<a href="/homepage">Back to homepage</a>
+
 <script src="../public/js/createTask.js"></script>

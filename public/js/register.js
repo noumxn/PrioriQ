@@ -42,7 +42,7 @@ if (registration) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name cannot have numbers'
       firstName.focus();
-    } else if (/^[a-zA-Z]*$/.test(firstName.value.trim()) === false) {
+    } else if (/^[a-zA-Z.\-'\s]*$/.test(firstName.value.trim()) === false) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name can only contain letters'
@@ -62,7 +62,7 @@ if (registration) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'Last name cannot have numbers'
       lastName.focus();
-    } else if (/^[a-zA-Z]*$/.test(lastName.value.trim()) === false) {
+    } else if (/^[a-zA-Z.\-'\s]*$/.test(lastName.value.trim()) === false) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name can only contain letters'

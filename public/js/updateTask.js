@@ -1,10 +1,10 @@
-let currentTaskId;
+
+  let currentTaskId;
   let addpriority;
   let priority;
   let difficulty;
   let taskId;
   function showUpdateTaskForm(taskId, prior, diffic, assignedTwo, tName, desc) {
-    console.log("hi");
     if (diffic === "" && prior !== "") {
       addpriority = true;
       difficulty = null;
@@ -13,7 +13,6 @@ let currentTaskId;
       addpriority = false;
       priority = null;
     }
-    console.log(addpriority);
 
     const updateTaskDiv = document.getElementById('updateTaskForm');
     const updateTaskForm = document.getElementById('update-task-form');
@@ -21,7 +20,6 @@ let currentTaskId;
     let taskName = document.getElementById("newtaskNameInput");
     if (addpriority == true) {
         priority = document.getElementById("newPriorityInput");
-        console.log(priority);
       }
       else {
         difficulty = document.getElementById("newDifficultyInput");
@@ -40,7 +38,6 @@ let currentTaskId;
 
     currentTaskId = taskId.toString();
     currentUsers = assignedTo.toString();
-    console.log("task id is", taskId);
 
     if (updateTaskDiv.style.display === "none") {
       updateTaskDiv.style.display = "block";

@@ -1,0 +1,160 @@
+html{
+  background-color: #E4DCCF;
+  overflow-x: hidden;
+}
+body{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+main{
+  flex: 1;
+ 
+}
+
+#navBar {
+  overflow: hidden;
+  background-color: #002B5B;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  margin: -1%;
+  padding: 1%;
+  color: #e4fafb;
+  text-align: center;
+}
+
+#leftSide{
+  display: inline;
+  width: 150px;
+  padding-left: 10px;
+  float:left;
+  text-align: left;
+}
+
+#RightSide{
+  display: inline;
+  width: 200px;
+  padding-top: 20px;
+  float:right;
+}
+
+.card {
+  background-color:  #EA5455;
+  display: inline-block;
+  margin-top: 6%;
+  margin-left: 7%;
+  margin-bottom: 2%;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 20%;
+  padding: 20px;
+  vertical-align: top;
+
+
+  
+}
+span{
+  font-weight: bold;
+}
+.settingsCard {
+  margin-left: 6%;
+  margin-bottom: 2%;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 20%;
+  padding: 20px;
+  text-align:center;
+  background-color:  #EA5455;
+  
+}
+
+.container {
+  background-color: rgb(229, 229, 229);
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-width: 2px;
+  border-style: solid;
+  margin-bottom: 10px;
+  border-color: black;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+#createTaskForm,
+#updateTaskForm {
+  text-align: center;
+
+}
+
+label {
+  padding-top: 10px;
+}
+
+h1{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#estimatedTimeInputH,
+#estimatedTimeInputM,
+#newEstimatedTimeInputH,
+#newEstimatedTimeInputM {
+  width: 40px;
+
+}
+
+button{
+  border:solid;
+  border-width: 1px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+  border-radius: 7px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#login{
+  display: inline;
+}
+#prioriQLogo {
+  display: inline;
+  background-color: #001124;
+  margin-right: -3%;
+  margin-top: -5%;
+  padding-top: 10%;
+  padding-bottom: 16%;
+  width:60%;
+  height: 100%;
+  float:right;
+}
+#prioriQLogo h1{
+  color:#EA5455;
+  font-size: 100px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+#prioriQLogo p{
+  color:#E4DCCF;
+  font-size: 50px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+}
+
+#loginFormDiv{
+  margin-top: 15%;
+  text-align: center;
+}
+
+footer{
+  background-color: #001124;
+  margin-left: -2%;
+  margin-top: auto;
+  bottom: 0;
+  width: 100%;
+
+  padding-left: 5%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}

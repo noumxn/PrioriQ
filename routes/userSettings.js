@@ -17,7 +17,7 @@ router.route("/")
     if (day < 10) {
       day = "0".concat(day);
     }
-
+    
     let year = new Date(currentUser.dob).getFullYear();
     let yyMMdd = `${year}-${month}-${day}`;
     return res.status(200).render("../views/userSettings", { titley: "User Settings", error: false, first: currentUser.firstName, last: currentUser.lastName, email: currentUser.email, dob: yyMMdd, user: currentUser.username });
