@@ -60,7 +60,7 @@ router
       if (name.length > 30) {
         throw `Board Name must be less than 30 characters.`;
       }
-      if(sortOrder !== 'asc' && sortOrder !== 'desc' && sortOrder !== 'null'){
+      if (sortOrder !== 'asc' && sortOrder !== 'desc' && sortOrder !== 'null') {
         throw `Sort Order must be equal to asc, desc, or null.`;
       }
       helpers.checkPassword(password);
