@@ -1,8 +1,16 @@
-<h1>Login</h1>
+
 <div id="errorDiv" class="error" hidden>Error</div>
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
+
+<div id="prioriQLogo">
+  <h1>PrioriQ</h1>
+  <p>Tasks made simpler</p>
+</div>
+
+<div id="loginFormDiv">
+<h1 id="login">Login</h1>
 <p>
   Please enter username and password:
 </p>
@@ -19,5 +27,6 @@
   <br>
   <button type="submit">Login</button>
 </form>
-<a href="http://localhost:3000/register">Click here to register</a>
+<a href="http://localhost:3000/register"><button>Register</button></a>
+</div>
 <script src="../public/js/login.js"></script>

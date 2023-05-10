@@ -118,7 +118,7 @@
 
 <br>
 
-<div id="createTaskForm" style="display:none">
+<div id="createTaskForm" style="display:none" class="settingsCard">
   <h2>Create Task</h2>
   <form action="/boards/{{boardId}}" id="create-task-form" method="POST">
     <label for="taskNameInput">Task Name</label><br>
@@ -163,7 +163,7 @@
 <script src="../public/js/updateTask.js"></script>
 
 {{!-- form for updating task --}}
-<div id="updateTaskForm" style="display:none">
+<div id="updateTaskForm" style="display:none" class="card">
   <h2>Update Task</h2>
   <form id="upTaskForm" method="POST">
     <label for="newtaskNameInput">Task Name</label><br>
