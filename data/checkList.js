@@ -61,6 +61,15 @@ const exportedMethods = {
       await taskData.moveToDone(taskId)
     }
     user.checkList = user.checkList.filter(checkListItem => checkListItem.completed === false)
+    for (let i = 0; i < user.checkList.length; i++) {
+      let taskId = user.checkList[i].taskId;
+      try {
+        await taskData.getTaskById(taskId);
+      } catch (e) {
+        user.checkList.splice(i, 1);
+        i--;
+      }
+    }
     const userCollection = await users();
     await userCollection.updateOne(
       {username: username},

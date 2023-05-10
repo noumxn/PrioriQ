@@ -12,7 +12,7 @@
 
 {{!-- <a href="/boardSettings">Board Settings</a> --}}
 
-<div class="card" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
+<div id="todo-container" class="card" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
   <h1>To-Do</h1>
   {{#each boardTodo}}
   <div id="{{this._id}}" class="container" draggable="true" ondragstart="drag(event)" data-task-id="{{this._id}}">
@@ -130,17 +130,18 @@
     <input type="datetime-local" id="deadlineInput" name="deadlineInput"><br>
 
     <label for="descriptionInput">Description</label><br>
-    <input type="text" id="descriptionInput" name="descriptionInput" placeholder="Type description here"><br>
+    <textarea type="text" id="descriptionInput" name="descriptionInput" placeholder="Type description here"></textarea><br>
 
     <label for="assignedToInput">Assigned Users</label><br>
     <p>Type in usernames separated by commas</p>
     <input type="text" id="assignedToInput" name="assignedToInput" placeholder="Type here"><br>
 
-    <button type="submit">Submit</button>
+    <button type="submit" id="add-task">Submit</button>
   </form>
 </div>
 
 {{!-- show task form when click button --}}
+
 <script src="../public/js/updateTask.js"></script>
 
 {{!-- form for updating task --}}
