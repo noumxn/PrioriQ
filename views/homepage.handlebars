@@ -16,10 +16,7 @@
 
 
 
-<div id="errorDiv" class="error" hidden> Hello</div>
-{{#if error}}
-<div id="serverError" class="error"> {{e}}</div>
-{{/if}}
+
 <br>
 
 
@@ -42,10 +39,13 @@
 <div id="sharedBoards" class="card">
     <h2>Shared Boards</h2>
         {{#each sharedBoards}}
+
+         <div id="{{this._id}}" class="container">
             {{boardName}}
             <a href="/boards/{{_id}}">
                 <button class="boardButton">Open</button>
             </a>
+        </div>
         {{/each}}
 
 </div>
@@ -81,6 +81,11 @@
     }
 </script>
 
+<div id="error" class="error" hidden> Hello</div>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
+<br>
 <button onclick="showCreateBoard()">Create New Board</button>
 <br>
 <div id="createBoard" style="display:none">

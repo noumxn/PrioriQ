@@ -1,8 +1,5 @@
 
-<div id="errorDiv" class="error" hidden>Error</div>
-{{#if error}}
-<div id="serverError" class="error"> {{e}}</div>
-{{/if}}
+
 
 <div id="prioriQLogo">
   <h1>PrioriQ</h1>
@@ -14,6 +11,10 @@
 <p>
   Please enter username and password:
 </p>
+<div id="error" class="error" hidden>Error</div>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
 <form action="/login" method="POST" id="login-form">
   <label for="usernameInput">
     Username:
