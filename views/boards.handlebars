@@ -16,9 +16,11 @@
   </div>
 </div>
 
-
-
-{{!--<p>boards yeah! This user has boards</p> --}}
+ <div id="errorDiv" class="error" style="display:none">Error</div>
+ <div id="ajaxError" class="error"style="display:none"></div>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
 
 {{!-- <a href="/boardSettings">Board Settings</a> --}}
 
@@ -108,7 +110,7 @@
 {{!-- button to create task --}}
 
 <br>
-<div id="errorDiv" class="error" style="display:none">Error</div>
+<div id="error" class="error"></div>
  <div id="ajaxError" class="error"style="display:none"></div>
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
@@ -155,7 +157,6 @@
 </div>
 
 {{!-- show task form when click button --}}
-<script src="../public/js/updateTask.js"></script>
 
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none" class="card">
@@ -198,5 +199,5 @@
     <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
   </form>
 </div>
-
+<script src="../public/js/updateTask.js"></script>
 <script src="../public/js/createTask.js"></script>

@@ -62,7 +62,7 @@ if (boardUpdate) {
   let sortOrder = document.getElementById("sortOrderInput");
   let password = document.getElementById("boardPasswordInput");
   let confirm = document.getElementById("confirmBoardPasswordInput");
-  let error = document.getElementById("errorDiv");
+  let error = document.getElementById("error");
   boardUpdate.addEventListener('submit', (event) => {
     let serverErr = document.getElementById("serverError");
     if (serverErr !== null) {

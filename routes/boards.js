@@ -27,8 +27,6 @@ router.route("/:id")
       boardId = req.params.id;
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
-      //console.log("Priority scheduling is now");
-      //console.log(userGet.priorityScheduling);
       if (userGet.priorityScheduling == "true") {
         addpriority = true;
       } else {
@@ -55,17 +53,6 @@ router.route("/:id")
       boardT = userGet.toDo;
       boardS = userGet.inProgress;
       boardD = userGet.done;
-     // console.log(boardT);
-
-     // for (let i = 0; i < boardT.length; i++) {
-      //  boardT[i].description = helpers.anchorLinks(boardT[i]);
-    //  }
-//
-      //boardT.forEach(helpers.anchorLinks);
-    //  console.log(boardT);
-      //boardS.forEach(helpers.anchorLinks);
-     // boardD.forEach(helpers.anchorLinks);
-
 
     } catch (e) {
       return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: true, error: true, e: e });
@@ -79,7 +66,7 @@ router.route("/:id")
     try {
       return res.render("boards", { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, addpriority: addpriority, e: e.message });
     }
 
   })
@@ -122,8 +109,7 @@ router.route("/:id")
       boardS = userGet.inProgress;
       boardD = userGet.done;   
     } catch (e) {
-      // console.log(e.status);
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e });
+      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
 
@@ -243,7 +229,7 @@ router.route("/:id")
       }
       res.render("boards", { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(400).render('../views/boards', { titley: boardName, boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
 
   });
@@ -268,7 +254,6 @@ router.route("/update/:taskId")
     let userGet;
     let addpriority;
     let boardName;
-    console.log(taskId);
 
     try {
       //get the taskId and get the board by the taskid 
@@ -296,7 +281,6 @@ router.route("/update/:taskId")
     try {
       taskName = xss(req.body.taskName);
       estimatedTimeH = xss(req.body.estimatedTimeH);
-      console.log(estimatedTimeH);
       estimatedTimeM = xss(req.body.estimatedTimeM);
       deadline = xss(req.body.deadline);
       description = xss(req.body.description);
@@ -314,21 +298,17 @@ router.route("/update/:taskId")
       }
       else {
         priority = xss(req.body.priority);
-        console.log(priority);
         helpers.checkPriority(priority);
       }
       //if the difficulty input is null, make the difficulty null, else get the difficulty
-      console.log(difficulty);
       difficulty = xss(req.body.difficulty);
       if (addpriority != true) {
-        console.log(difficulty);
         difficulty = xss(req.body.difficulty);
         helpers.checkDifficulty(difficulty);
       }
       else {
 
       }
-
 
       if (estimatedTimeH < 10) {
         estimatedTimeH = "0".concat(estimatedTimeH);
@@ -340,7 +320,6 @@ router.route("/update/:taskId")
       estimatedTime = estimatedTimeH.concat(" hours ", estimatedTimeM, " mins");
 
       deadline = deadline.concat(":00.000Z");
-      console.log("Updated deadline: ", deadline);
       validation.validDateTimeFormatCheck(deadline);
       let systemOffset = new Date().getTimezoneOffset();
       let inputDate = new Date(deadline)
@@ -361,14 +340,12 @@ router.route("/update/:taskId")
       if (assignedTo.length < 1) {
         assignedTo.push(board.owner);
       }
-      console.log(board.allowedUsers);
       helpers.assignedToCheck(assignedTo, board.allowedUsers);
 
       validation.arrayValidCheck(assignedTo);
 
-
     } catch (e) {
-      return res.status(e.status).json(e);
+      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority, error: true, e: e.message });
     }
 
     try {
@@ -402,7 +379,7 @@ router.route("/update/:taskId")
     try {
       return res.render("boards", { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
   });
 
@@ -452,7 +429,7 @@ router.route("/delete/:taskId")
     try {
       return res.render("boards", { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, addpriority: addpriority });
     } catch (e) {
-      return res.status(e.status).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
+      return res.status(400).render('../views/boards', { titley: "Board page", boardId: boardId, boardTodo: boardT, boardProgress: boardS, boardDone: boardD, error: true, e: e.message });
     }
   });
 

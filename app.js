@@ -35,7 +35,6 @@ app.use(
 );
 
 app.all('/', (req, res, next) => {
-  //console.log(req.session.id);
   if(!req.session.user){
     return res.redirect('/login');
   }else if(req.session.user){

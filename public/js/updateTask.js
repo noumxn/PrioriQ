@@ -53,7 +53,6 @@
     let difficulty;
     if (addpriority == true) {
       priority = document.getElementById("newPriorityInput");
-      console.log(priority);
     }
     else {
       difficulty = document.getElementById("newDifficultyInput");
@@ -65,7 +64,6 @@
     const assignedTo = document.getElementById("newAssignedToInput");
     let updateForm = document.getElementById('upTaskForm');
     if(updateForm){
-      console.log("form found")
       if(tName.value.trim().length == 0){
         tName.focus();
         err.innerHTML = "Please input a new task name (Can be the same as original name)";
@@ -157,7 +155,6 @@
 
     if (addpriority == true) {
       priority = document.getElementById("newPriorityInput").value;
-      console.log(priority);
     }
     else {
       difficulty = document.getElementById("newDifficultyInput").value;
@@ -185,7 +182,6 @@
 
 
     const url = "/boards/update/" + currentTaskId;
-    console.log(url);
 
     $.ajax({
       type: "POST",
@@ -196,9 +192,7 @@
         location.reload();
       },
       error: function (err) {
-        console.log("yow");
         document.getElementById('ajaxError').innerHTML = '';
-        console.log(err.responseJSON.message);
         document.getElementById('errorDiv').style.display = 'block';
         document.getElementById('ajaxError').style.display = 'block';
         let node = document.createTextNode(err.responseJSON.message);

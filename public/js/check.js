@@ -17,7 +17,6 @@ if (login) {
   let serverErr = document.getElementById("serverError");
   login.addEventListener('submit', (event) => {
     console.log('Form submission fired');
-    console.log('Has a form');
     if (serverErr !== null) {
       serverErr.hidden = true;
     }
@@ -81,7 +80,6 @@ if (registration) {
   let serverErr = document.getElementById('serverError');
   registration.addEventListener('submit', (event) => {
     console.log('Form Submission Recieved');
-    console.log('Has a form');
     if (serverErr !== null) {
       serverErr.hidden = true;
     }
@@ -238,7 +236,6 @@ if (update) {
   let serverErr = document.getElementById('serverError');
   update.addEventListener('submit', (event) => {
     console.log('Form Submission Recieved');
-    console.log('Has a form');
     if (serverErr !== null) {
       serverErr.hidden = true;
     }
