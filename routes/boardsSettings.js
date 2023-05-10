@@ -60,16 +60,15 @@ router
       if (name.length > 30) {
         throw `Board Name must be less than 30 characters.`;
       }
-      // if(sortOrder !== 'asc' && sortOrder !== 'desc'){
-      //   throw `Sort Order must be equal to asc or desc.`;
-      // }
-      //board = await boardData.getBoardById(boardId);
+      if(sortOrder !== 'asc' && sortOrder !== 'desc' && sortOrder !== 'null'){
+        throw `Sort Order must be equal to asc, desc, or null.`;
+      }
       helpers.checkPassword(password);
       if (password !== confirm) {
         throw `Password and confirm password must match`;
       }
     } catch (e) {
-      return res.status(e.status).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, sort: board.sortOrder, name: board.boardName, boardId: boardId, error: true, e: e.message });
+      return res.status(400).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, sort: board.sortOrder, name: board.boardName, boardId: boardId, error: true, e: e.message });
     }
     try {
       let updatedBoard = await boardData.updateBoard(boardId, name, sortOrder, password);
@@ -142,7 +141,7 @@ router.route("/blockUser/:boardId")
         throw `You cannot block the owner of the board`;
       }
     } catch (e) {
-      return res.status(e.status).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, sort: board.sortOrder, name: board.boardName, boardId: boardId, error: true, e: e });
+      return res.status(403).render("../views/boardSettings", { titley: "Board Settings", sortBool: flag, sort: board.sortOrder, name: board.boardName, boardId: boardId, error: true, e: e });
     }
     try {
       let newBoard = boardData.AddUserBlockedUsers(boardId, blockedUser);
