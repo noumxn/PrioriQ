@@ -45,6 +45,11 @@
 
 </div>
 
+<div id="error" class="error" style="display:none">Error</div>
+ <div id="ajaxError" class="error"style="display:none"></div>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
 
 <div class="card" ondrop="drop(event, 'inprogress')" ondragover="allowDrop(event)">
   <h1>In Progress</h1>
@@ -108,11 +113,7 @@
 {{!-- button to create task --}}
 
 <br>
-<div id="errorDiv" class="error" style="display:none">Error</div>
- <div id="ajaxError" class="error"style="display:none"></div>
-{{#if error}}
-<div id="serverError" class="error"> {{e}}</div>
-{{/if}}
+
 <div id="createTaskForm" style="display:none" class="settingsCard">
   <h2>Create Task</h2>
   <form action="/boards/{{boardId}}" id="create-task-form" method="POST">
