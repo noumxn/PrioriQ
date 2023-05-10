@@ -12,6 +12,12 @@ main{
   flex: 1;
  
 }
+a{
+  color:white
+}
+.redHyperLink{
+  color:#c70000;
+}
 
 #navBar {
   overflow: hidden;
@@ -55,6 +61,13 @@ main{
 
   
 }
+#userSettings{
+  color:white;
+}
+#Logout{
+  color:white;
+}
+
 span{
   font-weight: bold;
 }

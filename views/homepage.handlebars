@@ -5,10 +5,11 @@
     </div>
     <div id="RightSide">
         <a id="userSettings" href="/usersettings">
-            <button class="navButton">User Settings</button>
+            User Settings
         </a>
-            <a href="/logout">
-                <button class="navButton">Logout</button>
+        <br>
+            <a href="/logout" id="Logout">
+                Logout
             </a>
     </div>
 </div>
@@ -27,8 +28,8 @@
         <div id="{{this._id}}" class="container">
             {{boardName}}
             <br>
-            <a href="/boards/{{_id}}">
-                <button class="boardButton">Open</button>
+            <a href="/boards/{{_id}}" class="redHyperLink">
+                Open
             </a>
         </div>
         {{/each}}
@@ -42,8 +43,8 @@
 
          <div id="{{this._id}}" class="container">
             {{boardName}}
-            <a href="/boards/{{_id}}">
-                <button class="boardButton">Open</button>
+            <a href="/boards/{{_id}}" class="redHyperLink">
+                Open
             </a>
         </div>
         {{/each}}
