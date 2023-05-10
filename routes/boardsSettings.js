@@ -60,10 +60,9 @@ router
       if (name.length > 30) {
         throw `Board Name must be less than 30 characters.`;
       }
-      // if(sortOrder !== 'asc' && sortOrder !== 'desc'){
-      //   throw `Sort Order must be equal to asc or desc.`;
-      // }
-      //board = await boardData.getBoardById(boardId);
+      if (sortOrder !== 'asc' && sortOrder !== 'desc' && sortOrder !== 'null') {
+        throw `Sort Order must be equal to 'asc' or 'desc'.`;
+      }
       helpers.checkPassword(password);
       if (password !== confirm) {
         throw `Password and confirm password must match`;
