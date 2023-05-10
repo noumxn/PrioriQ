@@ -49,7 +49,34 @@ function checkTime(time, type) {
   if (type === 'hour') {
     if (time < 0 || time > 100) {
       time.focus();
-      throw `Hours must be between 0 and 100`;
+      throw `Please input a value for Hours and Minutes`;
+    }
+    if(typeof(numTime) !== 'number'){
+      time.focus();
+      throw `Must input a number for hours and minutes`;
+    }
+    if(type == 'min'){
+      if(numTime < 0 || numTime > 59){
+        time.focus();
+        throw `Minutes must be between 0 and 59`;
+      }
+    }
+    if(type == 'hour'){
+      if(numTime < 0 || numTime > 100){
+        time.focus();
+        throw `Hours must be between 0 and 100`;
+      }
+    }
+  };
+  function checkPriority(priority){
+    let prio = parseInt(priority.value);
+    if(isNaN(prio)){
+      priority.focus();
+      throw `Please provide a valid input for priority`;
+    }
+    if(prio < 1 || prio > 10){
+      priority.focus();
+      throw `Priority must be between 1 and 10`;
     }
   }
 };
@@ -100,7 +127,7 @@ if (taskForm) {
   taskForm.addEventListener('submit', (event) => {
     console.log("form Submission fired");
     let serverErr = document.getElementById("serverError");
-    if(serverErr == false){
+    if(serverErr){
       serverErr.hidden = true;
     }
     try {

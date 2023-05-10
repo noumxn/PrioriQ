@@ -34,7 +34,7 @@ router.route('/')
     try {
       return res.render("homepage", { titley: "Homepage", user: firstName, userBoards: userBoards, checklist: userChecklist, sharedBoards: sharedBoards });
     } catch (e) {
-      res.status(500).json({ error: e });
+      return res.status(500).json({ error: e });
     }
 
   })

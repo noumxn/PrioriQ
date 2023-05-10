@@ -41,7 +41,7 @@ if (update) {
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name cannot have numbers'
       firstName.focus();
-    } else if (/^[a-zA-Z]*$/.test(firstName.value.trim()) === false) {
+    } else if (/^[a-zA-Z.\-'\s]*$/.test(firstName.value.trim()) === false) {
       event.preventDefault();
       errorDiv.hidden = false;
       errorDiv.innerHTML = 'First name can only contain letters'
@@ -62,7 +62,7 @@ if (update) {
         errorDiv.hidden = false;
         errorDiv.innerHTML = 'Last name cannot have numbers'
         lastName.focus();
-      } else if (/^[a-zA-Z]*$/.test(lastName.value.trim()) === false) {
+      } else if (/^[a-zA-Z.\-'\s]*$/.test(lastName.value.trim()) === false) {
         event.preventDefault();
         errorDiv.hidden = false;
         errorDiv.innerHTML = 'First name can only contain letters'
@@ -114,7 +114,7 @@ if (update) {
         errorDiv.hidden = false;
         errorDiv.innerHTML = 'Username cannot be longer than 20 characters.'
         username.focus();
-      } else if (!/^[a-zA-Z0-9_]+$/.test(username.value.trim())) {
+      } else if (!/^[a-zA-Z0-9_.]+$/.test(username.value.trim())) {
         event.preventDefault();
         errorDiv.hidden = false;
         errorDiv.innerHTML = 'Username can only contain letters, numbers, and underscores.'

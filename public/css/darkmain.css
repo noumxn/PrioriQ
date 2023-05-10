@@ -1,6 +1,18 @@
 html{
   background-color: #00234b;
   color: #E5E5E5;
+  overflow-x: hidden;
+}
+
+body{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+main{
+  flex: 1;
+ 
 }
 
 #navBar {
@@ -117,4 +129,16 @@ html{
     text-align: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
+  }
+
+  footer{
+    background-color: #001124;
+    margin-left: -2%;
+    margin-top: auto;
+    bottom: 0;
+    width: 100%;
+  
+    padding-left: 5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
   }
