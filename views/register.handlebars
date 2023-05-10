@@ -1,11 +1,12 @@
-<h1>Registration</h1>
-<div id="errorDiv" class="error" hidden> Hello</div>
-{{#if error}}
-<div id="serverError" class="error"> {{e}}</div>
-{{/if}}
+
 <p>
   Please enter following information:
 </p>
+<h1>Registration</h1>
+<div id="error" class="error" hidden> Hello</div>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
 <form action="/register" method="POST" id="registration-form">
   <label for="firstNameInput">
     First Name:

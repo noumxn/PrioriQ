@@ -16,10 +16,7 @@
 
 
 
-<div id="errorDiv" class="error" hidden> Hello</div>
-{{#if error}}
-<div id="serverError" class="error"> {{e}}</div>
-{{/if}}
+
 <br>
 
 
@@ -81,6 +78,11 @@
     }
 </script>
 
+<div id="error" class="error" hidden> Hello</div>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
+<br>
 <button onclick="showCreateBoard()">Create New Board</button>
 <br>
 <div id="createBoard" style="display:none">

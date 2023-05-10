@@ -1,11 +1,12 @@
 <h1>Update your settings</h1>
-<div id="errorDiv" class="error" hidden> Hello</div>
-{{#if error}}
-<div id="serverError" class="error"> {{e}}</div>
-{{/if}}
+
 
 <div id="userSettingsOptions" class="settingsCard">
 <span>Please enter the following information:</span>
+<div id="error" class="error" hidden> Hello</div>
+{{#if error}}
+<div id="serverError" class="error"> {{e}}</div>
+{{/if}}
 <form action="/usersettings" method="POST" id="update-form">
   <label for="firstNameInput">
     First Name:
