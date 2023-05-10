@@ -1,7 +1,8 @@
 <h1>{{titley}}</h1>
-<h3>Board ID: {{boardId}}</h3>
+<span>Board ID: {{boardId}}</span>
 
-<div id="errorDiv" class="error" hidden>Error</div>
+ <div id="errorDiv" class="error" style="display:none">Error</div>
+ <div id="ajaxError" class="error"style="display:none"></div>
 {{#if error}}
 <div id="serverError" class="error"> {{e}}</div>
 {{/if}}
@@ -18,16 +19,16 @@
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>Estimated Time: {{this.estimatedTime}}</p>
-    {{#if ../addpriority}}
+  {{#if ../addpriority}}
     <p>Priority: {{this.priority}}</p>
-    {{else}}
+  {{else}}
     <p>Difficulty: {{this.difficulty}}</p>
-    {{/if}}
-    <p class="taskDescription">Description: {{this.description}}</p>
+  {{/if}}
+    <p>Description: {{this.description}}</p>
     <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
-    <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
-      Task</button>
+    <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}', '{{this.assignedTo}}', '{{this.taskName}}', '{{this.description}}')">
+      Update Task</button>
     <button onclick="addTaskToCheckList('{{this._id}}')">Add To Checklist</button>
   </div>
   {{/each}}
@@ -42,16 +43,16 @@
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>Estimated Time: {{this.estimatedTime}}</p>
-    {{#if ../addpriority}}
+  {{#if ../addpriority}}
     <p>Priority: {{this.priority}}</p>
-    {{else}}
+  {{else}}
     <p>Difficulty: {{this.difficulty}}</p>
-    {{/if}}
+  {{/if}}
     <p>Description: {{this.description}}</p>
     <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
-    <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
-      Task</button>
+    <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}', '{{this.assignedTo}}', '{{this.taskName}}', '{{this.description}}')">
+      UpdateTask</button>
     <button onclick="addTaskToCheckList('{{this._id}}')">Add To Checklist</button>
   </div>
   {{/each}}
@@ -65,16 +66,16 @@
     <p>Name: {{this.taskName}}</p>
     <p>Deadline: {{this.deadline}}</p>
     <p>Estimated Time: {{this.estimatedTime}}</p>
-    {{#if ../addpriority}}
+  {{#if ../addpriority}}
     <p>Priority: {{this.priority}}</p>
-    {{else}}
+  {{else}}
     <p>Difficulty: {{this.difficulty}}</p>
-    {{/if}}
+  {{/if}}
     <p>Description: {{this.description}}</p>
     <p>Assigned To: {{this.assignedTo}}</p>
     <button onclick="deleteTaskNow('{{this._id}}')">Delete Task</button>
-    <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}')">Update
-      Task</button>
+    <button onclick="showUpdateTaskForm('{{this._id}}', '{{this.priority}}', '{{this.difficulty}}', '{{this.assignedTo}}', '{{this.taskName}}', '{{this.description}}')">
+      UpdateTask</button>
     <button onclick="addTaskToCheckList('{{this._id}}')">Add To Checklist</button>
   </div>
   {{/each}}
@@ -140,99 +141,8 @@
 </div>
 
 {{!-- show task form when click button --}}
-<script>
-  let currentTaskId;
-  let addpriority;
-  let priority;
-  let difficulty;
-  let taskId;
-  function showUpdateTaskForm(taskId, prior, diffic) {
-    if (diffic === "" && prior !== "") {
-      addpriority = true;
-      difficulty = null;
-    }
-    else {
-      addpriority = false;
-      priority = null;
-    }
 
-    const updateTaskDiv = document.getElementById('updateTaskForm');
-    const updateTaskForm = document.getElementById('update-task-form');
-    currentTaskId = taskId.toString();
-    if (updateTaskDiv.style.display === "none") {
-      updateTaskDiv.style.display = "block";
-    } else {
-      updateTaskDiv.style.display = "none";
-    }
-  }
-
-  function updateIt() {
-
-    let taskName = document.getElementById("newtaskNameInput").value;
-    let priority;
-    let difficulty;
-
-    if (addpriority === true) {
-      priority = document.getElementById("newPriorityInput").value;
-    }
-    else {
-      difficulty = document.getElementById("newDifficultyInput").value;
-    }
-
-
-    let estimatedTimeH = document.getElementById("newEstimatedTimeInputH").value;
-    let estimatedTimeM = document.getElementById("newEstimatedTimeInputM").value;
-    const deadline = document.getElementById("newDeadlineInput").value;
-    const description = document.getElementById("newDescriptionInput").value;
-    const assignedTo = document.getElementById("newAssignedToInput").value;
-
-
-    let updateFormData = {
-      taskId: currentTaskId,
-      taskName: taskName,
-      priority: priority,
-      difficulty: difficulty,
-      estimatedTimeH: estimatedTimeH,
-      estimatedTimeM: estimatedTimeM,
-      deadline: deadline,
-      description: description,
-      assignedTo: assignedTo
-    };
-
-
-    const url = "/boards/update/" + currentTaskId;
-    console.log(url);
-
-    $.ajax({
-      type: "POST",
-      url: url,
-      data: updateFormData,
-      success: function (data) {
-        location.reload();
-      },
-      error: function (err) {
-        console.log(err);
-      }
-    })
-  }
-
-</script>
-
-{{!-- <script>
-  function anchorLinks() {
-    //console.log("hu");
-    //let descriptions = document.querySelectorAll('p.taskDescription');
-    for (let i = 0; i < descriptions.length; i++) {
-      //console.log(descriptions[i]);
-    }
-    //description = htmlStr.replace(/&lt;/g , "<");	 
-    //htmlStr = htmlStr.replace(/&gt;/g , ">");     
-    //htmlStr = htmlStr.replace(/&quot;/g , "\"");  
-    //htmlStr = htmlStr.replace(/&#39;/g , "\'");   
-    //htmlStr = htmlStr.replace(/&amp;/g , "&");
-    //return htmlStr;
-}
-</script> --}}
+<script src="../public/js/updateTask.js"></script>
 
 {{!-- form for updating task --}}
 <div id="updateTaskForm" style="display:none">
@@ -268,9 +178,9 @@
     <label for="newDescriptionInput">Description</label><br>
     <input type="text" id="newDescriptionInput" name="newDescriptionInput" placeholder="New description here"><br>
 
-    <label for="newAssignedToInput">Assigned Users</label><br>
-    <p>Type in usernames separated by commas</p>
-    <input type="text" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here"><br>
+      <label for="newAssignedToInput">Assigned Users</label><br>
+      <p>Type in usernames separated by commas</p>
+      <input type="text" id="newAssignedToInput" name="newAssignedToInput" placeholder="Type here" value={{currentUser}}><br>
 
     <button id="update-task-btn" onclick="updateIt()" type="button">Submit</button>
   </form>
@@ -279,4 +189,3 @@
 <br>
 <a href="/homepage">Back to homepage</a>
 <script src="../public/js/createTask.js"></script>
-{{!-- <script src="../public/js/hyperlink.js"></script> --}}
