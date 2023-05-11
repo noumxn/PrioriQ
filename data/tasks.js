@@ -183,6 +183,7 @@ const exportedMethods = {
     estimatedTime = estimatedTime.trim();
     estimatedTime = helpers.convertEstimatedTimeToMs(estimatedTime);
     description = description.trim();
+    description = helpers.checkDescription(description);
     taskName = helpers.checkTaskName(taskName);
     validation.validDateTimeFormatCheck(deadline);
     validation.arrayValidCheck(assignedTo);

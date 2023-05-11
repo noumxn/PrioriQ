@@ -13,7 +13,7 @@ router
   .route('/:boardId')
   .get(async (req, res) => {
     let currentUser = req.session.user;
-    let boardId = req.params.boardId;
+    let boardId = xss(req.params.boardId);
     let boardGet;
     let sortOrder;
     try {
@@ -34,7 +34,7 @@ router
     }
   })
   .post(async (req, res) => {
-    let boardId = req.params.boardId;
+    let boardId = xss(req.params.boardId);
     let board;
     try {
       boardId = validation.idCheck(boardId);
@@ -80,11 +80,11 @@ router
 
 router.route("/delete/:boardId")
   .get(async (req, res) => {
-    let boardId = req.params.boardId;
+    let boardId = xss(req.params.boardId);
     return res.redirect("/boardsettings/" + boardId);
   })
   .post(async (req, res) => {
-    let boardId = req.params.boardId;
+    let boardId = xss(req.params.boardId);
     let board;
     try {
       boardId = validation.idCheck(boardId);
@@ -110,12 +110,12 @@ router.route("/delete/:boardId")
 //EXTRA FEATURE - BLOCK USER FROM BOARD
 router.route("/blockUser/:boardId")
   .get(async (req, res) => {
-    let boardId = req.params.boardId;
+    let boardId = xss(req.params.boardId);
     return res.redirect("/boardsettings/" + boardId);
   })
   .post(async (req, res) => {
     let board, blockedUser;
-    let boardId = req.params.boardId;
+    let boardId = xss(req.params.boardId);
     blockedUser = xss(req.body.blockUserInput);
     try {
       boardId = validation.idCheck(boardId);
