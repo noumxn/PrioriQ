@@ -142,6 +142,9 @@ import { boardData, checkListData, taskData, userData } from '../data/index.js';
   try {
     console.log("├─ Adding Tasks to Boards...");
     // Tasks for Tom's Personal Board
+    if(-1) {
+      console.log("true");
+    }
     tomTask1 = await taskData.createTask(tomBoard1._id.toString(), "task1", 2, null, "00 hour 01 mins", time1UTC, "This is a test task1 on Toms Board", ["tom_smith"]);
     tomTask2 = await taskData.createTask(tomBoard1._id.toString(), "task2", 8, null, "00 hour 00 mins", time3UTC, "This is a test task2 on Toms Board", ["tom_smith"]);
     tomTask3 = await taskData.createTask(tomBoard1._id.toString(), "task3", 4, null, "00 hour 10 mins", time4UTC, "This is a test task3 on Toms Board", ["tom_smith"]);

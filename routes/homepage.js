@@ -103,7 +103,7 @@ router.route('/checklist/:taskId')
 
     try {
       username = req.session.user.username;
-      taskId = req.params.taskId;
+      taskId = xss(req.params.taskId);
       checklist = await checkListData.getCheckListByUsername(username);
       await taskData.moveToDone(taskId);
       await checkListData.completeCheckListItem(taskId, username);

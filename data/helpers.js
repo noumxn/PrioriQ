@@ -149,7 +149,7 @@ const checkTaskName = (taskName) => {
  * @return {description} after trimming leading and trailing spaces
  **/
 const checkDescription = (description) => {
-  if(description.indexOf('\'')){
+  if(description.includes("\'")) {
     throw validation.returnRes('BAD_REQUEST', `Description cannot have the ' character.`);
   }
   if (description.trim().length > 100)

@@ -21,10 +21,10 @@ router.route("/:id")
     let boardD;
     let boardName;
     let username;
-    boardId = req.params.id;
+    boardId = xss(req.params.id);
     try {
       username = req.session.user.username;
-      boardId = req.params.id;
+      boardId = xss(req.params.id);
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
       if (userGet.priorityScheduling == "true") {
@@ -95,7 +95,7 @@ router.route("/:id")
 
     //first, we get the board by the boardId
     try {
-      boardId = req.params.id;
+      boardId = xss(req.params.id);
       userGet = await boardData.getBoardById(boardId);
       boardName = userGet.boardName;
       if (userGet.priorityScheduling === "true") {
@@ -239,7 +239,7 @@ router.route("/update/:taskId")
     let boardT;
     let boardS;
     let boardD;
-    let taskId = req.params.taskId;
+    let taskId = xss(req.params.taskId);
     let board;
     let boardId;
     let taskName;
@@ -388,7 +388,7 @@ router.route("/delete/:taskId")
     let boardT;
     let boardS;
     let boardD;
-    let taskId = req.params.taskId;
+    let taskId = xss(req.params.taskId);
     let boardId;
     let userGet;
     try {
@@ -435,7 +435,7 @@ router.route("/delete/:taskId")
 
 router.route("/checklist/:taskId")
   .post(async (req, res) => {
-    const taskId = req.params.taskId;
+    const taskId = xss(req.params.taskId);
     let username = req.session.user.username;
     let duplicate = false;
     let checkList = undefined;
@@ -463,7 +463,7 @@ router.route("/todo/:taskId")
     let boardD;
     let boardName;
     let addpriority = false;
-    const taskId = req.params.taskId;
+    const taskId = xss(req.params.taskId);
     try {
       await taskData.moveToToDo(taskId);
       let board = await taskData.getBoardByTaskId(taskId);
@@ -493,7 +493,7 @@ router.route("/inprogress/:taskId")
     let boardD;
     let boardName;
     let addpriority = false;
-    const taskId = req.params.taskId;
+    const taskId = xss(req.params.taskId);
     try {
       await taskData.moveToInProgress(taskId);
       let board = await taskData.getBoardByTaskId(taskId);
@@ -524,7 +524,7 @@ router.route("/done/:taskId")
     let boardName;
     let addpriority = false;
     let boardIdStr;
-    const taskId = req.params.taskId;
+    const taskId = xss(req.params.taskId);
     try {
       await taskData.moveToDone(taskId);
       let board = await taskData.getBoardByTaskId(taskId);
